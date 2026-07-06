@@ -14,8 +14,9 @@ import {
   IndianRupee, Clock, ArrowLeftRight, ShieldCheck, Globe, Percent,
   FileCheck, FileSignature, PieChart, Link2, CheckSquare, Package,
   Settings, Sparkles, FolderOpen, File, FileCode, FilePlus, FileUp,
-  Trash2, Pencil, Check, X, LayoutGrid, Search, type LucideIcon,
+  Trash2, Pencil, Check, X, LayoutGrid, Search, LogOut, type LucideIcon,
 } from 'lucide-react';
+import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 
 interface NavItem { label: string; href: string; icon: LucideIcon }
 interface NavGroup { heading: string; items: NavItem[] }
@@ -404,6 +405,15 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
             <Settings className={`h-3.5 w-3.5 shrink-0 ${pathname === `${base}/settings` ? 'text-white' : 'text-gray-400'}`} />
             <span>Settings</span>
           </Link>
+          {isSupabaseConfigured && (
+            <button
+              onClick={async () => { try { await supabase?.auth.signOut(); } catch { /* ignore */ } navigate('/auth'); }}
+              className="w-full flex items-center gap-2.5 px-3 py-1.5 mx-1.5 rounded-lg text-[13px] font-medium transition-colors text-gray-600 hover:bg-red-50 hover:text-red-600"
+            >
+              <LogOut className="h-3.5 w-3.5 shrink-0 text-gray-400" />
+              <span>Sign Out</span>
+            </button>
+          )}
         </div>
       </aside>
 
