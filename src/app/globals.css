@@ -129,7 +129,7 @@ table { border-collapse: collapse; width: 100%; }
 
 /* ── Accounting table system ── */
 .acc-table { @apply w-full text-sm; }
-.acc-table thead tr { @apply border-b border-gray-200 bg-gray-50; }
+.acc-table thead tr { @apply border-b border-teal-100 bg-teal-50/50; }
 .acc-table thead th {
   @apply px-3 py-2.5 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider;
 }
@@ -156,10 +156,14 @@ table { border-collapse: collapse; width: 100%; }
 .text-cr  { color: #059669; }
 .text-bal { color: #0F172A; font-weight: 600; }
 
-/* ── Page card (EduMon floating card) ── */
+/* ── Page card (glass-lite on mint; kept ~opaque for readable tables) ── */
 .page-card {
-  @apply bg-white border border-gray-100 rounded-2xl overflow-hidden;
-  box-shadow: var(--shadow-float);
+  @apply rounded-2xl overflow-hidden;
+  background: color-mix(in srgb, white 88%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid color-mix(in srgb, white 55%, transparent);
+  box-shadow: 0 16px 36px -20px rgba(14, 58, 50, 0.24);
 }
 
 /* ── Stat card (floating, hover-lift) ── */
