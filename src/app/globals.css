@@ -1,0 +1,293 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap');
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  /* EduMon hero palette */
+  --color-hero: var(--hero);
+  --color-hero-2: var(--hero-2);
+  --color-hero-foreground: var(--hero-foreground);
+  --color-hero-muted: var(--hero-muted);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+}
+
+:root {
+  --font-sans: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+  /* Softer, rounder corners across the app (EduMon look) */
+  --radius: 0.75rem;
+  /* LIGHT THEME ONLY */
+  --background: #FAFBFC;
+  --foreground: #0F172A;
+  --card: #FFFFFF;
+  --card-foreground: #111827;
+  --popover: #FFFFFF;
+  --popover-foreground: #111827;
+  --primary: #2563EB;
+  --primary-foreground: #FFFFFF;
+  /* EduMon deep-teal hero (dark sections / heroes) */
+  --hero: #0B2A33;
+  --hero-2: #0F3A45;
+  --hero-foreground: #FFFFFF;
+  --hero-muted: #9FB7BE;
+  /* Soft floating-card shadow */
+  --shadow-float: 0 18px 40px -18px rgba(8, 40, 48, 0.20);
+  --shadow-float-lg: 0 28px 60px -22px rgba(8, 40, 48, 0.28);
+  --secondary: #F9FAFB;
+  --secondary-foreground: #111827;
+  --muted: #F9FAFB;
+  --muted-foreground: #6B7280;
+  --accent: #F3F4F6;
+  --accent-foreground: #111827;
+  --destructive: #DC2626;
+  --border: #E5E7EB;
+  --input: #E5E7EB;
+  --ring: #2563EB;
+  --chart-1: #2563EB;
+  --chart-2: #16A34A;
+  --chart-3: #D97706;
+  --chart-4: #7C3AED;
+  --chart-5: #DC2626;
+  --sidebar: #F9FAFB;
+  --sidebar-foreground: #111827;
+  --sidebar-primary: #2563EB;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #EFF6FF;
+  --sidebar-accent-foreground: #2563EB;
+  --sidebar-border: #E5E7EB;
+  --sidebar-ring: #2563EB;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Bolder, tighter headings — EduMon display style */
+  h1, h2, h3 {
+    letter-spacing: -0.018em;
+    font-weight: 700;
+  }
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+}
+
+/* ── Table ── */
+table { border-collapse: collapse; width: 100%; }
+
+/* ── Accounting table system ── */
+.acc-table { @apply w-full text-sm; }
+.acc-table thead tr { @apply border-b border-gray-200 bg-gray-50; }
+.acc-table thead th {
+  @apply px-3 py-2.5 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider;
+}
+.acc-table thead th.r { text-align: right; }
+.acc-table thead th.c { text-align: center; }
+.acc-table tbody tr { @apply border-b border-gray-100 hover:bg-blue-50/30 transition-colors; }
+.acc-table tbody td { @apply px-3 py-2.5 text-gray-700; }
+.acc-table tbody td.r { text-align: right; font-family: var(--font-sans); font-variant-numeric: tabular-nums; }
+.acc-table tbody td.c { text-align: center; }
+.acc-table tfoot tr { @apply border-t-2 border-gray-300 bg-gray-50; }
+.acc-table tfoot td { @apply px-3 py-2.5 font-semibold text-gray-900; font-family: var(--font-sans); }
+.acc-table tfoot td.r { text-align: right; }
+
+/* ── Amount formatting ── */
+.amount {
+  text-align: right;
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ── Dr / Cr color utilities ── */
+.text-dr  { color: #DC2626; }
+.text-cr  { color: #059669; }
+.text-bal { color: #0F172A; font-weight: 600; }
+
+/* ── Page card (EduMon floating card) ── */
+.page-card {
+  @apply bg-white border border-gray-100 rounded-2xl overflow-hidden;
+  box-shadow: var(--shadow-float);
+}
+
+/* ── Stat card (floating, hover-lift) ── */
+.stat-card {
+  @apply bg-white border border-gray-100 rounded-2xl p-4 transition-all;
+  box-shadow: var(--shadow-float);
+}
+.stat-card:hover { box-shadow: var(--shadow-float-lg); transform: translateY(-2px); }
+
+/* ── Premium stat card (official dashboard look) ── */
+.stat-premium {
+  @apply relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-4 transition-all;
+  box-shadow: var(--shadow-float);
+}
+.stat-premium:hover { box-shadow: var(--shadow-float-lg); transform: translateY(-3px); }
+/* soft diagonal wash driven by the per-card --accent */
+.stat-premium::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent, #2563EB) 12%, transparent) 0%, transparent 58%);
+  pointer-events: none;
+}
+/* faint gridline motif in the corner */
+.stat-premium::after {
+  content: '';
+  position: absolute; right: -20%; bottom: -30%;
+  width: 70%; height: 70%;
+  border-radius: 9999px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent, #2563EB) 10%, transparent) 0%, transparent 70%);
+  pointer-events: none;
+}
+.stat-premium > * { position: relative; }
+.stat-premium-icon {
+  @apply inline-flex items-center justify-center rounded-xl text-white mb-3 shrink-0;
+  width: 2.75rem; height: 2.75rem;
+  background: linear-gradient(135deg, var(--accent, #2563EB), color-mix(in srgb, var(--accent, #2563EB) 65%, black));
+  box-shadow: 0 10px 22px -8px color-mix(in srgb, var(--accent, #2563EB) 60%, transparent);
+}
+
+/* ── EduMon deep-teal hero section ── */
+.hero {
+  position: relative;
+  color: var(--hero-foreground);
+  background:
+    radial-gradient(120% 120% at 85% -10%, color-mix(in srgb, var(--primary) 26%, transparent) 0%, transparent 45%),
+    linear-gradient(135deg, var(--hero) 0%, var(--hero-2) 100%);
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+.hero-muted { color: var(--hero-muted); }
+/* "Creating" — accent highlight inside hero headings */
+.hero-accent { color: #5B9BFF; }
+
+/* ── Blue circular icon badge (the floating-card icon in the reference) ── */
+.icon-badge {
+  @apply inline-flex items-center justify-center rounded-full text-white shrink-0;
+  background: var(--primary);
+  width: 2.75rem;
+  height: 2.75rem;
+  box-shadow: 0 8px 20px -6px color-mix(in srgb, var(--primary) 60%, transparent);
+}
+.icon-badge-sm { width: 2rem; height: 2rem; }
+
+/* ── Pill buttons (fully rounded — EduMon CTA style) ── */
+.btn-pill,
+.btn-pill-primary,
+.btn-pill-outline,
+.btn-pill-dark {
+  @apply inline-flex items-center justify-center gap-2 rounded-full font-semibold text-sm transition-all px-5 h-10 whitespace-nowrap;
+}
+.btn-pill-primary {
+  @apply text-white;
+  background: var(--primary);
+  box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--primary) 70%, transparent);
+}
+.btn-pill-primary:hover { background: color-mix(in srgb, var(--primary) 90%, black); }
+.btn-pill-outline {
+  @apply border;
+  border-color: color-mix(in srgb, currentColor 35%, transparent);
+  background: transparent;
+}
+.btn-pill-outline:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+/* Dark pill for light navbars (the "Login / Register" button) */
+.btn-pill-dark {
+  @apply text-white;
+  background: var(--hero);
+}
+.btn-pill-dark:hover { background: var(--hero-2); }
+
+/* ── Two-column T-format equal split ── */
+.t-split { display: grid; grid-template-columns: 1fr 1fr; }
+.t-split > div:first-child { border-right: 1px solid #E5E7EB; }
+
+/* ── Statement section heading ── */
+.stmt-heading {
+  @apply px-3 py-1.5 text-[11px] font-bold text-gray-500 uppercase tracking-widest bg-gray-50 border-b border-gray-100;
+}
+.stmt-row { @apply flex items-center justify-between px-3 py-2 border-b border-gray-100 text-sm; }
+.stmt-row:last-child { @apply border-b-0; }
+.stmt-total { @apply flex items-center justify-between px-3 py-2.5 font-semibold text-gray-900 border-t-2 border-gray-300 bg-gray-50 text-sm; }
+.stmt-indent { padding-left: 1.5rem; }
+.stmt-indent2 { padding-left: 3rem; }
+
+/* ── Register row striping ── */
+.reg-row-even { @apply bg-white; }
+.reg-row-odd  { @apply bg-gray-50/50; }
+
+/* ── Balance tally banner ── */
+.tally-ok  { @apply px-4 py-2 rounded-lg text-sm font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 mb-4; }
+.tally-err { @apply px-4 py-2 rounded-lg text-sm font-medium bg-red-50 text-red-700 border border-red-200 mb-4; }
+
+/* ── Voucher type badge colors ── */
+.vtype-JRN { @apply bg-gray-100 text-gray-600; }
+.vtype-SLS { @apply bg-emerald-50 text-emerald-700; }
+.vtype-PUR { @apply bg-blue-50 text-blue-700; }
+.vtype-RCT { @apply bg-teal-50 text-teal-700; }
+.vtype-PMT { @apply bg-red-50 text-red-700; }
+.vtype-CNT { @apply bg-amber-50 text-amber-700; }
+.vtype-DN  { @apply bg-orange-50 text-orange-700; }
+.vtype-CN  { @apply bg-purple-50 text-purple-700; }
+.vtype-PAY { @apply bg-indigo-50 text-indigo-700; }
+
+/* -- Number Input Spin Buttons Removal -- */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}

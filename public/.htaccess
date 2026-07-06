@@ -1,0 +1,23 @@
+# CA Studio — single-page app on Apache / InfinityFree
+# Routes every path to index.html so React Router handles it client-side,
+# while still serving real files (JS/CSS/images) directly.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Serve existing files and directories as-is
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Everything else -> index.html (SPA fallback)
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Long-cache the fingerprinted build assets
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 month"
+</IfModule>
