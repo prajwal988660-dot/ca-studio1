@@ -12,6 +12,8 @@
 //   • OPENINGBALANCE: Tally exports debit balances as negative → internal = −raw.
 // ============================================================================
 
+import { mirrorUpsert, mirrorDelete } from '@/lib/sync/cloudSync';
+
 export type TallyNature = 'asset' | 'liability' | 'income' | 'expense' | 'unknown';
 
 export interface TallyGroup { name: string; parent: string }
@@ -483,6 +485,8 @@ const key = (companyId: string) => `tally_import_${companyId}`;
 export function saveTallyDataset(companyId: string, ds: TallyDataset): boolean {
   try {
     localStorage.setItem(key(companyId), JSON.stringify(ds));
+    // Fire-and-forget cloud mirror (best-effort, never throws, no-op when offline).
+    mirrorUpsert('tally_datasets', { id: companyId, company_id: companyId, data: ds });
     return true;
   } catch {
     return false; // quota exceeded — caller keeps it in memory only
@@ -500,4 +504,6 @@ export function loadTallyDataset(companyId: string): TallyDataset | null {
 
 export function clearTallyDataset(companyId: string): void {
   try { localStorage.removeItem(key(companyId)); } catch { /* ignore */ }
+  // Fire-and-forget cloud mirror of the deletion (best-effort, no-op when offline).
+  mirrorDelete('tally_datasets', companyId);
 }

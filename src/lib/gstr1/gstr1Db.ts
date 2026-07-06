@@ -1,5 +1,12 @@
 import { GSTR1_CONFIG } from './config';
 import type { GSTR1Filing } from './types';
+import { mirrorUpsert } from '@/lib/sync/cloudSync';
+
+/** Shape one filing into its cloud row: composite id + denormalised period, the
+ *  whole filing payload as the `data` jsonb blob. */
+function toGstr1Row(f: GSTR1Filing) {
+  return { id: f.id, company_id: f.company_id, period: f.period, data: f, updated_at: f.updated_at };
+}
 
 function loadAll(): GSTR1Filing[] {
   try {
@@ -26,6 +33,8 @@ export function getOrCreateFiling(companyId: string, period: string, gstin: stri
   };
   all.push(fresh);
   saveAll(all);
+  // Fire-and-forget cloud mirror (best-effort, never throws, no-op when offline).
+  mirrorUpsert('gstr1_filings', toGstr1Row(fresh));
   return fresh;
 }
 
@@ -35,6 +44,8 @@ export function saveFiling(filing: GSTR1Filing) {
   const updated = { ...filing, updated_at: new Date().toISOString() };
   if (idx >= 0) all[idx] = updated; else all.push(updated);
   saveAll(all);
+  // Fire-and-forget cloud mirror (best-effort, never throws, no-op when offline).
+  mirrorUpsert('gstr1_filings', toGstr1Row(updated));
 }
 
 export function getFiling(companyId: string, period: string): GSTR1Filing | null {

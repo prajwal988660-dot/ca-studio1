@@ -6,6 +6,7 @@
  */
 
 import type { WorkspaceFile } from '@/lib/carp/tools/types';
+import { mirrorUpsert, mirrorDelete } from '@/lib/sync/cloudSync';
 
 const WORKSPACE_KEY_PREFIX = 'carp_workspace_';
 
@@ -40,6 +41,9 @@ export function addFile(
   };
   files.push(newFile);
   saveWorkspace(companyId, files);
+  // Fire-and-forget cloud mirror (best-effort, never throws, no-op when offline).
+  // WorkspaceFile carries no company_id, so stamp it onto the mirrored row.
+  try { mirrorUpsert('workspace_files', { ...newFile, company_id: companyId }); } catch { /* best-effort */ }
   return newFile;
 }
 
@@ -58,6 +62,8 @@ export function updateFile(
     file.size = new Blob([updates.content]).size;
   }
   saveWorkspace(companyId, files);
+  // Fire-and-forget cloud mirror (best-effort, never throws, no-op when offline).
+  try { mirrorUpsert('workspace_files', { ...file, company_id: companyId }); } catch { /* best-effort */ }
   return file;
 }
 
@@ -67,5 +73,7 @@ export function deleteFile(companyId: string, fileId: string): WorkspaceFile | n
   if (idx === -1) return null;
   const deleted = files.splice(idx, 1)[0];
   saveWorkspace(companyId, files);
+  // Fire-and-forget cloud mirror (best-effort, never throws, no-op when offline).
+  try { mirrorDelete('workspace_files', fileId); } catch { /* best-effort */ }
   return deleted;
 }

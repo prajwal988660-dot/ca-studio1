@@ -60,8 +60,9 @@ export function mirrorUpsert(table: string, rowOrRows: Record<string, unknown> |
       const list = (Array.isArray(rowOrRows) ? rowOrRows : [rowOrRows]) as Record<string, unknown>[];
       const rows = list.map((r) => ({ ...r, user_id: uid }));
       if (!rows.length) return;
-      await supabase!.from(table).upsert(rows, { onConflict: 'id' });
-    } catch { /* best-effort mirror */ }
+      const { error } = await supabase!.from(table).upsert(rows, { onConflict: 'id' });
+      if (error && import.meta.env.DEV) console.warn(`[cloudSync] upsert ${table} failed:`, error.message);
+    } catch (e) { if (import.meta.env.DEV) console.warn(`[cloudSync] upsert ${table} threw:`, e); }
   })();
 }
 
@@ -184,6 +185,9 @@ export async function mergeCloudIntoLocal(): Promise<{ ok: boolean; merged?: num
  */
 export async function syncOnSignIn(): Promise<void> {
   if (!supabase) return;
-  try { await pushLocalToCloud(); } catch { /* best-effort */ }
-  try { await mergeCloudIntoLocal(); } catch { /* best-effort */ }
+  try {
+    const r = await pushLocalToCloud();
+    if (!r.ok && import.meta.env.DEV) console.warn('[cloudSync] push failed:', r.error);
+  } catch (e) { if (import.meta.env.DEV) console.warn('[cloudSync] push threw:', e); }
+  try { await mergeCloudIntoLocal(); } catch (e) { if (import.meta.env.DEV) console.warn('[cloudSync] merge threw:', e); }
 }

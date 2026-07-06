@@ -6,6 +6,7 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { ENTITY_TYPES } from '@/lib/constants/entityTypes';
 import { getEntityConfig } from '@/lib/entityConfig';
 import { getEntityData, upsertEntityData, getCustomAccounts, deleteCustomAccount, renameCustomAccount, updateAccountGroupInAllEntries } from '@/lib/offlineDb';
+import { mirrorUpsert } from '@/lib/sync/cloudSync';
 import { LEDGER_GROUPS, getAllDefaultAccounts } from '@/lib/coa';
 import type { PrimaryGroup } from '@/lib/coa';
 import type { CustomAccount } from '@/lib/offlineDb';
@@ -466,6 +467,16 @@ export default function SettingsPage() {
     } catch {
       // ignore
     }
+    // Fire-and-forget cloud mirror (one blob row per company; never throws, no-op offline/logged-out).
+    try {
+      mirrorUpsert('export_prefs', {
+        id: companyId,
+        company_id: companyId,
+        export_format: exportFormat,
+        show_je_codes: showJECodes,
+        company_logo: companyLogo,
+      });
+    } catch { /* best-effort mirror */ }
   }, [companyId, exportFormat, showJECodes, companyLogo]);
 
   if (companyLoading || !company) {

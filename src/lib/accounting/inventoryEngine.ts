@@ -20,6 +20,7 @@ import {
   type PurchaseInvoice,
   type InvoiceV2,
 } from './gstInvoices';
+import { mirrorUpsert } from '@/lib/sync/cloudSync';
 
 // ─── Types ───
 
@@ -113,6 +114,21 @@ function saveProductionIssue(issue: ProductionIssue): void {
   } catch {
     // silent fail
   }
+  // Fire-and-forget cloud mirror (never throws, no-op offline/logged-out).
+  try {
+    mirrorUpsert('inventory_production_issues', {
+      id: issue.id,
+      company_id: issue.companyId,
+      date: issue.date,
+      item_name: issue.itemName,
+      item_hsn: issue.itemHsn,
+      qty: issue.qty,
+      rate: issue.rate,
+      value: issue.value,
+      narration: issue.narration,
+      created_at: issue.createdAt,
+    });
+  } catch { /* best-effort mirror */ }
 }
 
 export function issueToProduction(

@@ -11,8 +11,82 @@ import type {
   BulkLedgerEntry,
   BulkAuditLog,
 } from './types';
+import {
+  mirrorUpsert,
+  mirrorDelete,
+  mirrorDeleteByCompany,
+} from '@/lib/sync/cloudSync';
 
 const STORAGE_KEY = 'bulk_data_v1';
+
+// ── Cloud mirror row mappers ────────────────────────────────────────────────
+// Map the camelCase store shapes to the snake_case Supabase columns defined in
+// supabase/migrations/0005_bulk.sql. Pure + best-effort; the mirror helpers are
+// fire-and-forget (never awaited, never throw, no-op offline/logged-out).
+
+function accountRow(a: BulkLedgerAccount): Record<string, unknown> {
+  return {
+    id: a.id,
+    company_id: a.companyId,
+    name: a.name,
+    account_group: a.group,
+    account_type: a.accountType,
+    created_by: a.createdBy,
+    created_at: a.createdAt,
+  };
+}
+
+function suspenseRow(t: SuspenseTransaction): Record<string, unknown> {
+  return {
+    id: t.id,
+    company_id: t.companyId,
+    fy: t.fy,
+    batch_id: t.batchId,
+    txn_date: t.txnDate,
+    narration: t.narration,
+    reference_no: t.referenceNo,
+    amount: t.amount,
+    direction: t.direction,
+    status: t.status,
+    allocated_ledger_id: t.allocatedLedgerId,
+    allocated_by: t.allocatedBy,
+    allocation_keyword: t.allocationKeyword,
+    allocated_at: t.allocatedAt,
+    original_row_number: t.originalRowNumber,
+    created_at: t.createdAt,
+  };
+}
+
+function ledgerEntryRow(e: BulkLedgerEntry): Record<string, unknown> {
+  return {
+    id: e.id,
+    company_id: e.companyId,
+    fy: e.fy,
+    ledger_account_id: e.ledgerAccountId,
+    txn_date: e.txnDate,
+    narration: e.narration,
+    reference_no: e.referenceNo,
+    amount: e.amount,
+    side: e.side,
+    source: e.source,
+    suspense_id: e.suspenseId,
+    batch_id: e.batchId,
+    allocated_by: e.allocatedBy,
+    allocation_keyword: e.allocationKeyword,
+    created_at: e.createdAt,
+  };
+}
+
+function auditRow(l: BulkAuditLog): Record<string, unknown> {
+  return {
+    id: l.id,
+    company_id: l.companyId,
+    actor: l.actor,
+    action: l.action,
+    detail: l.detail,
+    created_at: l.createdAt,
+  };
+}
 
 // ── Schema ────────────────────────────────────────────────────────────────────
 
@@ -104,6 +178,8 @@ export function upsertLedgerAccount(
   };
   data.ledger_accounts.push(newAccount);
   saveCompanyData(companyId, data);
+  // Fire-and-forget cloud mirror (best-effort, never throws, no-op offline).
+  mirrorUpsert('bulk_ledger_accounts', accountRow(newAccount));
   return newAccount;
 }
 
@@ -124,6 +200,8 @@ export function bulkInsertSuspense(
   const data = getCompanyData(companyId);
   data.suspense_transactions.push(...rows);
   saveCompanyData(companyId, data);
+  // Fire-and-forget cloud mirror of the inserted rows.
+  mirrorUpsert('bulk_suspense_transactions', rows.map(suspenseRow));
 }
 
 export function updateSuspenseRows(
@@ -137,6 +215,9 @@ export function updateSuspenseRows(
     idSet.has(t.id) ? { ...t, ...updates } : t,
   );
   saveCompanyData(companyId, data);
+  // Fire-and-forget cloud mirror of the updated rows.
+  const updatedRows = data.suspense_transactions.filter((t) => idSet.has(t.id));
+  mirrorUpsert('bulk_suspense_transactions', updatedRows.map(suspenseRow));
 }
 
 export function deleteSuspenseRows(
@@ -147,6 +228,8 @@ export function deleteSuspenseRows(
   const idSet = new Set(ids);
   data.suspense_transactions = data.suspense_transactions.filter((t) => !idSet.has(t.id));
   saveCompanyData(companyId, data);
+  // Fire-and-forget cloud mirror of the deletions (best-effort).
+  if (ids.length) mirrorDelete('bulk_suspense_transactions', ids);
 }
 
 // ── Ledger Entries ────────────────────────────────────────────────────────────
@@ -169,6 +252,8 @@ export function bulkInsertLedgerEntries(
   const data = getCompanyData(companyId);
   data.ledger_entries.push(...entries);
   saveCompanyData(companyId, data);
+  // Fire-and-forget cloud mirror of the inserted entries.
+  mirrorUpsert('bulk_ledger_entries', entries.map(ledgerEntryRow));
 }
 
 export function insertLedgerEntry(
@@ -178,6 +263,8 @@ export function insertLedgerEntry(
   const data = getCompanyData(companyId);
   data.ledger_entries.push(entry);
   saveCompanyData(companyId, data);
+  // Fire-and-forget cloud mirror of the inserted entry.
+  mirrorUpsert('bulk_ledger_entries', ledgerEntryRow(entry));
 }
 
 // ── Audit Log ─────────────────────────────────────────────────────────────────
@@ -187,15 +274,18 @@ export function appendAuditLog(
   log: Omit<BulkAuditLog, 'id' | 'companyId' | 'createdAt'>,
 ): void {
   const data = getCompanyData(companyId);
-  data.audit_log.push({
+  const entry: BulkAuditLog = {
     id: crypto.randomUUID(),
     companyId,
     actor: log.actor,
     action: log.action,
     detail: log.detail,
     createdAt: new Date().toISOString(),
-  });
+  };
+  data.audit_log.push(entry);
   saveCompanyData(companyId, data);
+  // Fire-and-forget cloud mirror of the appended audit entry.
+  mirrorUpsert('bulk_audit_log', auditRow(entry));
 }
 
 export function getAuditLog(companyId: string): BulkAuditLog[] {
@@ -208,4 +298,9 @@ export function clearBulkData(companyId: string): void {
   const storage = load();
   delete storage[companyId];
   save(storage);
+  // Fire-and-forget cloud mirror of the per-company wipe across all 4 tables.
+  mirrorDeleteByCompany('bulk_ledger_accounts', companyId);
+  mirrorDeleteByCompany('bulk_suspense_transactions', companyId);
+  mirrorDeleteByCompany('bulk_ledger_entries', companyId);
+  mirrorDeleteByCompany('bulk_audit_log', companyId);
 }

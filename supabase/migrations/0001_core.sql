@@ -43,7 +43,7 @@ create table if not exists public.companies (
   tds_applicable       boolean not null default false,
   tcs_applicable       boolean not null default false,
   tax_audit_applicable boolean not null default false,
-  financial_year_start date,
+  financial_year_start text,   -- app stores a label ('april'|'july'|'january'), NOT a date
   accounting_standard  text not null default 'indian_gaap'
                          check (accounting_standard in ('indian_gaap','ind_as')),
   accounting_method    text not null default 'mercantile'
