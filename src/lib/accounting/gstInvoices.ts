@@ -1,4 +1,5 @@
 import { emitInvoiceDataChanged } from '@/lib/journalSync';
+import { mirrorUpsert, mirrorDelete } from '@/lib/sync/cloudSync';
 
 export type SalesBucket = 'B2B' | 'B2CL' | 'B2CS' | 'EXP' | 'CDNR' | 'CDNUR';
 export type PurchaseBucket =
@@ -1327,6 +1328,8 @@ export function createInvoiceV2(companyId: string, draft: InvoiceV2Draft): Invoi
   };
   db.invoices.push(invoice);
   saveDbV2(db);
+  // Fire-and-forget cloud mirror (best-effort; never throws / never awaited).
+  try { mirrorUpsert('invoices', invoice); } catch { /* best-effort */ }
   return invoice;
 }
 
@@ -1340,6 +1343,8 @@ export function updateInvoiceV2(invoiceId: string, draft: Partial<InvoiceV2Draft
   db.invoices[idx] = { ...merged, ...recalc };
   saveDbV2(db);
   emitInvoiceDataChanged(existing.company_id);
+  // Fire-and-forget cloud mirror (best-effort; never throws / never awaited).
+  try { mirrorUpsert('invoices', db.invoices[idx]); } catch { /* best-effort */ }
   return db.invoices[idx];
 }
 
@@ -1347,6 +1352,8 @@ export function deleteInvoiceV2(invoiceId: string) {
   const db = loadDbV2();
   db.invoices = db.invoices.filter((x) => x.id !== invoiceId);
   saveDbV2(db);
+  // Fire-and-forget cloud mirror (best-effort; never throws / never awaited).
+  try { mirrorDelete('invoices', invoiceId); } catch { /* best-effort */ }
 }
 
 export function listInvoicesByGstr1Table(companyId: string, table: Gstr1Table): InvoiceV2[] {
