@@ -227,10 +227,10 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
 
   if (loading || !groups) {
     return (
-      <aside className="w-full bg-[#1b4a43] border-r border-black/10 h-full shrink-0 flex flex-col min-h-0">
+      <aside className="w-full bg-white border-r border-gray-200 h-full shrink-0 flex flex-col min-h-0">
         <div className="p-3 space-y-2 flex-1 overflow-y-auto min-h-0">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="h-7 bg-white/10 rounded-md animate-pulse" />
+            <div key={i} className="h-7 bg-gray-100 rounded-md animate-pulse" />
           ))}
         </div>
       </aside>
@@ -241,15 +241,15 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
 
   return (
     <>
-      <aside className="w-full bg-[#1b4a43] border-r border-black/10 h-full shrink-0 flex flex-col min-h-0">
+      <aside className="w-full bg-white border-r border-gray-200 h-full shrink-0 flex flex-col min-h-0">
         <nav className="py-2 flex-1 overflow-y-auto min-h-0">
           {/* Aleza button */}
           <div className="mb-2 px-1.5">
             <button
               onClick={onAlezaToggle}
-              className="w-full flex items-center gap-2.5 px-3 py-1.5 mx-0 rounded-lg text-[13px] font-semibold transition-colors text-white/85 bg-white/5 hover:bg-white/12 hover:text-white group"
+              className="w-full flex items-center gap-2.5 px-3 py-1.5 mx-0 rounded-lg text-[13px] font-medium transition-colors text-gray-600 hover:bg-blue-50 hover:text-blue-700 group"
             >
-              <Sparkles className="h-3.5 w-3.5 shrink-0 text-teal-300 group-hover:text-teal-200" />
+              <Sparkles className="h-3.5 w-3.5 shrink-0 text-gray-400 group-hover:text-blue-600" />
               <span className="truncate">Aleza</span>
             </button>
           </div>
@@ -257,7 +257,7 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
           {/* Quick search — type the start of an entry to float it to the top */}
           <div className="mb-2 px-1.5">
             <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-white/50 pointer-events-none" />
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400 pointer-events-none" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -266,11 +266,11 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
                   if (e.key === 'Escape') setQuery('');
                 }}
                 placeholder="Search menu…"
-                className="w-full h-8 pl-8 pr-7 text-[13px] text-white bg-white/10 border border-white/10 rounded-lg focus:outline-none focus:bg-white/15 focus:border-white/30 focus:ring-2 focus:ring-white/10 placeholder:text-white/40 transition-colors"
+                className="w-full h-8 pl-8 pr-7 text-[13px] bg-gray-100 border border-transparent rounded-lg focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 placeholder:text-gray-400 transition-colors"
               />
               {query && (
                 <button onClick={() => setQuery('')} title="Clear"
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 p-0.5 rounded text-white/50 hover:text-white hover:bg-white/10">
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 p-0.5 rounded text-gray-400 hover:text-gray-600 hover:bg-gray-200">
                   <X className="h-3 w-3" />
                 </button>
               )}
@@ -280,11 +280,11 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
           {q ? (
           /* ── Search results (matches float to the top) ── */
           <div className="mb-1">
-            <p className="text-[10px] uppercase font-bold text-white/40 tracking-widest px-3 py-1.5 mt-1">
+            <p className="text-[10px] uppercase font-bold text-gray-400 tracking-widest px-3 py-1.5 mt-1">
               Results{matches.length ? ` (${matches.length})` : ''}
             </p>
             {matches.length === 0 ? (
-              <p className="text-[11px] text-white/40 px-4 py-1 italic">No matching menu items</p>
+              <p className="text-[11px] text-gray-400 px-4 py-1 italic">No matching menu items</p>
             ) : matches.map((item) => {
               const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
               return (
@@ -293,10 +293,10 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
                   to={item.href}
                   onClick={() => setQuery('')}
                   className={`flex items-center gap-2.5 px-3 py-1.5 mx-1.5 rounded-lg text-[13px] font-medium transition-colors ${
-                    isActive ? 'bg-white/15 text-white shadow-[0_8px_18px_-8px_rgba(0,0,0,0.45)]' : 'text-white/70 hover:bg-white/10 hover:text-white'
+                    isActive ? 'bg-blue-600 text-white shadow-[0_8px_18px_-8px_color-mix(in_srgb,var(--primary)_70%,transparent)]' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                   }`}
                 >
-                  <item.icon className={`h-3.5 w-3.5 shrink-0 ${isActive ? 'text-white' : 'text-white/50'}`} />
+                  <item.icon className={`h-3.5 w-3.5 shrink-0 ${isActive ? 'text-white' : 'text-gray-400'}`} />
                   <span className="truncate">{item.label}</span>
                 </Link>
               );
@@ -307,7 +307,7 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
           {/* Nav groups */}
           {groups.map((group) => (
             <div key={group.heading} className="mb-1">
-              <p className="text-[10px] uppercase font-bold text-white/40 tracking-widest px-3 py-1.5 mt-1">
+              <p className="text-[10px] uppercase font-bold text-gray-400 tracking-widest px-3 py-1.5 mt-1">
                 {group.heading}
               </p>
               {group.items.map((item) => {
@@ -317,10 +317,10 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
                     key={item.href}
                     to={item.href}
                     className={`flex items-center gap-2.5 px-3 py-1.5 mx-1.5 rounded-lg text-[13px] font-medium transition-colors ${
-                      isActive ? 'bg-white/15 text-white shadow-[0_8px_18px_-8px_rgba(0,0,0,0.45)]' : 'text-white/70 hover:bg-white/10 hover:text-white'
+                      isActive ? 'bg-blue-600 text-white shadow-[0_8px_18px_-8px_color-mix(in_srgb,var(--primary)_70%,transparent)]' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                     }`}
                   >
-                    <item.icon className={`h-3.5 w-3.5 shrink-0 ${isActive ? 'text-white' : 'text-white/50'}`} />
+                    <item.icon className={`h-3.5 w-3.5 shrink-0 ${isActive ? 'text-white' : 'text-gray-400'}`} />
                     <span className="truncate">{item.label}</span>
                   </Link>
                 );
@@ -331,19 +331,19 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
           {/* WORKSPACE — file tree (hidden in Business mode) */}
           {mode !== 'business' && (
           <div className="mb-1" onContextMenu={openWorkspaceBg}>
-            <p className="text-[10px] uppercase font-bold text-white/40 tracking-widest px-3 py-1.5 mt-1 flex items-center justify-between">
+            <p className="text-[10px] uppercase font-bold text-gray-400 tracking-widest px-3 py-1.5 mt-1 flex items-center justify-between">
               <span>WORKSPACE</span>
               <button
                 onClick={handleNewFile}
                 title="New file"
-                className="p-0.5 rounded hover:bg-white/10 text-white/40 hover:text-white/70 transition-colors"
+                className="p-0.5 rounded hover:bg-gray-100 text-gray-300 hover:text-gray-500 transition-colors"
               >
                 <FilePlus className="h-3 w-3" />
               </button>
             </p>
 
             {wsFiles.length === 0 ? (
-              <p className="text-[11px] text-white/40 px-4 py-1 italic">
+              <p className="text-[11px] text-gray-400 px-4 py-1 italic">
                 No files yet
               </p>
             ) : (
@@ -376,10 +376,10 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
                       <Link
                         to={fileHref}
                         className={`flex items-center gap-2.5 px-3 py-1.5 mx-1.5 rounded-lg text-[13px] font-medium transition-colors ${
-                          isActive ? 'bg-white/15 text-white shadow-[0_8px_18px_-8px_rgba(0,0,0,0.45)]' : 'text-white/70 hover:bg-white/10 hover:text-white'
+                          isActive ? 'bg-blue-600 text-white shadow-[0_8px_18px_-8px_color-mix(in_srgb,var(--primary)_70%,transparent)]' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                         }`}
                       >
-                        <Icon className={`h-3.5 w-3.5 shrink-0 ${isActive ? 'text-white' : 'text-white/50'}`} />
+                        <Icon className={`h-3.5 w-3.5 shrink-0 ${isActive ? 'text-white' : 'text-gray-400'}`} />
                         <span className="truncate text-xs">{f.name}</span>
                       </Link>
                     )}
@@ -394,14 +394,14 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
         </nav>
 
         {/* Settings */}
-        <div className="border-t border-black/15 mt-1 pt-1 pb-2 shrink-0">
+        <div className="border-t border-gray-200 mt-1 pt-1 pb-2 shrink-0">
           <Link
             to={`${base}/settings`}
             className={`flex items-center gap-2.5 px-3 py-1.5 mx-1.5 rounded-lg text-[13px] font-medium transition-colors ${
-              pathname === `${base}/settings` ? 'bg-white/15 text-white shadow-[0_8px_18px_-8px_rgba(0,0,0,0.45)]' : 'text-white/70 hover:bg-white/10 hover:text-white'
+              pathname === `${base}/settings` ? 'bg-blue-600 text-white shadow-[0_8px_18px_-8px_color-mix(in_srgb,var(--primary)_70%,transparent)]' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
             }`}
           >
-            <Settings className={`h-3.5 w-3.5 shrink-0 ${pathname === `${base}/settings` ? 'text-white' : 'text-white/50'}`} />
+            <Settings className={`h-3.5 w-3.5 shrink-0 ${pathname === `${base}/settings` ? 'text-white' : 'text-gray-400'}`} />
             <span>Settings</span>
           </Link>
         </div>

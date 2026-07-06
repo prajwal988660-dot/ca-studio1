@@ -16,17 +16,6 @@ import { computeProfitLoss } from '@/lib/accounting/profitLossCompute';
 import { formatIndianCurrency } from '@/lib/utils/currencyFormat';
 import { getCurrentFY } from '@/lib/utils/dateUtils';
 
-// Decorative sparkline that tints itself with the card's --accent.
-function Sparkline() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 120 32" preserveAspectRatio="none"
-      style={{ position: 'absolute', left: 0, right: 0, bottom: 0, width: '100%', height: '2.5rem', color: 'var(--accent)', opacity: 0.38, pointerEvents: 'none' }}>
-      <polyline points="0,27 15,21 30,24 45,15 60,19 75,10 90,14 105,5 120,11"
-        fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 function shortINR(num: number): string {
   const abs = Math.abs(num);
   const sign = num < 0 ? '-' : '';
@@ -100,30 +89,31 @@ export default function CompanyOverviewPage() {
   return (
     <div className="space-y-5">
 
-      {/* ── Company header (frosted glass) ── */}
-      <div className="glass-card p-6 overflow-hidden">
+      {/* ── Company hero header ── */}
+      <div className="hero p-6">
+        <div className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full border border-white/10" />
         {/* subtle rising-graph motif */}
-        <svg className="pointer-events-none absolute inset-x-0 bottom-0 h-24 w-full opacity-[0.12]" viewBox="0 0 600 100" preserveAspectRatio="none" aria-hidden="true">
+        <svg className="pointer-events-none absolute inset-x-0 bottom-0 h-24 w-full opacity-20" viewBox="0 0 600 100" preserveAspectRatio="none" aria-hidden="true">
           <polyline points="0,82 60,66 120,72 180,48 240,56 300,36 360,44 420,24 480,32 540,14 600,22"
-            fill="none" stroke="#0D9488" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
         <div className="relative flex items-start justify-between flex-wrap gap-3">
           <div className="flex items-start gap-3.5">
             <span className="icon-badge mt-1"><Building2 className="h-5 w-5" /></span>
             <div>
-              <h1 className="text-2xl font-extrabold tracking-tight text-gray-900">{company.name}</h1>
+              <h1 className="text-2xl font-extrabold tracking-tight">{company.name}</h1>
               <div className="flex flex-wrap items-center gap-2 mt-2.5">
-                <span className="px-2.5 py-0.5 bg-teal-50 text-teal-700 rounded-full text-[11px] font-semibold border border-teal-100">
+                <span className="px-2.5 py-0.5 bg-white/10 text-white rounded-full text-[11px] font-semibold border border-white/15">
                   {entityMeta?.label ?? company.entity_type}
                 </span>
-                <span className="px-2.5 py-0.5 bg-gray-100 text-gray-600 rounded-full text-[11px] font-semibold">
+                <span className="px-2.5 py-0.5 bg-white/10 text-white rounded-full text-[11px] font-semibold border border-white/15">
                   {entityMeta?.itrForm}
                 </span>
-                <span className="px-2.5 py-0.5 bg-gray-100 text-gray-600 rounded-full text-[11px] font-semibold">
+                <span className="px-2.5 py-0.5 bg-white/10 text-white rounded-full text-[11px] font-semibold border border-white/15">
                   {company.accounting_method === 'mercantile' ? 'Accrual' : 'Cash'} Basis
                 </span>
                 {company.gst_status !== 'unregistered' && (
-                  <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 rounded-full text-[11px] font-semibold border border-emerald-100">
+                  <span className="px-2.5 py-0.5 bg-emerald-400/15 text-emerald-200 rounded-full text-[11px] font-semibold border border-emerald-300/25">
                     GST {company.gst_status === 'composition' ? 'Composition' : 'Regular'}
                   </span>
                 )}
@@ -132,36 +122,36 @@ export default function CompanyOverviewPage() {
           </div>
           <Link
             to={`/company/${companyId}/settings`}
-            className="relative inline-flex items-center gap-1.5 h-9 px-4 rounded-full text-xs font-bold text-gray-600 bg-white/70 border border-gray-200 hover:bg-white hover:border-gray-300 transition-colors shadow-sm"
+            className="btn-pill-outline relative text-white !h-9"
           >
             Settings
           </Link>
         </div>
 
         {/* Identity details */}
-        <div className="relative grid grid-cols-2 sm:grid-cols-4 gap-4 mt-5 pt-5 border-t border-gray-200/70">
+        <div className="relative grid grid-cols-2 sm:grid-cols-4 gap-4 mt-5 pt-5 border-t border-white/10">
           {company.entity_details?.pan && (
             <div>
-              <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">PAN</p>
-              <p className="text-sm font-mono font-semibold text-gray-800">{company.entity_details.pan}</p>
+              <p className="text-[10px] hero-muted uppercase tracking-wider mb-0.5">PAN</p>
+              <p className="text-sm font-mono font-semibold text-white">{company.entity_details.pan}</p>
             </div>
           )}
           {company.gst_details?.gstin && (
             <div>
-              <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">GSTIN</p>
-              <p className="text-sm font-mono font-semibold text-gray-800">{company.gst_details.gstin}</p>
+              <p className="text-[10px] hero-muted uppercase tracking-wider mb-0.5">GSTIN</p>
+              <p className="text-sm font-mono font-semibold text-white">{company.gst_details.gstin}</p>
             </div>
           )}
           {(company.entity_details as any)?.cin && (
             <div>
-              <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">CIN</p>
-              <p className="text-sm font-mono font-semibold text-gray-800">{(company.entity_details as any).cin}</p>
+              <p className="text-[10px] hero-muted uppercase tracking-wider mb-0.5">CIN</p>
+              <p className="text-sm font-mono font-semibold text-white">{(company.entity_details as any).cin}</p>
             </div>
           )}
           {company.entity_details?.state && (
             <div>
-              <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">State</p>
-              <p className="text-sm font-semibold text-gray-800">{company.entity_details.state}</p>
+              <p className="text-[10px] hero-muted uppercase tracking-wider mb-0.5">State</p>
+              <p className="text-sm font-semibold text-white">{company.entity_details.state}</p>
             </div>
           )}
         </div>
@@ -174,7 +164,6 @@ export default function CompanyOverviewPage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {/* Journal entries */}
         <div className="stat-premium" style={{ '--accent': '#2563EB' } as CSSProperties}>
-          <Sparkline />
           <span className="stat-premium-icon"><BookOpen className="h-5 w-5" /></span>
           <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Journal Entries</p>
           <p className="text-[26px] leading-none font-extrabold text-gray-900 font-mono">
@@ -185,7 +174,6 @@ export default function CompanyOverviewPage() {
 
         {/* Cash & Bank */}
         <div className="stat-premium" style={{ '--accent': cashBalance < 0 ? '#DC2626' : '#0D9488' } as CSSProperties}>
-          <Sparkline />
           <span className="stat-premium-icon"><Wallet className="h-5 w-5" /></span>
           <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Cash &amp; Bank</p>
           <p className={`text-[26px] leading-none font-extrabold font-mono ${cashBalance < 0 ? 'text-red-600' : 'text-gray-900'}`}>
@@ -196,7 +184,6 @@ export default function CompanyOverviewPage() {
 
         {/* Net Profit / Loss */}
         <div className="stat-premium" style={{ '--accent': isProfit ? '#16A34A' : '#DC2626' } as CSSProperties}>
-          <Sparkline />
           <span className="stat-premium-icon">{isProfit ? <TrendingUp className="h-5 w-5" /> : <TrendingDown className="h-5 w-5" />}</span>
           <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">
             {isProfit ? 'Net Profit' : 'Net Loss'}
@@ -209,7 +196,6 @@ export default function CompanyOverviewPage() {
 
         {/* Accounts */}
         <div className="stat-premium" style={{ '--accent': '#7C3AED' } as CSSProperties}>
-          <Sparkline />
           <span className="stat-premium-icon"><Scale className="h-5 w-5" /></span>
           <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Active Accounts</p>
           <p className="text-[26px] leading-none font-extrabold text-gray-900 font-mono">
@@ -223,14 +209,12 @@ export default function CompanyOverviewPage() {
       {(totalDebtors > 0 || totalCreditors > 0) && (
         <div className="grid grid-cols-2 gap-3">
           <div className="stat-premium" style={{ '--accent': '#2563EB' } as CSSProperties}>
-            <Sparkline />
-          <span className="stat-premium-icon"><Users className="h-5 w-5" /></span>
+            <span className="stat-premium-icon"><Users className="h-5 w-5" /></span>
             <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Debtors (Receivable)</p>
             <p className="text-[22px] leading-none font-extrabold text-blue-600 font-mono">{shortINR(totalDebtors)}</p>
           </div>
           <div className="stat-premium" style={{ '--accent': '#D97706' } as CSSProperties}>
-            <Sparkline />
-          <span className="stat-premium-icon"><Receipt className="h-5 w-5" /></span>
+            <span className="stat-premium-icon"><Receipt className="h-5 w-5" /></span>
             <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1">Creditors (Payable)</p>
             <p className="text-[22px] leading-none font-extrabold text-amber-600 font-mono">{shortINR(totalCreditors)}</p>
           </div>

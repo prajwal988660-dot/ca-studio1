@@ -46,7 +46,7 @@ export default function CompanyLayout() {
 
   return (
     <CompanyProvider>
-      <div className="app-bg h-screen flex flex-col overflow-hidden">
+      <div className="h-screen flex flex-col bg-gray-50 overflow-hidden">
         <Header
           onMenuToggle={() => setSidebarOpen((o) => !o)}
           onAlezaToggle={() => setAlezaOpen((o) => !o)}

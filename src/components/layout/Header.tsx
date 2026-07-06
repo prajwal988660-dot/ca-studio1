@@ -14,7 +14,7 @@ export function Header({ onMenuToggle, onAlezaToggle, alezaOpen }: HeaderProps) 
 
   if (loading) {
     return (
-      <header className="h-9 bg-white/60 backdrop-blur-md border-b border-white/50 flex items-center px-3 shrink-0 z-30">
+      <header className="h-9 bg-white border-b border-gray-200 flex items-center px-3 shrink-0 z-30">
         <div className="h-3 w-28 bg-gray-100 rounded animate-pulse" />
       </header>
     );
@@ -25,7 +25,7 @@ export function Header({ onMenuToggle, onAlezaToggle, alezaOpen }: HeaderProps) 
   const meta = ENTITY_TYPES[company.entity_type as EntityType];
 
   return (
-    <header className="h-9 bg-white/60 backdrop-blur-md border-b border-white/50 flex items-center px-3 gap-2 shrink-0 z-30 sticky top-0 select-none">
+    <header className="h-9 bg-white border-b border-gray-200 flex items-center px-3 gap-2 shrink-0 z-30 sticky top-0 select-none">
       {onMenuToggle && (
         <button
           onClick={onMenuToggle}
