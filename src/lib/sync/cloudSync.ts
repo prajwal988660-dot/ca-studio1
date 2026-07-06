@@ -133,3 +133,57 @@ export async function pullCloudToLocal(): Promise<{ ok: boolean; error?: string 
   }
   return { ok: true };
 }
+
+/**
+ * Pull the user's cloud rows and MERGE them into localStorage (union by id).
+ * Non-destructive: local-only rows survive (they are pushed up separately by
+ * pushLocalToCloud). For a row that exists both locally and in the cloud, the
+ * newer `updated_at` wins; rows without an `updated_at` (book_periods,
+ * custom_accounts) keep the local copy. This is what powers multi-device sync:
+ * a fresh device (or one that was edited offline elsewhere) gains the other
+ * device's rows without clobbering its own unsynced work.
+ */
+export async function mergeCloudIntoLocal(): Promise<{ ok: boolean; merged?: number; error?: string }> {
+  if (!supabase) return { ok: false, error: 'Supabase not configured' };
+  if (!(await currentUserId())) return { ok: false, error: 'Not signed in' };
+
+  const local: Record<string, Row[]> =
+    readLocalDb() ?? { companies: [], journal_entries: [], book_periods: [], entity_data: [], custom_accounts: [] };
+
+  let merged = 0;
+  for (const table of SYNCED_TABLES) {
+    const { data, error } = await supabase.from(table).select('*');
+    if (error) return { ok: false, error: `${table}: ${error.message}` };
+
+    const byId = new Map<string, Row>();
+    for (const r of local[table] ?? []) byId.set(String(r.id), r);
+
+    for (const cloudRow of (data as Row[]) ?? []) {
+      const id = String(cloudRow.id);
+      const existing = byId.get(id);
+      if (!existing) { byId.set(id, cloudRow); merged++; continue; }
+      const localTs = existing.updated_at ? Date.parse(String(existing.updated_at)) : 0;
+      const cloudTs = cloudRow.updated_at ? Date.parse(String(cloudRow.updated_at)) : 0;
+      if (cloudTs > localTs) { byId.set(id, cloudRow); merged++; }
+    }
+    local[table] = Array.from(byId.values());
+  }
+
+  if (typeof window !== 'undefined') {
+    window.localStorage.setItem(OFFLINE_DB_STORAGE_KEY, JSON.stringify(local));
+  }
+  return { ok: true, merged };
+}
+
+/**
+ * Full sign-in reconciliation: seed the cloud with this device's local rows,
+ * then merge the cloud (including rows created on other devices) back down.
+ * Best-effort and safe to call repeatedly; a no-op when offline / not signed in.
+ * Callers should await this before routing into the app so the first render
+ * already reflects the merged data.
+ */
+export async function syncOnSignIn(): Promise<void> {
+  if (!supabase) return;
+  try { await pushLocalToCloud(); } catch { /* best-effort */ }
+  try { await mergeCloudIntoLocal(); } catch { /* best-effort */ }
+}

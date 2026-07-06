@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { User, Phone, Mail, MapPin, Briefcase, Award, Lock, Sparkles, AlertCircle, Rocket, ShieldCheck, Target } from 'lucide-react';
-import { storeProfileInSupabase } from '@/lib/supabase';
+import { saveUserProfile } from '@/lib/profile';
 
 export interface UserRegistration {
   name: string;
@@ -112,7 +112,7 @@ export default function SignUpForm({ onSuccess }: SignUpFormProps) {
     };
 
     try {
-      await storeProfileInSupabase(registrationData);
+      await saveUserProfile(registrationData);
     } catch (err) {
       console.error('Error writing to Supabase:', err);
     }

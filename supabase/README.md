@@ -15,10 +15,15 @@ close to your users and save the database password somewhere safe.
 
 ### 2. Run the schema
 In the project dashboard open **SQL Editor → New query**, then paste the full
-contents of `migrations/0001_core.sql` and click **Run**. It is safe to re-run:
-the script uses `create ... if not exists` and drops/recreates its triggers and
-policies each time. You should see the five tables under **Table Editor**:
-`companies`, `book_periods`, `journal_entries`, `custom_accounts`, `entity_data`.
+contents of `migrations/0001_core.sql` and click **Run**. Then repeat for
+`migrations/0002_user_profiles.sql` (run it *after* 0001). Both are safe to
+re-run: they use `create ... if not exists` and drop/recreate their triggers and
+policies each time. You should see six tables under **Table Editor**:
+`companies`, `book_periods`, `journal_entries`, `custom_accounts`, `entity_data`,
+and `user_profiles`.
+
+`user_profiles` (added in 0002) stores the onboarding contact/professional
+details captured by the sign-up form — one row per user, keyed by `user_id`.
 
 ### 3. Enable auth providers
 Go to **Authentication → Providers** and enable:

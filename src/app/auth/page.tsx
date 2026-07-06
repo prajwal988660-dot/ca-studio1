@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Building2, Briefcase, Check, ArrowRight, ArrowLeft, User, Lock, Eye, EyeOff } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
-import { pushLocalToCloud } from '@/lib/sync/cloudSync';
+import { syncOnSignIn } from '@/lib/sync/cloudSync';
 
 // Access mode is chosen here and persisted; the sidebar reads it (no selector there).
 const ACCESS_MODE_KEY = 'ca_access_mode';
@@ -61,10 +61,14 @@ export default function AuthPage() {
   const [remember, setRemember] = useState(true);
   const [busy, setBusy] = useState(false);
 
-  // If a Google OAuth redirect lands back here with a session, advance.
+  // If a Google OAuth redirect lands back here with a session, sync then advance.
   useEffect(() => {
     if (!isSupabaseConfigured || !supabase) return;
-    supabase.auth.getSession().then(({ data }) => { if (data.session) setStep('profile'); });
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (!data.session) return;
+      await syncOnSignIn(); // push local up + merge cloud (other devices) down
+      setStep('profile');
+    });
   }, []);
 
   // Email sign-in / sign-up — every required field must be filled before continuing.
@@ -91,8 +95,9 @@ export default function AuthPage() {
             : await supabase.auth.signInWithPassword(creds);
         if (error) { toast.error(error.message); return; }
         toast.success(mode === 'login' ? 'Signed in' : 'Account created');
-        // Best-effort: seed the cloud with any existing local data (needs a session).
-        pushLocalToCloud().catch(() => {});
+        // Seed the cloud with any local data, then merge cloud rows (incl. other
+        // devices) back down before entering the app.
+        await syncOnSignIn();
         setStep('profile');
       } finally {
         setBusy(false);
