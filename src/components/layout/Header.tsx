@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ChevronRight, Settings, Menu, Layers } from 'lucide-react';
+import { ChevronRight, Menu, Layers } from 'lucide-react';
 import { useCompany } from '@/hooks/useCompany';
 import { ENTITY_TYPES, type EntityType } from '@/lib/constants/entityTypes';
 
@@ -69,14 +69,6 @@ export function Header({ onMenuToggle, onAlezaToggle, alezaOpen }: HeaderProps) 
           Aleza
         </button>
       )}
-
-      <Link
-        to={`/company/${company.id}/settings`}
-        className="p-1 rounded text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-        title="Settings"
-      >
-        <Settings className="h-3.5 w-3.5" />
-      </Link>
     </header>
   );
 }

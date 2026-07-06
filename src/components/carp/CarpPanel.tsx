@@ -267,44 +267,6 @@ export function CarpPanel({ open, onClose, width, onWidthChange }: CarpPanelProp
 
       {/* ── Messages ── */}
       <div className="flex-1 overflow-y-auto min-h-0 px-3 py-3 space-y-3">
-        {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-center px-4">
-            <p className="text-sm font-bold text-gray-300 mb-1 tracking-tight">Aleza</p>
-            <p className="text-[11px] text-gray-400 mb-4 max-w-[220px] leading-relaxed">
-              Your CA accounting agent. Create entries, compute statements, upload data, check compliance.
-            </p>
-            <div className="space-y-1.5 w-full max-w-[260px]">
-              {[
-                'Create a sales entry for ₹1,00,000',
-                'Show trial balance for this FY',
-                'What compliance is overdue?',
-                'Generate board resolution for dividend',
-              ].map((s) => (
-                <button
-                  key={s}
-                  onClick={() => {
-                    setInput(s);
-                    inputRef.current?.focus();
-                  }}
-                  className="w-full text-left px-2.5 py-1.5 rounded-md border border-gray-100 text-[11px] text-gray-500
-                    hover:border-blue-200 hover:bg-blue-50/50 hover:text-blue-600 transition-colors"
-                >
-                  {s}
-                </button>
-              ))}
-              {/* Upload shortcut — locked */}
-              <div
-                className="w-full text-left px-2.5 py-1.5 rounded-md border border-dashed border-gray-200 text-[11px] text-gray-400
-                  bg-gray-50 flex items-center gap-1.5 cursor-not-allowed select-none"
-                title="Upload disabled for security"
-              >
-                <LockKeyhole className="h-3 w-3 shrink-0 text-amber-400" />
-                <span>Upload disabled — <span className="text-amber-600">security restriction</span></span>
-              </div>
-            </div>
-          </div>
-        )}
-
         {messages.map((msg) => (
           <MessageBubble key={msg.id} message={msg} />
         ))}

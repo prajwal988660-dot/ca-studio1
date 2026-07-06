@@ -11,7 +11,7 @@ const SIDEBAR_MIN = 160;
 const SIDEBAR_MAX = 300;
 
 export default function CompanyLayout() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(210);
   const [alezaOpen, setAlezaOpen] = useState(false);
   const [alezaWidth, setAlezaWidth] = useState(360);
@@ -52,7 +52,7 @@ export default function CompanyLayout() {
           onAlezaToggle={() => setAlezaOpen((o) => !o)}
           alezaOpen={alezaOpen}
         />
-        <div className="flex flex-1 min-h-0">
+        <div className="flex flex-1 min-h-0 min-w-0">
           {/* Mobile overlay */}
           {sidebarOpen && (
             <div

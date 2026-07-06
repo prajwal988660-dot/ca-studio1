@@ -12,12 +12,6 @@ import * as LucideIcons from 'lucide-react';
 
 const LOCKED_ENTITY_TYPES = new Set(['huf', 'trust', 'society', 'section8', 'aop_boi', 'cooperative']);
 
-const BUSINESS_NATURES = [
-  'Trading','Manufacturing','Service','Professional',
-  'Commission Agent','Contractor','Transport','Real Estate',
-  'Agriculture','Education','Healthcare','IT/Software',
-];
-
 type WizardData = {
   entity_type: string;
   name: string; pan: string; address: string; city: string;
@@ -27,7 +21,7 @@ type WizardData = {
   cin: string; authorizedCapital: number; paidUpCapital: number; faceValuePerShare: number;
   kartaName: string; registrationNumber: string;
   tan: string; aadhaar: string; dob: string; tradeName: string; llpin: string; dateOfIncorporation: string;
-  business_nature: string[]; accounting_method: 'mercantile' | 'cash';
+  accounting_method: 'mercantile' | 'cash';
   financial_year_start: string;
   gst_status: 'unregistered' | 'regular' | 'composition'; gstin: string;
   tds_applicable: boolean; tcs_applicable: boolean;
@@ -38,7 +32,7 @@ const defaultData: WizardData = {
   entity_type: '', name: '', pan: '', address: '', city: '', state: '', pincode: '', phone: '', email: '',
   partners: [{ name: '', capitalAmount: 0, profitSharingRatio: 50, salary: 0 }, { name: '', capitalAmount: 0, profitSharingRatio: 50, salary: 0 }],
   capitalMethod: 'fluctuating', cin: '', authorizedCapital: 0, paidUpCapital: 0, faceValuePerShare: 10,
-  kartaName: '', registrationNumber: '', business_nature: [], accounting_method: 'mercantile',
+  kartaName: '', registrationNumber: '', accounting_method: 'mercantile',
   tan: '', aadhaar: '', dob: '', tradeName: '', llpin: '', dateOfIncorporation: '',
   financial_year_start: 'april', gst_status: 'unregistered', gstin: '',
   tds_applicable: false, tcs_applicable: false, inventory_enabled: false, valuation_method: 'weighted_average',
@@ -128,7 +122,6 @@ export default function CreateCompanyPage() {
   const steps: { key: string; title: string; desc: string }[] = [
     { key: 'entity', title: 'Entity Type', desc: 'Choose the legal structure of the business.' },
     { key: 'details', title: 'Registration Details', desc: 'Identity, registration & location.' },
-    ...(!isIndividual ? [{ key: 'business', title: 'Business & Accounting', desc: 'Activities and recognition method.' }] : []),
     { key: 'tax', title: 'Tax Configuration', desc: 'GST, TDS and TCS setup.' },
     ...(!isIndividual ? [{ key: 'inventory', title: 'Inventory Settings', desc: 'Stock tracking configuration.' }] : []),
   ];
@@ -142,6 +135,16 @@ export default function CreateCompanyPage() {
     : 'Date of Incorporation';
   const dateErr = isIndividual ? errors.dob : errors.dateOfIncorporation;
 
+  // Incorporation / registration / DOB dates must be strictly in the PAST
+  // (never today, never future). `todayStr` is used by validation; `maxPastDate`
+  // (= yesterday) is the date input's max attr so today/future can't be picked.
+  const pad2 = (n: number) => String(n).padStart(2, '0');
+  const toDateStr = (dt: Date) => `${dt.getFullYear()}-${pad2(dt.getMonth() + 1)}-${pad2(dt.getDate())}`;
+  const todayStr = toDateStr(new Date());
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const maxPastDate = toDateStr(yesterday);
+
   const focusFirstError = (errs: Record<string, string>) => {
     setTimeout(() => {
       const firstErrorKey = Object.keys(errs)[0];
@@ -154,11 +157,11 @@ export default function CreateCompanyPage() {
   };
 
   // ─── Per-step validation ────────────────────────────────────────────────────
-  const validateStep = (key: string): boolean => {
+  const validateStep = (key: string, d: WizardData = data): boolean => {
     const errs: Record<string, string> = {};
 
     if (key === 'entity') {
-      if (!data.entity_type) {
+      if (!d.entity_type) {
         toast.error('Please select an Entity Type first.');
         setErrors({ entity_type: 'Required' });
         return false;
@@ -167,43 +170,42 @@ export default function CreateCompanyPage() {
     }
 
     if (key === 'details') {
-      if (!data.name.trim()) errs.name = 'Name is required';
+      if (!d.name.trim()) errs.name = 'Name is required';
 
       // PAN — mandatory + format
-      if (!data.pan) {
+      if (!d.pan) {
         errs.pan = 'PAN is mandatory';
-      } else if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(data.pan)) {
+      } else if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(d.pan)) {
         errs.pan = 'Invalid PAN format';
       } else {
-        const char4 = data.pan[3];
+        const char4 = d.pan[3];
         if (isIndividual && char4 !== 'P') errs.pan = "Individual PAN 4th letter must be 'P'";
         if (isCompany && char4 !== 'C') errs.pan = "Company PAN 4th letter must be 'C'";
         if (isPartnership && char4 !== 'F') errs.pan = "Firm PAN 4th letter must be 'F'";
         if (isTrust && char4 !== 'T') errs.pan = "Trust PAN 4th letter must be 'T'";
       }
 
-      // Date — mandatory
+      // Date — mandatory + must be strictly in the PAST (not today, not future)
       if (isIndividual) {
-        if (!data.dob) errs.dob = 'Date of birth is required';
-      } else if (!data.dateOfIncorporation) {
+        if (!d.dob) errs.dob = 'Date of birth is required';
+        else if (d.dob >= todayStr) errs.dob = 'Date of birth must be in the past';
+      } else if (!d.dateOfIncorporation) {
         errs.dateOfIncorporation = `${dateLabel} is required`;
+      } else if (d.dateOfIncorporation >= todayStr) {
+        errs.dateOfIncorporation = 'Incorporation date must be in the past';
       }
 
       // Optional-but-validated fields
-      if (data.tan && !/^[A-Z]{4}[0-9]{5}[A-Z]{1}$/.test(data.tan)) errs.tan = 'Invalid TAN format';
-      if (isIndividual && data.aadhaar && !/^\d{12}$/.test(data.aadhaar)) errs.aadhaar = 'Must be 12 digits';
-      if (isCompany && data.cin && data.cin.length !== 21) errs.cin = 'CIN must be 21 characters';
-    }
-
-    if (key === 'business') {
-      if (!isIndividual && data.business_nature.length === 0) errs.business_nature = 'Select at least one business nature';
+      if (d.tan && !/^[A-Z]{4}[0-9]{5}[A-Z]{1}$/.test(d.tan)) errs.tan = 'Invalid TAN format';
+      if (isIndividual && d.aadhaar && !/^\d{12}$/.test(d.aadhaar)) errs.aadhaar = 'Must be 12 digits';
+      if (isCompany && d.cin && d.cin.length !== 21) errs.cin = 'CIN must be 21 characters';
     }
 
     if (key === 'tax') {
-      if (data.gst_status !== 'unregistered') {
-        if (!data.gstin) errs.gstin = 'GSTIN required';
-        else if (!isGstin(data.gstin)) errs.gstin = 'Invalid GSTIN (format or checksum)';
-        else if (data.pan && data.gstin.substring(2, 12) !== data.pan) errs.gstin = 'GSTIN does not match PAN';
+      if (d.gst_status !== 'unregistered') {
+        if (!d.gstin) errs.gstin = 'GSTIN required';
+        else if (!isGstin(d.gstin)) errs.gstin = 'Invalid GSTIN (format or checksum)';
+        else if (d.pan && d.gstin.substring(2, 12) !== d.pan) errs.gstin = 'GSTIN does not match PAN';
       }
     }
 
@@ -227,6 +229,18 @@ export default function CreateCompanyPage() {
   };
   const goToStep = (i: number) => {
     if (i <= step) { setStep(i); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  };
+
+  // Single-choice selection steps (e.g. the entity-type grid) auto-advance:
+  // pick an option → set the value → run this step's validation → go to next step,
+  // so the user never has to click the Next/arrow button on such steps.
+  const selectAndAdvance = (patch: Partial<WizardData>) => {
+    const merged = { ...data, ...patch };
+    upd(patch);
+    setLockedClicked(null);
+    if (!validateStep(currentKey, merged)) return;
+    setStep(s => Math.min(s + 1, steps.length - 1));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // ─── Silent MCA auto-fill from CIN (no button / no result card) ─────────────
@@ -284,7 +298,7 @@ export default function CreateCompanyPage() {
 
       const company = createCompanyLocal({
         name: data.name, entity_type: data.entity_type as EntityType,
-        entity_details: entityDetails as any, business_nature: data.business_nature,
+        entity_details: entityDetails as any, business_nature: [],
         inventory_enabled: isIndividual ? false : data.inventory_enabled,
         inventory_config: { valuationMethod: data.valuation_method, pettyCashThreshold: 5000 },
         gst_status: data.gst_status, gst_details: gstDetails as any,
@@ -378,7 +392,6 @@ export default function CreateCompanyPage() {
               <h2 className="text-lg font-extrabold tracking-tight text-slate-900">
                 {currentKey === 'entity' && 'Select Entity Type'}
                 {currentKey === 'details' && 'Company & Registration Details'}
-                {currentKey === 'business' && 'Business Nature & Accounting'}
                 {currentKey === 'tax' && 'Tax Configuration'}
                 {currentKey === 'inventory' && 'Inventory Settings'}
               </h2>
@@ -409,7 +422,7 @@ export default function CreateCompanyPage() {
                     );
                   }
                   return (
-                    <button key={key} onClick={() => { upd({ entity_type: key }); setLockedClicked(null); }}
+                    <button key={key} onClick={() => selectAndAdvance({ entity_type: key })}
                       className={`p-5 rounded-2xl border-2 text-left transition-all duration-300 relative overflow-hidden group
                         ${active
                           ? 'border-blue-500 ring-2 ring-blue-500 bg-blue-50 shadow-md shadow-blue-500/10 -translate-y-0.5'
@@ -484,6 +497,7 @@ export default function CreateCompanyPage() {
                   <input
                     name={isIndividual ? 'dob' : 'dateOfIncorporation'}
                     type="date"
+                    max={maxPastDate}
                     className={`${inp} ${dateErr ? 'border-red-500 focus:ring-red-500' : ''}`}
                     value={isIndividual ? data.dob : data.dateOfIncorporation}
                     onChange={e => upd(isIndividual ? { dob: e.target.value } : { dateOfIncorporation: e.target.value })}
@@ -593,65 +607,6 @@ export default function CreateCompanyPage() {
             </>
           )}
 
-          {/* ── STEP: Business Nature & Accounting ── */}
-          {currentKey === 'business' && (
-            <>
-              <div className="mb-8" id="business_nature">
-                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-3">Nature of Business *</label>
-                {errors.business_nature && (
-                  <p className="text-red-500 text-[10.5px] mb-3 font-medium flex items-center gap-1">
-                    <LucideIcons.AlertCircle className="w-3 h-3" /> {errors.business_nature}
-                  </p>
-                )}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {BUSINESS_NATURES.map(n => {
-                    const active = data.business_nature.includes(n);
-                    return (
-                      <button key={n} onClick={() => upd({ business_nature: active ? data.business_nature.filter(x=>x!==n) : [...data.business_nature,n] })}
-                        className={`p-3 rounded-xl border-2 text-left transition-all duration-300 relative overflow-hidden group
-                          ${active
-                            ? 'border-blue-600 bg-blue-50/50 shadow-sm shadow-blue-500/10 -translate-y-0.5'
-                            : 'border-slate-200 hover:border-blue-300 bg-white hover:-translate-y-0.5 hover:shadow-sm hover:shadow-slate-200/50'}`}>
-                        {active && <div className="absolute top-0 right-0 w-8 h-8 bg-blue-500/10 rounded-bl-full -z-10" />}
-                        <div className="flex items-center gap-2">
-                          <div className={`w-2 h-2 rounded-full transition-colors ${active ? 'bg-blue-600' : 'bg-slate-200 group-hover:bg-blue-400'}`} />
-                          <span className={`text-[12px] font-bold transition-colors ${active ? 'text-blue-900' : 'text-slate-600 group-hover:text-slate-800'}`}>{n}</span>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-3">Accounting Method</label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {[
-                    ['mercantile','Mercantile (Accrual)','Income & expenses recorded when earned/incurred', LucideIcons.BookOpenCheck],
-                    ['cash','Cash Basis','Recorded when cash is received or paid', LucideIcons.Banknote],
-                  ].map(([v, l, d, Icon]) => {
-                    const active = data.accounting_method === v;
-                    const I = Icon as any;
-                    return (
-                      <label key={v as string} className={`p-5 rounded-2xl border-2 cursor-pointer text-left transition-all duration-300 relative overflow-hidden group flex flex-col
-                        ${active
-                          ? 'border-blue-600 bg-blue-50/50 shadow-md shadow-blue-500/10 -translate-y-0.5'
-                          : 'border-slate-200 hover:border-blue-300 bg-white hover:-translate-y-0.5 hover:shadow-md hover:shadow-slate-200/50'}`}>
-                        <input type="radio" className="sr-only" checked={active} onChange={() => upd({ accounting_method: v as any })} />
-                        {active && <div className="absolute top-0 right-0 w-16 h-16 bg-blue-500/10 rounded-bl-full -z-10" />}
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 transition-colors ${active ? 'bg-blue-600 text-white shadow-inner shadow-black/10' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-600'}`}>
-                          <I className="h-5 w-5" strokeWidth={active ? 2 : 1.5} />
-                        </div>
-                        <span className={`text-sm font-bold transition-colors ${active ? 'text-blue-900' : 'text-slate-700'}`}>{l as string}</span>
-                        <span className={`text-[11px] font-medium mt-1 transition-colors ${active ? 'text-blue-600' : 'text-slate-500'}`}>{d as string}</span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
-            </>
-          )}
-
           {/* ── STEP: Tax Configuration ── */}
           {currentKey === 'tax' && (
             <>
@@ -739,7 +694,6 @@ export default function CreateCompanyPage() {
                   [dateLabel, (isIndividual ? data.dob : data.dateOfIncorporation) || '—'],
                   ['State', data.state || '—'],
                   ['Financial Year', data.financial_year_start === 'april' ? 'Apr–Mar' : data.financial_year_start === 'july' ? 'Jul–Jun' : 'Jan–Dec'],
-                  ...(!isIndividual ? [['Business Nature', data.business_nature.join(', ') || '—']] : []),
                   ['Accounting', data.accounting_method === 'mercantile' ? 'Mercantile (Accrual)' : 'Cash Basis'],
                   ['GST Status', `${data.gst_status}${data.gstin ? ` — ${data.gstin}` : ''}`],
                   ['TDS', data.tds_applicable ? 'Applicable' : 'Not applicable'],

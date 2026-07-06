@@ -1,5 +1,4 @@
 import { useMemo, type CSSProperties } from 'react';
-import { Link } from 'react-router-dom';
 import {
   BookOpen, Scale, TrendingUp, TrendingDown, Building2, Calculator,
   Receipt, Wallet, ArrowRight, ShieldCheck, FileText,
@@ -120,12 +119,6 @@ export default function CompanyOverviewPage() {
               </div>
             </div>
           </div>
-          <Link
-            to={`/company/${companyId}/settings`}
-            className="btn-pill-outline relative text-white !h-9"
-          >
-            Settings
-          </Link>
         </div>
 
         {/* Identity details */}
