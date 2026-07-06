@@ -1,6 +1,7 @@
 import { useState, useRef, useLayoutEffect, Fragment } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { createCompany as createCompanyLocal, createInitialBookPeriod } from '@/lib/offlineDb';
+import { isGstin } from '@/lib/schemas/india';
 import { initEntityData } from '@/entities/initEntity';
 import { ENTITY_TYPES, type EntityType } from '@/lib/constants/entityTypes';
 import { INDIAN_STATES } from '@/lib/constants/indianStates';
@@ -201,7 +202,7 @@ export default function CreateCompanyPage() {
     if (key === 'tax') {
       if (data.gst_status !== 'unregistered') {
         if (!data.gstin) errs.gstin = 'GSTIN required';
-        else if (!/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(data.gstin)) errs.gstin = 'Invalid GSTIN format';
+        else if (!isGstin(data.gstin)) errs.gstin = 'Invalid GSTIN (format or checksum)';
         else if (data.pan && data.gstin.substring(2, 12) !== data.pan) errs.gstin = 'GSTIN does not match PAN';
       }
     }

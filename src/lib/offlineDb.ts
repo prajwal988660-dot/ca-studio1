@@ -2,6 +2,7 @@ import type { Company, BookPeriod } from '@/types/company';
 import type { JournalEntry, VoucherType } from '@/types/journal';
 import { validateJournalEntry } from '@/lib/accounting/validation';
 import { emitJournalDataChanged } from '@/lib/journalSync';
+import { mirrorUpsert, mirrorDelete, mirrorDeleteByCompany } from '@/lib/sync/cloudSync';
 
 /** Per-company entity-specific data (classification, IFC, registers, filings, etc.) */
 export interface EntityDataRecord {
@@ -110,6 +111,7 @@ export function deleteCompany(id: string): void {
   db.entity_data = db.entity_data.filter((d) => d.company_id !== id);
   db.custom_accounts = db.custom_accounts.filter((a) => a.company_id !== id);
   saveDb(db);
+  mirrorDelete('companies', id); // children cascade in the DB via FK ON DELETE CASCADE
 }
 
 export interface NewCompanyInput {
@@ -144,6 +146,7 @@ export function createCompany(input: NewCompanyInput): Company {
 
   db.companies.push(company);
   saveDb(db);
+  mirrorUpsert('companies', company);
   return company;
 }
 
@@ -161,6 +164,7 @@ export async function updateCompany(id: string, updates: Partial<Company>): Prom
 
   db.companies[idx] = updated;
   saveDb(db);
+  mirrorUpsert('companies', updated);
   return updated;
 }
 
@@ -183,6 +187,7 @@ export function createInitialBookPeriod(companyId: string): BookPeriod {
 
   db.book_periods.push(period);
   saveDb(db);
+  mirrorUpsert('book_periods', period);
   return period;
 }
 
@@ -279,6 +284,7 @@ export function createJournalEntry(input: NewJournalEntryInput): JournalEntry {
   db.journal_entries.push(entry);
   saveDb(db);
   emitJournalDataChanged(input.company_id);
+  mirrorUpsert('journal_entries', entry);
   return entry;
 }
 
@@ -307,6 +313,7 @@ export function updateJournalEntry(id: string, updates: Partial<JournalEntry>): 
   db.journal_entries[idx] = next;
   saveDb(db);
   emitJournalDataChanged(existing.company_id);
+  mirrorUpsert('journal_entries', next);
   return next;
 }
 
@@ -317,6 +324,7 @@ export function deleteJournalEntry(id: string): void {
   db.journal_entries = db.journal_entries.filter((e) => e.id !== id);
   saveDb(db);
   emitJournalDataChanged(victim.company_id);
+  mirrorDelete('journal_entries', id);
 }
 
 export function deleteAllJournalEntries(companyId: string): number {
@@ -325,6 +333,7 @@ export function deleteAllJournalEntries(companyId: string): number {
   db.journal_entries = db.journal_entries.filter((e) => e.company_id !== companyId);
   saveDb(db);
   emitJournalDataChanged(companyId);
+  mirrorDeleteByCompany('journal_entries', companyId);
   return before - db.journal_entries.length;
 }
 
@@ -362,6 +371,10 @@ export function registerCustomAccount(
     });
   }
   saveDb(db);
+  const acct = db.custom_accounts.find(
+    (a) => a.company_id === companyId && a.name.trim().replace(/\s+/g, ' ').toLowerCase() === key,
+  );
+  if (acct) mirrorUpsert('custom_accounts', acct);
 }
 
 /** Delete a custom account from the registry by id. */
@@ -370,6 +383,7 @@ export function deleteCustomAccount(companyId: string, id: string): void {
   if (!db.custom_accounts) return;
   db.custom_accounts = db.custom_accounts.filter((a) => !(a.company_id === companyId && a.id === id));
   saveDb(db);
+  mirrorDelete('custom_accounts', id);
 }
 
 /** Rename a custom account in the registry (does NOT rename in JE lines). */
@@ -377,7 +391,7 @@ export function renameCustomAccount(companyId: string, id: string, newName: stri
   const db = loadDb();
   if (!db.custom_accounts) return;
   const acc = db.custom_accounts.find((a) => a.company_id === companyId && a.id === id);
-  if (acc) { acc.name = newName.trim().replace(/\s+/g, ' '); saveDb(db); }
+  if (acc) { acc.name = newName.trim().replace(/\s+/g, ' '); saveDb(db); mirrorUpsert('custom_accounts', acc); }
 }
 
 /** Update an account's group/nature across all its journal lines + registry. */
@@ -414,7 +428,12 @@ export function updateAccountGroupInAllEntries(
     });
     changed = true;
   }
-  if (changed) { saveDb(db); emitJournalDataChanged(companyId); }
+  if (changed) {
+    saveDb(db);
+    emitJournalDataChanged(companyId);
+    mirrorUpsert('journal_entries', db.journal_entries.filter((e) => e.company_id === companyId));
+    mirrorUpsert('custom_accounts', db.custom_accounts.filter((a) => a.company_id === companyId));
+  }
 }
 
 // ---- Entity Data (per-company entity-specific modules) ----
@@ -448,6 +467,7 @@ export function upsertEntityData(
   if (idx >= 0) {
     db.entity_data[idx] = { ...db.entity_data[idx], data, updated_at: now };
     saveDb(db);
+    mirrorUpsert('entity_data', db.entity_data[idx]);
     return db.entity_data[idx];
   }
 
@@ -462,15 +482,20 @@ export function upsertEntityData(
   };
   db.entity_data.push(record);
   saveDb(db);
+  mirrorUpsert('entity_data', record);
   return record;
 }
 
 export function deleteEntityData(companyId: string, module: string, section?: string): void {
   const db = loadDb();
+  const removedIds = db.entity_data
+    .filter((d) => d.company_id === companyId && d.module === module && (!section || d.section === section))
+    .map((d) => d.id);
   db.entity_data = db.entity_data.filter((d) => {
     if (d.company_id !== companyId || d.module !== module) return true;
     if (section && d.section !== section) return true;
     return false;
   });
   saveDb(db);
+  if (removedIds.length) mirrorDelete('entity_data', removedIds);
 }

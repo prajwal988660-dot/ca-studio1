@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Building2, Briefcase, Check, ArrowRight, ArrowLeft, User, Lock, Eye, EyeOff } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
+import { pushLocalToCloud } from '@/lib/sync/cloudSync';
 
 // Access mode is chosen here and persisted; the sidebar reads it (no selector there).
 const ACCESS_MODE_KEY = 'ca_access_mode';
@@ -67,7 +68,7 @@ export default function AuthPage() {
   }, []);
 
   // Email sign-in / sign-up — every required field must be filled before continuing.
-  const handleSignSubmit = (e: React.FormEvent) => {
+  const handleSignSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (mode === 'signup' && !name.trim()) return toast.error('Please enter your full name.');
     if (!email.trim()) return toast.error('Please enter your email.');
@@ -78,6 +79,27 @@ export default function AuthPage() {
       if (!confirm) return toast.error('Please confirm your password.');
       if (password !== confirm) return toast.error('Passwords do not match.');
     }
+
+    // Real auth when Supabase is configured; otherwise offline pass-through.
+    if (isSupabaseConfigured && supabase) {
+      setBusy(true);
+      try {
+        const creds = { email: email.trim(), password };
+        const { error } =
+          mode === 'signup'
+            ? await supabase.auth.signUp(creds)
+            : await supabase.auth.signInWithPassword(creds);
+        if (error) { toast.error(error.message); return; }
+        toast.success(mode === 'login' ? 'Signed in' : 'Account created');
+        // Best-effort: seed the cloud with any existing local data (needs a session).
+        pushLocalToCloud().catch(() => {});
+        setStep('profile');
+      } finally {
+        setBusy(false);
+      }
+      return;
+    }
+
     toast.success(mode === 'login' ? 'Signed in' : 'Account created');
     setStep('profile');
   };
