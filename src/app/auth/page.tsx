@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Building2, Briefcase, Check, ArrowRight, ArrowLeft, User, Lock, Eye, EyeOff } from 'lucide-react';
@@ -61,15 +61,29 @@ export default function AuthPage() {
   const [remember, setRemember] = useState(true);
   const [busy, setBusy] = useState(false);
 
-  // If a Google OAuth redirect lands back here with a session, sync then advance.
+  // Advance to the profile step exactly once, after a session exists. Idempotent
+  // so the auth-state listener and the email/password handler can't double-fire.
+  const advancedRef = useRef(false);
+  const enterProfile = useCallback(async () => {
+    if (advancedRef.current) return;
+    advancedRef.current = true;
+    try { await syncOnSignIn(); } catch { /* best-effort cloud merge */ }
+    setStep('profile');
+  }, []);
+
+  // Detect a sign-in that completes via a browser redirect — Google OAuth and the
+  // email-confirmation link both return to /auth and exchange the URL `?code=`
+  // for a session ASYNCHRONOUSLY. A one-shot getSession() on mount races that
+  // exchange and misses it, stranding the user back on the auth page; listening to
+  // onAuthStateChange catches the session the moment the exchange finishes.
   useEffect(() => {
     if (!isSupabaseConfigured || !supabase) return;
-    supabase.auth.getSession().then(async ({ data }) => {
-      if (!data.session) return;
-      await syncOnSignIn(); // push local up + merge cloud (other devices) down
-      setStep('profile');
+    supabase.auth.getSession().then(({ data }) => { if (data.session) enterProfile(); });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) enterProfile();
     });
-  }, []);
+    return () => sub.subscription.unsubscribe();
+  }, [enterProfile]);
 
   // Email sign-in / sign-up — every required field must be filled before continuing.
   const handleSignSubmit = async (e: React.FormEvent) => {
@@ -89,16 +103,25 @@ export default function AuthPage() {
       setBusy(true);
       try {
         const creds = { email: email.trim(), password };
-        const { error } =
+        const { data, error } =
           mode === 'signup'
-            ? await supabase.auth.signUp(creds)
+            ? await supabase.auth.signUp({
+                ...creds,
+                // If email confirmation is ON, the link must return to /auth so the
+                // listener above can pick up the session and enter the app.
+                options: { emailRedirectTo: `${window.location.origin}/auth` },
+              })
             : await supabase.auth.signInWithPassword(creds);
         if (error) { toast.error(error.message); return; }
+        // Sign-up with email confirmation ON returns no session until the user
+        // clicks the link — don't fake entry; send them back to sign in.
+        if (mode === 'signup' && !data.session) {
+          toast.success('Account created — check your email to confirm, then sign in.');
+          setMode('login');
+          return;
+        }
         toast.success(mode === 'login' ? 'Signed in' : 'Account created');
-        // Seed the cloud with any local data, then merge cloud rows (incl. other
-        // devices) back down before entering the app.
-        await syncOnSignIn();
-        setStep('profile');
+        await enterProfile();
       } finally {
         setBusy(false);
       }

@@ -40,7 +40,8 @@ const ITR_META: Record<ItrKey, { label: string; short: string; src: string; note
 const ENTITY_FORMS: Partial<Record<EntityType, ItrKey[]>> = {
   individual: ['itr1', 'itr2'],
   sole_proprietorship: ['itr3', 'itr4'],
-  huf: ['itr2', 'itr3'],
+  // A HUF may also file ITR-4 (Sugam) when opting for presumptive income u/s 44AD/44ADA/44AE.
+  huf: ['itr2', 'itr3', 'itr4'],
 };
 
 /** Company entity types keep the existing ITR-6 experience (unchanged). */
@@ -74,13 +75,33 @@ function toDDMMYYYY(raw?: string): string | undefined {
   return undefined;
 }
 
+function fireInputChange(win: Window, el: Element) {
+  const EventCtor = (win as unknown as { Event: typeof Event }).Event;
+  el.dispatchEvent(new EventCtor('input', { bubbles: true }));
+  el.dispatchEvent(new EventCtor('change', { bubbles: true }));
+}
+
 function setIfEmpty(win: Window, id: string, val?: string | null) {
   if (val == null || val === '') return;
   const el = win.document.getElementById(id) as HTMLInputElement | HTMLSelectElement | null;
-  if (!el || (el as HTMLInputElement).value) return; // never clobber existing/restored data
+  if (!el) return;
+
+  // <select> defaults to its first option (a truthy value like "Individual"), so the
+  // plain "already has a value" guard would never let us switch it. Treat a select that
+  // is still on its first option as unset, and only apply a value that is a real option.
+  if (el instanceof (win as unknown as { HTMLSelectElement: typeof HTMLSelectElement }).HTMLSelectElement) {
+    const sel = el as HTMLSelectElement;
+    if (sel.value !== (sel.options[0]?.value ?? '')) return; // user/restore already chose
+    const opt = Array.from(sel.options).find((o) => o.value === val || o.text === val);
+    if (!opt) return;
+    sel.value = opt.value;
+    fireInputChange(win, sel);
+    return;
+  }
+
+  if ((el as HTMLInputElement).value) return; // never clobber existing/restored data
   (el as HTMLInputElement).value = String(val);
-  el.dispatchEvent(new (win as unknown as { Event: typeof Event }).Event('input', { bubbles: true }));
-  el.dispatchEvent(new (win as unknown as { Event: typeof Event }).Event('change', { bubbles: true }));
+  fireInputChange(win, el);
 }
 
 /** Prefill assessee-master fields from the company record (only where empty). */
@@ -156,6 +177,7 @@ function IndividualItrView({ company, forms }: { company: Company; forms: ItrKey
   const [savedAt, setSavedAt] = useState<Date | null>(null);
   const winRefs = useRef<Partial<Record<ItrKey, Window>>>({});
   const timers = useRef<Partial<Record<ItrKey, number>>>({});
+  const mountedRef = useRef(true);
 
   const openForm = (key: ItrKey) => {
     setActive(key);
@@ -166,9 +188,15 @@ function IndividualItrView({ company, forms }: { company: Company; forms: ItrKey
     const win = winRefs.current[key];
     if (!win) return;
     try {
-      const fields = collectFields(win.document);
+      const current = collectFields(win.document);
+      // Merge over the previous snapshot: dynamically-added rows (extra bank accounts,
+      // capital-gains rows, …) may not exist in the DOM at this moment, so a plain
+      // overwrite would silently erase them from storage and the Supabase mirror. Merging
+      // keeps any previously-captured keys that aren't currently present.
+      const prev = (getEntityData(companyId, ITR_MODULE, key)?.data as { fields?: Record<string, string> } | undefined)?.fields;
+      const fields = prev ? { ...prev, ...current } : current;
       upsertEntityData(companyId, ITR_MODULE, key, { fields, savedAt: new Date().toISOString(), ay: AY_NEW });
-      setSavedAt(new Date());
+      if (mountedRef.current) setSavedAt(new Date());
     } catch { /* ignore */ }
   }, [companyId]);
 
@@ -186,24 +214,32 @@ function IndividualItrView({ company, forms }: { company: Company; forms: ItrKey
     } catch { /* ignore */ }
     try { prefillFromCompany(win, company); } catch { /* ignore */ }
 
-    // 3) debounced autosave on any edit
+    // 3) debounced autosave on any edit. The timer entry is deleted once it fires so
+    //    `timers.current` only ever holds genuinely-pending saves.
     try {
       const handler = () => {
         window.clearTimeout(timers.current[key]);
-        timers.current[key] = window.setTimeout(() => saveForm(key), 1500);
+        timers.current[key] = window.setTimeout(() => {
+          delete timers.current[key];
+          saveForm(key);
+        }, 1500);
       };
       win.document.addEventListener('input', handler, true);
       win.document.addEventListener('change', handler, true);
     } catch { /* ignore */ }
   }, [company, companyId, saveForm]);
 
-  // Flush pending autosaves on unmount.
+  // Flush only genuinely-pending autosaves on unmount (keys still holding a live timer).
   useEffect(() => {
+    mountedRef.current = true; // reset on (re)mount — StrictMode runs setup twice
     const t = timers.current;
     const refs = winRefs.current;
     return () => {
+      mountedRef.current = false;
       for (const key of Object.keys(t) as ItrKey[]) {
+        if (t[key] == null) continue;
         window.clearTimeout(t[key]);
+        delete t[key];
         if (refs[key]) saveForm(key);
       }
     };
