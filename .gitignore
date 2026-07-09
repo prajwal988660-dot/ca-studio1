@@ -42,3 +42,7 @@ mcp-server/node_modules/
 # Raw ITR form source (large HTML) — the used copies live in /public/tax-utilities
 /itr25-26/
 /itr26-27/
+
+# Stray security/working docs — never in the public repo
+/VAPT Checklist.xlsx
+*.xlsx
