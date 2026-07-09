@@ -11,29 +11,41 @@ import {
 } from 'lucide-react';
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   ITR filing module — A.Y. 2026-27 (Financial Year 2025-26)
+   ITR filing module — year-wise (A.Y. 2026-27 and A.Y. 2025-26)
 
    The ITR-1 / ITR-2 / ITR-3 / ITR-4 forms are self-contained data-entry tools
    (each embeds its own tax computation + AIS import) served from
-   /public/tax-utilities/. Because they are same-origin iframes we integrate the
+   /public/tax-utilities/, one HTML per (form, assessment year). The user picks the
+   assessment year; because they are same-origin iframes we integrate the
    company/backend data by driving the iframe DOM directly on load:
      1. restore any previously-saved ITR field state (entity_data → Supabase mirror)
      2. prefill empty assessee-master fields from the company record
      3. debounced autosave of every field back into entity_data (auto-synced)
+   Each assessment year saves under its own entity_data `module` key (see AY_LIST),
+   so returns for different years never overwrite one another.
    ──────────────────────────────────────────────────────────────────────────── */
 
-const AY_NEW = '2026-27';
-const FY_NEW = '2025-26';
-/** entity_data module key under which each form's field snapshot is stored. */
-const ITR_MODULE = 'itr_ay2627';
+/** Assessment years the ITR module ships forms for, newest first. Each maps to its
+ *  financial year and the entity_data `module` key its saved snapshots live under —
+ *  so every year's return is stored (and cloud-synced) independently. */
+const AY_LIST = [
+  { ay: '2026-27', fy: '2025-26', module: 'itr_ay2627' },
+  { ay: '2025-26', fy: '2024-25', module: 'itr_ay2526' },
+] as const;
 
 type ItrKey = 'itr1' | 'itr2' | 'itr3' | 'itr4';
 
-const ITR_META: Record<ItrKey, { label: string; short: string; src: string; note: string }> = {
-  itr1: { label: 'ITR-1 Sahaj', short: 'ITR-1', src: '/tax-utilities/itr1.html', note: 'Salary, one house property & other sources (income ≤ ₹50L)' },
-  itr2: { label: 'ITR-2', short: 'ITR-2', src: '/tax-utilities/itr2.html', note: 'Capital gains, multiple properties & foreign assets — no business income' },
-  itr3: { label: 'ITR-3', short: 'ITR-3', src: '/tax-utilities/itr3.html', note: 'Income from business or profession (regular books)' },
-  itr4: { label: 'ITR-4 Sugam', short: 'ITR-4', src: '/tax-utilities/itr4.html', note: 'Presumptive business/profession u/s 44AD / 44ADA / 44AE' },
+/** Served form path for a given assessment year. AY 2026-27 keeps the original flat
+ *  filenames; other years use a year-suffixed copy in the same /tax-utilities folder. */
+function itrSrc(ay: string, key: ItrKey): string {
+  return ay === '2026-27' ? `/tax-utilities/${key}.html` : `/tax-utilities/${key}-${ay}.html`;
+}
+
+const ITR_META: Record<ItrKey, { label: string; short: string; note: string }> = {
+  itr1: { label: 'ITR-1 Sahaj', short: 'ITR-1', note: 'Salary, one house property & other sources (income ≤ ₹50L)' },
+  itr2: { label: 'ITR-2', short: 'ITR-2', note: 'Capital gains, multiple properties & foreign assets — no business income' },
+  itr3: { label: 'ITR-3', short: 'ITR-3', note: 'Income from business or profession (regular books)' },
+  itr4: { label: 'ITR-4 Sugam', short: 'ITR-4', note: 'Presumptive business/profession u/s 44AD / 44ADA / 44AE' },
 };
 
 /** Applicable ITR forms per entity type for A.Y. 2026-27. */
@@ -170,6 +182,53 @@ function applyFields(win: Window, fields: Record<string, string>) {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 function IndividualItrView({ company, forms }: { company: Company; forms: ItrKey[] }) {
+  // Selected assessment year drives which forms load and which module data saves under.
+  const [ay, setAy] = useState<string>(AY_LIST[0].ay);
+  const meta = AY_LIST.find((y) => y.ay === ay) ?? AY_LIST[0];
+  const entityLabel = ENTITY_TYPES[company.entity_type as EntityType]?.label ?? company.entity_type;
+
+  return (
+    <div className="flex h-[calc(100vh-60px)] flex-col">
+      {/* Header strip with the A.Y. selector */}
+      <div className="flex items-center justify-between border-b border-gray-100 bg-white px-4 py-1.5">
+        <div className="flex items-center gap-2 min-w-0">
+          <FileText className="h-4 w-4 text-blue-600 shrink-0" />
+          <span className="text-sm font-semibold text-gray-800">Income Tax</span>
+          <span className="text-xs text-gray-400 truncate">· FY {meta.fy} · {entityLabel}</span>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="hidden sm:inline-flex items-center gap-1 rounded border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
+            <UploadCloud className="h-3 w-3" /> AIS import inside form
+          </span>
+          <label className="flex items-center gap-1.5 text-[11px] font-semibold text-gray-500">
+            <span className="text-gray-400">Assessment Year</span>
+            <select
+              value={ay}
+              onChange={(e) => setAy(e.target.value)}
+              className="rounded-lg border border-gray-200 bg-white px-2 py-1 text-[11px] font-semibold text-blue-700 focus:border-blue-400 focus:outline-none"
+              title="Choose the assessment year to file"
+            >
+              {AY_LIST.map((y) => (
+                <option key={y.ay} value={y.ay}>A.Y. {y.ay}</option>
+              ))}
+            </select>
+          </label>
+        </div>
+      </div>
+
+      {/* Per-year workspace. key={ay} forces a clean remount on year change, so the old
+          year's pending autosaves flush under the correct module before the next mounts. */}
+      <ItrYearForms key={ay} company={company} forms={forms} ay={ay} moduleKey={meta.module} />
+    </div>
+  );
+}
+
+/* Per-assessment-year form workspace: owns tab state and the debounced autosave/restore
+   for ONE year. All persistence is keyed by `moduleKey`, so switching years never mixes
+   returns. Remounted by the parent (key={ay}) whenever the year changes. */
+function ItrYearForms({
+  company, forms, ay, moduleKey,
+}: { company: Company; forms: ItrKey[]; ay: string; moduleKey: string }) {
   const companyId = company.id;
   const [active, setActive] = useState<ItrKey>(forms[0]);
   // Lazy-mount iframes: only load a form once its tab is first opened.
@@ -193,12 +252,12 @@ function IndividualItrView({ company, forms }: { company: Company; forms: ItrKey
       // capital-gains rows, …) may not exist in the DOM at this moment, so a plain
       // overwrite would silently erase them from storage and the Supabase mirror. Merging
       // keeps any previously-captured keys that aren't currently present.
-      const prev = (getEntityData(companyId, ITR_MODULE, key)?.data as { fields?: Record<string, string> } | undefined)?.fields;
+      const prev = (getEntityData(companyId, moduleKey, key)?.data as { fields?: Record<string, string> } | undefined)?.fields;
       const fields = prev ? { ...prev, ...current } : current;
-      upsertEntityData(companyId, ITR_MODULE, key, { fields, savedAt: new Date().toISOString(), ay: AY_NEW });
+      upsertEntityData(companyId, moduleKey, key, { fields, savedAt: new Date().toISOString(), ay });
       if (mountedRef.current) setSavedAt(new Date());
     } catch { /* ignore */ }
-  }, [companyId]);
+  }, [companyId, moduleKey, ay]);
 
   const onFrameLoad = useCallback((key: ItrKey, el: HTMLIFrameElement) => {
     let win: Window | null = null;
@@ -208,7 +267,7 @@ function IndividualItrView({ company, forms }: { company: Company; forms: ItrKey
 
     // 1) restore saved snapshot, 2) prefill empty fields from company master
     try {
-      const rec = getEntityData(companyId, ITR_MODULE, key);
+      const rec = getEntityData(companyId, moduleKey, key);
       const saved = rec?.data as { fields?: Record<string, string> } | undefined;
       if (saved?.fields) applyFields(win, saved.fields);
     } catch { /* ignore */ }
@@ -227,7 +286,7 @@ function IndividualItrView({ company, forms }: { company: Company; forms: ItrKey
       win.document.addEventListener('input', handler, true);
       win.document.addEventListener('change', handler, true);
     } catch { /* ignore */ }
-  }, [company, companyId, saveForm]);
+  }, [company, companyId, moduleKey, saveForm]);
 
   // Flush only genuinely-pending autosaves on unmount (keys still holding a live timer).
   useEffect(() => {
@@ -245,35 +304,8 @@ function IndividualItrView({ company, forms }: { company: Company; forms: ItrKey
     };
   }, [saveForm]);
 
-  const entityLabel = ENTITY_TYPES[company.entity_type as EntityType]?.label ?? company.entity_type;
-
   return (
-    <div className="flex h-[calc(100vh-60px)] flex-col">
-      {/* Header strip */}
-      <div className="flex items-center justify-between border-b border-gray-100 bg-white px-4 py-1.5">
-        <div className="flex items-center gap-2 min-w-0">
-          <FileText className="h-4 w-4 text-blue-600 shrink-0" />
-          <span className="text-sm font-semibold text-gray-800">Income Tax</span>
-          <span className="text-xs text-gray-400 truncate">
-            · A.Y. {AY_NEW} · FY {FY_NEW} · {entityLabel}
-          </span>
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
-          {savedAt && (
-            <span className="hidden sm:flex items-center gap-1 text-[11px] font-medium text-green-600">
-              <CheckCircle className="h-3 w-3" /> Saved {savedAt.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
-            </span>
-          )}
-          <button
-            onClick={() => saveForm(active)}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
-            title="Save this return now (also synced to your account)"
-          >
-            <Save className="h-3.5 w-3.5" /> Save
-          </button>
-        </div>
-      </div>
-
+    <>
       {/* Form switcher */}
       <div className="flex items-center justify-between border-b border-gray-200 bg-white px-4">
         <div className="flex gap-1 overflow-x-auto">
@@ -293,19 +325,26 @@ function IndividualItrView({ company, forms }: { company: Company; forms: ItrKey
             );
           })}
         </div>
-        <div className="hidden md:flex items-center gap-1.5">
-          <span className="rounded border border-blue-200 bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-blue-700">
-            A.Y. {AY_NEW}
-          </span>
-          <span className="inline-flex items-center gap-1 rounded border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
-            <UploadCloud className="h-3 w-3" /> AIS import inside form
-          </span>
+        <div className="flex items-center gap-2 shrink-0 pl-2">
+          {savedAt && (
+            <span className="hidden sm:flex items-center gap-1 text-[11px] font-medium text-green-600">
+              <CheckCircle className="h-3 w-3" /> Saved {savedAt.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+            </span>
+          )}
+          <button
+            onClick={() => saveForm(active)}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+            title="Save this return now (also synced to your account)"
+          >
+            <Save className="h-3.5 w-3.5" /> Save
+          </button>
         </div>
       </div>
 
       {/* Applicability note for the active form */}
       <div className="border-b border-gray-100 bg-gray-50/70 px-4 py-1 text-[11px] text-gray-500">
         <span className="font-semibold text-gray-600">{ITR_META[active].short}</span> — {ITR_META[active].note}
+        <span className="ml-1 text-gray-400">· A.Y. {ay}</span>
       </div>
 
       {/* Iframes */}
@@ -313,7 +352,7 @@ function IndividualItrView({ company, forms }: { company: Company; forms: ItrKey
         {forms.filter((k) => mounted.has(k)).map((key) => (
           <iframe
             key={key}
-            src={ITR_META[key].src}
+            src={itrSrc(ay, key)}
             onLoad={(e) => onFrameLoad(key, e.currentTarget)}
             className={`absolute inset-0 h-full w-full border-none ${
               active === key ? 'z-10' : 'pointer-events-none z-0 opacity-0'
@@ -322,7 +361,7 @@ function IndividualItrView({ company, forms }: { company: Company; forms: ItrKey
           />
         ))}
       </div>
-    </div>
+    </>
   );
 }
 
