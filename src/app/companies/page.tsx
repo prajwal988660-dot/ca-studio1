@@ -156,8 +156,8 @@ export default function CompaniesPage() {
               </div>
             </div>
 
-            {/* ── List ── */}
-            <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden divide-y divide-gray-100">
+            {/* ── Cards ── */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {filtered.map(company => {
                 const meta   = ENTITY_TYPES[company.entity_type as EntityType];
                 const colors = ENTITY_COLORS[company.entity_type] ?? { bg: 'bg-gray-50', text: 'text-gray-600', border: 'border-gray-200' };
@@ -165,56 +165,51 @@ export default function CompaniesPage() {
                   <Link
                     key={company.id}
                     to={`/company/${company.id}`}
-                    className="group flex items-center gap-4 px-4 sm:px-5 py-3.5 hover:bg-blue-50/40 transition-colors"
+                    className="group stat-card hover:border-blue-200 !p-5 block"
                   >
-                    {/* Icon */}
-                    <span className="icon-badge icon-badge-sm shrink-0"><Building2 className="h-4 w-4" /></span>
-
-                    {/* Name + entity-type badge */}
-                    <div className="flex items-center gap-2.5 min-w-0 w-48 sm:w-60 lg:w-72 shrink-0">
-                      <h3 className="font-bold text-gray-900 truncate group-hover:text-blue-700 transition-colors text-sm">
-                        {company.name}
-                      </h3>
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border shrink-0 ${colors.bg} ${colors.text} ${colors.border}`}>
-                        {meta?.shortLabel ?? company.entity_type}
-                      </span>
-                    </div>
-
-                    {/* Inline details */}
-                    <div className="hidden md:flex items-center gap-x-6 flex-1 min-w-0 text-xs text-gray-500">
-                      {company.entity_details?.pan && (
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <span className="text-gray-400">PAN</span>
-                          <span className="font-mono font-medium text-gray-700 truncate">{company.entity_details.pan}</span>
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-start gap-3 min-w-0">
+                        <span className="icon-badge icon-badge-sm mt-0.5 shrink-0"><Building2 className="h-4 w-4" /></span>
+                        <div className="min-w-0">
+                          <h3 className="font-bold text-gray-900 truncate group-hover:text-blue-700 transition-colors text-sm">
+                            {company.name}
+                          </h3>
+                          <span className={`inline-flex items-center mt-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold border ${colors.bg} ${colors.text} ${colors.border}`}>
+                            {meta?.shortLabel ?? company.entity_type}
+                          </span>
                         </div>
-                      )}
-                      {company.gst_status !== 'unregistered' && company.gst_details?.gstin && (
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <span className="text-gray-400">GSTIN</span>
-                          <span className="font-mono font-medium text-gray-700 truncate">{company.gst_details.gstin}</span>
-                        </div>
-                      )}
-                      <div className="flex items-center gap-1.5 min-w-0">
-                        <span className="text-gray-400">Method</span>
-                        <span className="truncate">{company.accounting_method === 'mercantile' ? 'Accrual (Mercantile)' : 'Cash Basis'}</span>
                       </div>
-                    </div>
-
-                    {/* Created date */}
-                    <span className="hidden lg:block text-[11px] text-gray-400 shrink-0 w-24 text-right">
-                      {fmtDate(company.created_at)}
-                    </span>
-
-                    {/* Delete (on hover) + chevron */}
-                    <div className="flex items-center gap-1 shrink-0 ml-auto md:ml-0">
                       <button
                         onClick={e => handleDelete(e, company)}
-                        className="p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all"
+                        className="ml-2 p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all shrink-0"
                         title="Delete company"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>
-                      <ChevronRight className="h-4 w-4 text-gray-300 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all" />
+                    </div>
+
+                    <div className="space-y-1 text-xs text-gray-500">
+                      {company.entity_details?.pan && (
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-gray-400 w-12 shrink-0">PAN</span>
+                          <span className="font-mono font-medium text-gray-700 truncate">{company.entity_details.pan}</span>
+                        </div>
+                      )}
+                      {company.gst_status !== 'unregistered' && company.gst_details?.gstin && (
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-gray-400 w-12 shrink-0">GSTIN</span>
+                          <span className="font-mono font-medium text-gray-700 truncate">{company.gst_details.gstin}</span>
+                        </div>
+                      )}
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-gray-400 w-12 shrink-0">Method</span>
+                        <span>{company.accounting_method === 'mercantile' ? 'Accrual (Mercantile)' : 'Cash Basis'}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
+                      <span className="text-[11px] text-gray-400">{fmtDate(company.created_at)}</span>
+                      <ChevronRight className="h-3.5 w-3.5 text-gray-300 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all" />
                     </div>
                   </Link>
                 );

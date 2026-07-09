@@ -1,8 +1,9 @@
 import { useMemo, type CSSProperties } from 'react';
+import { Link } from 'react-router-dom';
 import {
   BookOpen, Scale, TrendingUp, TrendingDown, Building2, Calculator,
   Receipt, Wallet, ArrowRight, ShieldCheck, FileText,
-  Users, Package, ArrowRightLeft,
+  Users, Package, ArrowRightLeft, Sparkles,
 } from 'lucide-react';
 import { QuickOpen } from '@/components/company/QuickOpen';
 import { useCompany } from '@/hooks/useCompany';
@@ -14,6 +15,19 @@ import { computeTradingAccount } from '@/lib/accounting/tradingAccountCompute';
 import { computeProfitLoss } from '@/lib/accounting/profitLossCompute';
 import { formatIndianCurrency } from '@/lib/utils/currencyFormat';
 import { getCurrentFY } from '@/lib/utils/dateUtils';
+
+// Common destinations surfaced as tiles on the overview so the page always has
+// somewhere useful to go — each carries its own accent colour (--tile).
+const QUICK_ACTIONS: { label: string; desc: string; path: string; icon: typeof BookOpen; tile: string }[] = [
+  { label: 'Journal',       desc: 'Record entries',    path: 'journal',       icon: BookOpen,       tile: '#2563EB' },
+  { label: 'Cash Book',     desc: 'Cash & bank',       path: 'cash-book',     icon: Wallet,         tile: '#0D9488' },
+  { label: 'Ledger',        desc: 'All accounts',      path: 'ledger',        icon: FileText,       tile: '#7C3AED' },
+  { label: 'Trial Balance', desc: 'Verify balances',   path: 'trial-balance', icon: Scale,          tile: '#4F46E5' },
+  { label: 'Profit & Loss', desc: 'Income statement',  path: 'profit-loss',   icon: TrendingUp,     tile: '#16A34A' },
+  { label: 'Balance Sheet', desc: 'Schedule III',      path: 'balance-sheet', icon: Building2,      tile: '#0EA5E9' },
+  { label: 'GST',           desc: 'Returns & ITC',     path: 'gst',           icon: Receipt,        tile: '#D97706' },
+  { label: 'Tally Import',  desc: 'Import from Tally', path: 'tally',         icon: ArrowRightLeft, tile: '#DC2626' },
+];
 
 function shortINR(num: number): string {
   const abs = Math.abs(num);

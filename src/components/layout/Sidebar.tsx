@@ -17,6 +17,7 @@ import {
   Trash2, Pencil, Check, X, LayoutGrid, Search, LogOut, type LucideIcon,
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
+import { ENTITY_TYPES, type EntityType } from '@/lib/constants/entityTypes';
 
 interface NavItem { label: string; href: string; icon: LucideIcon }
 interface NavGroup { heading: string; items: NavItem[] }
@@ -61,6 +62,15 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
 
   // Quick search — type the start of a menu entry to jump to it.
   const [query, setQuery] = useState('');
+
+  // Signed-in user (shown as a chip in the sidebar footer).
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase) return;
+    supabase.auth.getUser().then(({ data }) => setUserEmail(data.user?.email ?? null)).catch(() => {});
+  }, []);
+
+  const entityMeta = company ? ENTITY_TYPES[company.entity_type as EntityType] : undefined;
 
   /* close context menu on outside click or Escape */
   useEffect(() => {
@@ -228,7 +238,16 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
 
   if (loading || !groups) {
     return (
-      <aside className="w-full bg-white border-r border-gray-200 h-full shrink-0 flex flex-col min-h-0">
+      <aside className="w-full side-surface border-r border-gray-200 h-full shrink-0 flex flex-col min-h-0">
+        <div className="px-3 pt-3 pb-3 border-b border-gray-100">
+          <div className="flex items-center gap-2.5">
+            <span className="brand-mark h-9 w-9 text-[13px]">CA</span>
+            <div className="flex-1 space-y-1.5">
+              <div className="h-3 w-24 bg-gray-200 rounded animate-pulse" />
+              <div className="h-2 w-16 bg-gray-100 rounded animate-pulse" />
+            </div>
+          </div>
+        </div>
         <div className="p-3 space-y-2 flex-1 overflow-y-auto min-h-0">
           {Array.from({ length: 8 }).map((_, i) => (
             <div key={i} className="h-7 bg-gray-100 rounded-md animate-pulse" />
@@ -242,16 +261,33 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
 
   return (
     <>
-      <aside className="w-full bg-white border-r border-gray-200 h-full shrink-0 flex flex-col min-h-0">
+      <aside className="w-full side-surface border-r border-gray-200 h-full shrink-0 flex flex-col min-h-0">
+        {/* Brand + active company header — gives the sidebar a solid, official top */}
+        <div className="px-3 pt-3 pb-3 border-b border-gray-100 shrink-0">
+          <Link to="/companies" className="flex items-center gap-2.5 group" title="All companies">
+            <span className="brand-mark h-9 w-9 text-[13px]">CA</span>
+            <div className="min-w-0 flex-1">
+              <p className="text-[13.5px] font-extrabold tracking-tight text-gray-900 leading-none truncate group-hover:text-blue-700 transition-colors">
+                {company?.name ?? 'CA Studio'}
+              </p>
+              <p className="text-[10px] font-semibold text-gray-400 mt-1 truncate">
+                {entityMeta?.label ?? 'Workspace'}
+              </p>
+            </div>
+          </Link>
+        </div>
+
         <nav className="py-2 flex-1 overflow-y-auto min-h-0">
-          {/* Aleza button */}
-          <div className="mb-2 px-1.5">
+          {/* Aleza — AI agent launcher (a subtle gradient pill so it reads as the hero action) */}
+          <div className="mb-2.5 px-1.5">
             <button
               onClick={onAlezaToggle}
-              className="w-full flex items-center gap-2.5 px-3 py-1.5 mx-0 rounded-lg text-[13px] font-medium transition-colors text-gray-600 hover:bg-blue-50 hover:text-blue-700 group"
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[13px] font-semibold text-blue-700 border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 transition-colors group"
             >
-              <Sparkles className="h-3.5 w-3.5 shrink-0 text-gray-400 group-hover:text-blue-600" />
-              <span className="truncate">Aleza</span>
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded-lg bg-white text-blue-600 shadow-sm shrink-0">
+                <Sparkles className="h-3.5 w-3.5" />
+              </span>
+              <span className="truncate">Ask Aleza AI</span>
             </button>
           </div>
 
@@ -394,8 +430,16 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
           )}
         </nav>
 
-        {/* Settings */}
-        <div className="border-t border-gray-200 mt-1 pt-1 pb-2 shrink-0">
+        {/* Footer — signed-in user + settings / sign out */}
+        <div className="border-t border-gray-200 mt-1 pt-1.5 pb-2 shrink-0">
+          {userEmail && (
+            <div className="flex items-center gap-2.5 px-3 py-1.5 mx-1.5 mb-0.5 rounded-lg">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-blue-700 text-[10px] font-bold shrink-0 uppercase">
+                {userEmail[0] ?? 'U'}
+              </span>
+              <span className="text-[11px] font-medium text-gray-500 truncate" title={userEmail}>{userEmail}</span>
+            </div>
+          )}
           <Link
             to={`${base}/settings`}
             className={`flex items-center gap-2.5 px-3 py-1.5 mx-1.5 rounded-lg text-[13px] font-medium transition-colors ${

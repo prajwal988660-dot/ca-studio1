@@ -282,6 +282,61 @@ table { border-collapse: collapse; width: 100%; }
 .vtype-CN  { @apply bg-purple-50 text-purple-700; }
 .vtype-PAY { @apply bg-indigo-50 text-indigo-700; }
 
+/* ── App surface: a soft, light wash so blank areas never read as empty ── */
+/* Subtle blue + teal corner glows over the base background — the same light,
+   "trending" feel is reused on every top-level screen (auth → dashboard). */
+.app-surface {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(1200px 620px at 100% -6%, rgba(37, 99, 235, 0.07), transparent 58%),
+    radial-gradient(920px 540px at -8% 112%, rgba(13, 148, 136, 0.06), transparent 55%);
+  background-attachment: fixed;
+}
+
+/* ── Sidebar surface — faintly tinted, never flat white ── */
+.side-surface {
+  background-image: linear-gradient(180deg, #FFFFFF 0%, #F5F8FC 100%);
+}
+
+/* ── Brand mark (the "CA" logo chip) ── */
+.brand-mark {
+  @apply inline-flex items-center justify-center rounded-xl text-white font-extrabold shrink-0 tracking-tight;
+  background: linear-gradient(135deg, var(--primary) 0%, #1E40AF 100%);
+  box-shadow: 0 10px 22px -10px color-mix(in srgb, var(--primary) 70%, transparent);
+}
+
+/* ── Small uppercase section label ── */
+.section-eyebrow {
+  @apply text-[11px] font-bold uppercase tracking-[0.14em] text-gray-400;
+}
+
+/* ── Quick-action tile (dashboard shortcuts) — per-tile accent via --tile ── */
+.quick-tile {
+  @apply relative flex items-center gap-3 overflow-hidden rounded-2xl border border-gray-100 bg-white p-3.5 transition-all;
+  box-shadow: var(--shadow-float);
+}
+.quick-tile:hover { box-shadow: var(--shadow-float-lg); transform: translateY(-2px); }
+.quick-tile::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--tile, #2563EB) 8%, transparent) 0%, transparent 62%);
+  pointer-events: none;
+}
+.quick-tile > * { position: relative; }
+.quick-tile-icon {
+  @apply inline-flex h-10 w-10 items-center justify-center rounded-xl shrink-0;
+  background: color-mix(in srgb, var(--tile, #2563EB) 13%, white);
+  color: var(--tile, #2563EB);
+}
+.quick-tile-arrow { @apply ml-auto h-4 w-4 text-gray-300 transition-all; }
+.quick-tile:hover .quick-tile-arrow { color: var(--tile, #2563EB); transform: translateX(2px); }
+
+/* ── Soft info panel (getting-started / helper cards) ── */
+.soft-panel {
+  @apply relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5;
+  box-shadow: var(--shadow-float);
+}
+
 /* -- Number Input Spin Buttons Removal -- */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {

@@ -402,7 +402,7 @@ export default function CreateCompanyPage() {
           {/* ── STEP: Entity Type ── */}
           {currentKey === 'entity' && (
             <>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <div className="space-y-2">
                 {Object.entries(ENTITY_TYPES).map(([key, config]) => {
                   const Icon = (LucideIcons as any)[config.icon] || LucideIcons.Building2;
                   const active = data.entity_type === key;
@@ -411,29 +411,30 @@ export default function CreateCompanyPage() {
                     return (
                       <button key={key} type="button"
                         onClick={() => setLockedClicked(lockedClicked === key ? null : key)}
-                        className="p-5 rounded-2xl border-2 border-slate-100 bg-slate-50 text-left transition-all relative group">
-                        <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <LucideIcons.Lock className="h-3.5 w-3.5 text-slate-400" />
-                        </div>
-                        <Icon className="h-6 w-6 mb-3 text-slate-300" strokeWidth={1.5} />
-                        <p className="font-bold text-sm text-slate-400">{config.shortLabel}</p>
-                        <p className="text-[11px] font-medium text-slate-300 mt-1 uppercase tracking-wider">{config.itrForm}</p>
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 text-left transition-all">
+                        <span className="w-9 h-9 rounded-lg bg-slate-100 text-slate-300 flex items-center justify-center shrink-0"><Icon className="h-4 w-4" strokeWidth={1.5} /></span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block font-bold text-sm text-slate-400 truncate">{config.shortLabel}</span>
+                          <span className="block text-[11px] font-medium text-slate-300 uppercase tracking-wider truncate">{config.itrForm} · {config.label}</span>
+                        </span>
+                        <LucideIcons.Lock className="h-3.5 w-3.5 text-slate-400 shrink-0" />
                       </button>
                     );
                   }
                   return (
                     <button key={key} onClick={() => selectAndAdvance({ entity_type: key })}
-                      className={`p-5 rounded-2xl border-2 text-left transition-all duration-300 relative overflow-hidden group
+                      className={`group w-full flex items-center gap-3 px-4 py-3 rounded-xl border text-left transition-all
                         ${active
-                          ? 'border-blue-500 ring-2 ring-blue-500 bg-blue-50 shadow-md shadow-blue-500/10 -translate-y-0.5'
-                          : 'border-gray-200 hover:border-blue-200 bg-white hover:-translate-y-0.5 hover:shadow-md hover:shadow-slate-200/50'}`}>
-                      {active && <div className="absolute top-0 right-0 w-16 h-16 bg-blue-500/10 rounded-bl-full -z-10" />}
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 transition-colors ${active ? 'bg-blue-600 text-white shadow-inner shadow-black/10' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-600'}`}>
-                        <Icon className="h-5 w-5" strokeWidth={active ? 2 : 1.5} />
-                      </div>
-                      <p className={`font-bold text-sm transition-colors ${active ? 'text-blue-900' : 'text-slate-700'}`}>{config.shortLabel}</p>
-                      <p className={`text-[11px] font-medium mt-1 uppercase tracking-wider transition-colors ${active ? 'text-blue-600' : 'text-slate-400'}`}>{config.itrForm}</p>
-                      {active && <p className="text-xs text-blue-700 mt-2 font-medium leading-snug animate-in fade-in slide-in-from-left-1 duration-300">{config.label}</p>}
+                          ? 'border-blue-500 ring-2 ring-blue-500 bg-blue-50'
+                          : 'border-gray-200 hover:border-blue-200 bg-white hover:bg-blue-50/40'}`}>
+                      <span className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors ${active ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-600'}`}>
+                        <Icon className="h-4 w-4" strokeWidth={active ? 2 : 1.5} />
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className={`block font-bold text-sm truncate ${active ? 'text-blue-900' : 'text-slate-700'}`}>{config.shortLabel}</span>
+                        <span className={`block text-[11px] font-medium uppercase tracking-wider truncate ${active ? 'text-blue-600' : 'text-slate-400'}`}>{config.itrForm} · {config.label}</span>
+                      </span>
+                      <LucideIcons.ChevronRight className={`h-4 w-4 shrink-0 transition-transform ${active ? 'text-blue-500' : 'text-slate-300 group-hover:translate-x-0.5'}`} />
                     </button>
                   );
                 })}
