@@ -92,7 +92,7 @@ export default function CompaniesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen app-surface">
       {/* ── Hero header ── */}
       <header className="px-4 pt-4 sm:px-6 sm:pt-6">
         <div className="hero max-w-6xl mx-auto px-6 sm:px-8 py-7 flex items-center justify-between gap-4">
@@ -227,13 +227,13 @@ export default function CompaniesPage() {
             </div>
             <div>
               <h3 className="text-sm font-bold text-slate-900">Questions or need assistance?</h3>
-              <p className="text-xs text-slate-550 mt-0.5 leading-relaxed font-medium">
+              <p className="text-xs text-slate-500 mt-0.5 leading-relaxed font-medium">
                 You can pre-register for upcoming modules or get support from our activation agents immediately.
               </p>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-            <button onClick={() => setShowDetailsModal(true)} className="flex-1 md:flex-none inline-flex items-center justify-center h-10 px-5 text-xs font-bold text-slate-650 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm cursor-pointer">
+            <button onClick={() => setShowDetailsModal(true)} className="flex-1 md:flex-none inline-flex items-center justify-center h-10 px-5 text-xs font-bold text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm cursor-pointer">
               View Registered Profile
             </button>
             <div className="flex-1 md:flex-none inline-flex flex-col items-center justify-center gap-0.5 h-10 px-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl shadow-[0_3px_10px_0_rgba(37,99,235,0.25)]">
@@ -308,7 +308,7 @@ export default function CompaniesPage() {
                   setShowDetailsModal(false);
                   localStorage.removeItem('ca_user_registration');
                   setRegistrationData(null);
-                }} className="w-full h-11 text-xs font-bold text-red-650 hover:bg-red-50 hover:border-red-200 border border-transparent rounded-xl transition-all cursor-pointer">
+                }} className="w-full h-11 text-xs font-bold text-red-600 hover:bg-red-50 hover:border-red-200 border border-transparent rounded-xl transition-all cursor-pointer">
                   Update Registered Info
                 </button>
                 <button onClick={() => setShowDetailsModal(false)} className="w-full h-11 text-xs font-bold text-slate-600 border border-slate-200 rounded-xl bg-white hover:bg-slate-50 transition-all shadow-sm cursor-pointer">

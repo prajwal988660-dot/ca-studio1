@@ -133,7 +133,7 @@ export default function AuthPage() {
   // ── Step 2: choose profile ─────────────────────────────────────────────────
   if (step === 'profile') {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4 lg:p-8">
+      <div className="min-h-screen app-surface flex items-center justify-center p-4 lg:p-8">
         <div className="w-full max-w-5xl">
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -163,19 +163,24 @@ export default function AuthPage() {
   const inp = "w-full h-11 pl-11 pr-4 text-sm bg-gray-100 border border-transparent rounded-xl focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder:text-gray-400 transition-colors";
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-600 via-blue-600 to-blue-800">
-      <div className="w-full max-w-4xl grid md:grid-cols-2 rounded-3xl bg-white overflow-hidden shadow-[0_40px_80px_-20px_rgba(8,40,80,0.45)]">
+    <div className="min-h-screen app-surface flex items-center justify-center p-4">
+      <div className="w-full max-w-4xl grid md:grid-cols-2 rounded-3xl bg-white overflow-hidden border border-gray-100 shadow-[0_28px_60px_-22px_rgba(8,40,48,0.28)]">
 
-        {/* ── Left: WELCOME panel ── */}
-        <div className="relative hidden md:flex flex-col justify-center p-10 text-white overflow-hidden bg-gradient-to-br from-blue-500 to-blue-700">
-          {/* floating bubbles */}
-          <div className="pointer-events-none absolute -bottom-16 -left-10 h-56 w-56 rounded-full bg-white/10" />
-          <div className="pointer-events-none absolute bottom-10 left-24 h-32 w-32 rounded-full bg-white/10" />
-          <div className="pointer-events-none absolute -top-12 -right-10 h-48 w-48 rounded-full bg-blue-400/30" />
+        {/* ── Left: WELCOME panel (same deep-teal hero as the in-app dashboard) ── */}
+        <div className="hero relative hidden md:flex flex-col justify-center p-10 text-white overflow-hidden !rounded-none">
+          {/* soft rings */}
+          <div className="pointer-events-none absolute -bottom-16 -left-10 h-56 w-56 rounded-full bg-white/5" />
+          <div className="pointer-events-none absolute -top-12 -right-10 h-48 w-48 rounded-full border border-white/10" />
+          {/* rising-graph motif — echoes the dashboard header */}
+          <svg className="pointer-events-none absolute inset-x-0 bottom-0 h-24 w-full opacity-20" viewBox="0 0 600 100" preserveAspectRatio="none" aria-hidden="true">
+            <polyline points="0,82 60,66 120,72 180,48 240,56 300,36 360,44 420,24 480,32 540,14 600,22"
+              fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
           <div className="relative">
+            <span className="brand-mark h-11 w-11 text-base mb-6">CA</span>
             <h2 className="text-4xl font-extrabold tracking-tight leading-none">WELCOME</h2>
-            <p className="mt-3 text-sm font-bold uppercase tracking-[0.2em] text-white/90">CA Studio</p>
-            <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/80">
+            <p className="mt-3 text-sm font-bold uppercase tracking-[0.2em] hero-muted">CA Studio</p>
+            <p className="mt-5 max-w-xs text-sm leading-relaxed hero-muted">
               Your complete accounting workspace — ledgers, GST, financial statements and Tally import, all in one place.
             </p>
           </div>

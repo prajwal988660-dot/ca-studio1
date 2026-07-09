@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ITR-1 · Data Entry · A.Y. 2026-27</title>
+<title>ITR-3 · Data Entry · A.Y. 2026-27</title>
 <style>
 /* ===== §12 BASE STYLESHEET (verbatim design system) ===== */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -118,43 +118,11 @@ textarea{resize:vertical;min-height:30px}
 .masterin:focus{outline:1px solid var(--blue2);background:#fffef8}
 
 /* ===== FORM-SPECIFIC (ITR-3) ===== */
-/* (single section — no tab bar in ITR-1) */
+/* tab bar (ITR Info | ITR B/S | ITR P&L) */
 .tabbar{display:flex;background:#eef2f7;border-bottom:1px solid var(--line)}
 .tabbar .tab{padding:7px 20px;font-size:12.5px;font-weight:600;color:var(--sub);cursor:pointer;border-right:1px solid var(--line2);border-bottom:2px solid transparent}
 .tabbar .tab.active{background:#fff;color:var(--blue);border-bottom-color:var(--blue)}
 .tabbar .tab:hover:not(.active){background:#e3ecf6}
-/* toolbar buttons in tab bar */
-.toolbtn{background:#fff;border:1px solid var(--blue2);color:var(--blue2);font-size:12px;font-weight:600;padding:5px 13px;border-radius:4px;cursor:pointer;font-family:inherit}
-.toolbtn:hover{background:var(--blue2);color:#fff}
-.toolbtn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
-.toolbtn.primary:hover{background:#16385a}
-/* tax summary tab */
-.summary-wrap{max-width:900px;margin:0 auto;padding:20px 18px 60px;display:flex;flex-direction:column;gap:18px}
-.sumcard{border:1px solid var(--line);border-radius:6px;background:#fff;overflow:hidden}
-.sumcard-h{background:var(--bar);color:var(--blue);font-weight:700;font-size:13px;padding:9px 16px;border-bottom:1px solid var(--barln)}
-.sumtbl{width:100%;border-collapse:collapse}
-.sumtbl td{padding:7px 16px;font-size:13px;border-bottom:1px solid var(--line2)}
-.sumtbl td.amt{text-align:right;font-variant-numeric:tabular-nums;font-family:Consolas,monospace;font-weight:600;color:#243b53;width:200px}
-.sumtbl tr.sub td{background:#f7f9fc;font-weight:600;color:var(--blue)}
-.sumtbl tr.tot td{background:#eaf1f8;font-weight:700;color:var(--blue)}
-.sumtbl tr.grand td{background:var(--blue);color:#fff}
-.sumtbl tr.grand td.amt{color:#fff}
-.sumnote{padding:10px 16px;font-size:11px;color:var(--sub);font-style:italic;background:#fafbfc}
-.valplaceholder{padding:16px;font-size:12.5px;color:var(--sub);font-style:italic}
-.val-item{display:flex;align-items:flex-start;gap:9px;padding:8px 16px;font-size:12.5px;border-bottom:1px solid var(--line2)}
-.val-item.err{background:#fdecef}
-.val-item.warn{background:#fdf9ef}
-.val-item.ok{background:#eefaf1}
-.val-item .ico{flex-shrink:0;font-weight:700}
-.val-item.err .ico{color:var(--req)}
-.val-item.warn .ico{color:var(--warn)}
-.val-item.ok .ico{color:var(--ok)}
-.val-summary{padding:10px 16px;font-size:12.5px;font-weight:600}
-.ais-row{display:flex;justify-content:space-between;padding:6px 16px;font-size:12.5px;border-bottom:1px solid var(--line2)}
-.ais-row .aval{font-variant-numeric:tabular-nums;font-family:Consolas,monospace;font-weight:600;color:#243b53}
-.ais-actions{padding:12px 16px;display:flex;gap:10px}
-.ais-btn{background:var(--ok);color:#fff;border:none;font-size:12.5px;font-weight:600;padding:7px 16px;border-radius:4px;cursor:pointer;font-family:inherit}
-.ais-btn.ghost{background:#fff;color:var(--sub);border:1px solid var(--line)}
 .tabpane{display:none}
 .tabpane.active{display:block}
 /* schedule strip on right of banner */
@@ -270,6 +238,37 @@ textarea{resize:vertical;min-height:30px}
 .toast.show{opacity:1}
 /* date input inline format hint styling */
 .datewrap{display:inline-flex;flex-direction:column;gap:1px}
+
+/* ===== integration layer (computation/summary tabs, toolbar, summary, toast) ===== */
+.toolbtn{background:#fff;border:1px solid var(--blue2);color:var(--blue2);font-size:12px;font-weight:600;padding:5px 13px;border-radius:4px;cursor:pointer;font-family:inherit}
+.toolbtn:hover{background:var(--blue2);color:#fff}
+.toolbtn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.toolbtn.primary:hover{background:#16385a}
+.summary-wrap{max-width:900px;margin:0 auto;padding:20px 18px 60px;display:flex;flex-direction:column;gap:18px}
+.sumcard{border:1px solid var(--line);border-radius:6px;background:#fff;overflow:hidden}
+.sumcard-h{background:var(--bar);color:var(--blue);font-weight:700;font-size:13px;padding:9px 16px;border-bottom:1px solid var(--line)}
+.sumtbl{width:100%;border-collapse:collapse}
+.sumtbl td{padding:7px 16px;font-size:13px;border-bottom:1px solid var(--line2)}
+.sumtbl td.amt{text-align:right;font-variant-numeric:tabular-nums;font-family:Consolas,monospace;font-weight:600;color:#243b53;width:200px}
+.sumtbl tr.sub td{background:#f7f9fc;font-weight:600;color:var(--blue)}
+.sumtbl tr.tot td{background:#eaf1f8;font-weight:700;color:var(--blue)}
+.sumtbl tr.grand td{background:var(--blue);color:#fff}
+.sumtbl tr.grand td.amt{color:#fff}
+.sumnote{padding:10px 16px;font-size:11px;color:var(--sub);font-style:italic;background:#fafbfc}
+.valplaceholder{padding:16px;font-size:12.5px;color:var(--sub);font-style:italic}
+.val-item{display:flex;gap:9px;align-items:flex-start;padding:8px 16px;font-size:12.5px;border-bottom:1px solid var(--line2)}
+.val-item .ico{font-weight:700;flex:none}
+.val-item.err{color:#b00020}.val-item.err .ico{color:#b00020}
+.val-item.warn{color:#8a6d00}.val-item.warn .ico{color:#c79100}
+.val-item.ok{color:#1e7a46}.val-item.ok .ico{color:#1e7a46}
+.val-summary{padding:9px 16px;font-size:11.5px;color:var(--sub);background:#fafbfc}
+.ais-row{display:flex;justify-content:space-between;padding:6px 16px;font-size:12.5px;border-bottom:1px solid var(--line2)}
+.ais-row .aval{font-variant-numeric:tabular-nums;font-family:Consolas,monospace;font-weight:600;color:#243b53}
+.ais-actions{padding:12px 16px;display:flex;gap:10px}
+.ais-btn{background:var(--ok,#1e7a46);color:#fff;border:none;font-size:12.5px;font-weight:600;padding:7px 16px;border-radius:4px;cursor:pointer;font-family:inherit}
+.ais-btn.ghost{background:#fff;color:var(--sub);border:1px solid var(--line)}
+.toast{position:fixed;left:50%;bottom:60px;transform:translateX(-50%);background:#1a2233;color:#fff;font-size:12.5px;padding:9px 16px;border-radius:4px;z-index:300;box-shadow:0 6px 20px rgba(0,0,0,.25);opacity:0;transition:opacity .2s}
+.toast.show{opacity:1}
 </style>
 </head>
 <body>
@@ -278,10 +277,11 @@ textarea{resize:vertical;min-height:30px}
   <!-- ===== TOP BANNER ===== -->
   <div class="top">
     <div>
-      <h1>ITR-1 &nbsp;·&nbsp; Data Entry</h1>
-      <div class="sub" id="bannerSub">For Resident Individual having Income only from Salary / One House Property / Other Sources · computed u/s 115BAC by default</div>
+      <h1>ITR-3 &nbsp;·&nbsp; Data Entry</h1>
+      <div class="sub" id="bannerSub">For Individual or HUF having Income from Business or Profession · computed u/s 115BAC by default</div>
     </div>
     <div style="display:flex;align-items:center;gap:14px">
+      <button class="gearbtn" id="openDefaultsBtn" title="Manage default particulars">⚙ Defaults</button>
       <div class="ay">A.Y.&nbsp;2026-27</div>
     </div>
   </div>
@@ -300,7 +300,9 @@ textarea{resize:vertical;min-height:30px}
 
   <!-- ===== TAB BAR ===== -->
   <div class="tabbar">
-    <div class="tab active" data-tab="info" onclick="switchMainTab('info')">ITR Information</div>
+    <div class="tab active" data-tab="info" onclick="switchTab('info')">ITR Info</div>
+    <div class="tab" data-tab="bs" onclick="switchTab('bs')">ITR B/S</div>
+    <div class="tab" data-tab="pl" onclick="switchTab('pl')">ITR P&amp;L</div>
     <div class="tab" data-tab="comp" onclick="switchMainTab('comp')">Computation of Income</div>
     <div class="tab" data-tab="summary" onclick="switchMainTab('summary')">Tax Summary &amp; Filing</div>
     <div style="margin-left:auto;display:flex;gap:8px;align-items:center;padding-right:12px">
@@ -311,11 +313,11 @@ textarea{resize:vertical;min-height:30px}
   </div>
 
   <!-- ============================================================
-       ITR INFO (ITR-1 has a single section, no tabs)
+       TAB 1 — ITR INFO
        ============================================================ -->
   <div class="tabpane active" id="pane-info">
   <div class="itpage">
-    <div class="sec-subhdr" style="text-align:center;background:#eef2f7;color:var(--sub);font-weight:400;font-style:italic;border:none;padding:6px">(For Resident Individual having Income only from Salary / One House Property / Other Sources)</div>
+    <div class="sec-subhdr" style="text-align:center;background:#eef2f7;color:var(--sub);font-weight:400;font-style:italic;border:none;padding:6px">(For Individual or HUF having Income from Business or Profession)</div>
 
     <div class="it-head ittog" data-grp="g-info"><span class="tg">▾</span> ITR Information</div>
     <div class="it-grp" id="g-info">
@@ -326,6 +328,7 @@ textarea{resize:vertical;min-height:30px}
       <div class="itr"><div class="lbl">Assessee info.</div><div class="drillcol sf-open" data-sf="sf-assessee">⋯</div><div class="st" id="st_assessee"></div><div class="schtag"></div></div>
       <div class="itr"><div class="lbl">Verifier info.</div><div class="drillcol sf-open" data-sf="sf-verifier">⋯</div><div class="st" id="st_verifier"></div><div class="schtag"></div></div>
       <div class="itr"><div class="lbl">Bank Accounts</div><div class="drillcol sf-open" data-sf="sf-bank">⋯</div><div class="st" id="st_bank"></div><div class="schtag"></div></div>
+      <div class="itr"><div class="lbl">Residential status info.</div><div class="drillcol sf-open" data-sf="sf-residential">⋯</div><div class="st" id="st_residential"></div><div class="schtag"></div></div>
 
       <!-- ITR filing info. -->
       <div class="it-sub">ITR filing info.</div>
@@ -345,6 +348,24 @@ textarea{resize:vertical;min-height:30px}
       <!-- Income related info. -->
       <div class="it-sub">Income related info.</div>
       <div class="itr"><div class="lbl">Pass Through Income u/s 115U/ 115UA/ 115UB</div><div class="drillcol sf-open" data-sf="sf-pti">⋯</div><div class="st" id="st_pti"></div><div class="schtag">PTI</div></div>
+      <div class="itr"><div class="lbl">Income of Other persons included in computation</div><div class="drillcol sf-open" data-sf="sf-spi">⋯</div><div class="st" id="st_spi"></div><div class="schtag">SPI</div></div>
+
+      <!-- Audit related details -->
+      <div class="it-sub">Audit related details</div>
+      <div class="itr"><div class="lbl">Liable for audit u/s 44AB?</div><div class="drillcol"></div>
+        <div class="inlineval"><span class="helpq" title="Tick if the assessee is liable to tax audit under section 44AB">?</span>
+          <span class="yn-tabs" data-fld="audit44ab"><button data-v="yes">Yes</button><button class="active" data-v="no">No</button></span></div><div class="schtag"></div></div>
+      <div class="itr cond-row" id="row-44ab" style="display:none"><div class="lbl i1">44AB Tax Audit details</div><div class="drillcol sf-open" data-sf="sf-44ab">⋯</div><div class="st" id="st_44ab"></div><div class="schtag"></div></div>
+      <div class="itr"><div class="lbl">Other Audits (excluding u/s 44AB of Income Tax Act)</div><div class="drillcol sf-open" data-sf="sf-otheraudits">⋯</div><div class="st" id="st_otheraudits"></div><div class="schtag"></div></div>
+
+      <!-- Business related info. -->
+      <div class="it-sub">Business related info.</div>
+      <div class="itr"><div class="lbl">Nature of Business / Profession</div><div class="drillcol sf-open" data-sf="sf-nature">⋯</div><div class="st" id="st_nature"></div><div class="schtag"></div></div>
+      <div class="itr"><div class="lbl">Turnover/Gross Receipts reported in GSTR</div><div class="drillcol sf-open" data-sf="sf-gstr">⋯</div><div class="st" id="st_gstr"></div><div class="schtag">GST</div></div>
+      <div class="itr"><div class="lbl">Business or Profession start date</div><div class="drillcol"></div>
+        <div class="inlineval"><span class="helpq" title="Date the business or profession commenced">?</span>
+          <input type="text" id="f_bizstart" class="datein" placeholder="DD/MM/YYYY" maxlength="10" oninput="fmtDate(this);computeAll()"><span class="fmt">DD/MM/YYYY</span></div><div class="schtag"></div></div>
+      <div class="itr"><div class="lbl">Tax paid u/s 92CE</div><div class="drillcol sf-open" data-sf="sf-92ce">⋯</div><div class="st" id="st_92ce"></div><div class="schtag">TPSA</div></div>
 
       <!-- Other info. -->
       <div class="it-sub">Other info.</div>
@@ -360,37 +381,204 @@ textarea{resize:vertical;min-height:30px}
       <div class="itr"><div class="lbl">Other Forms filed</div><div class="drillcol sf-open" data-sf="sf-otherforms">⋯</div><div class="st" id="st_otherforms"></div><div class="schtag"></div></div>
     </div>
 
-    <!-- Foreign Assets & Incomes — its own section (Schedule FA) -->
-    <div class="it-head ittog" data-grp="g-fa"><span class="tg">▾</span> Foreign Assets &amp; Incomes<span style="margin-left:auto;font-size:10px;font-weight:700;color:#9a3b2e">FA</span></div>
-    <div class="it-grp" id="g-fa">
-      <div class="itfull"><div class="lbl">Having Foreign assets and Income or Signing authority in Foreign a/c?<sup>^</sup></div><div class="chkcell"><input type="checkbox" id="f_hasFA" onchange="toggleFA();computeAll()"></div><div class="schtag"></div></div>
-      <div id="fa-wrap" style="display:none">
-        <div class="itr"><div class="lbl i1">Foreign Depository / Custodial accounts</div><div class="drillcol sf-open" data-sf="sf-fa_depository">⋯</div><div class="st" id="st_fa_depository"></div><div class="schtag"></div></div>
-        <div class="itr"><div class="lbl i1">Investments in Foreign Equity / Debts</div><div class="drillcol sf-open" data-sf="sf-fa_equity">⋯</div><div class="st" id="st_fa_equity"></div><div class="schtag"></div></div>
-        <div class="itr"><div class="lbl i1">Surrender value of Foreign Insurance / Annuity Contract</div><div class="drillcol sf-open" data-sf="sf-fa_insurance">⋯</div><div class="st" id="st_fa_insurance"></div><div class="schtag"></div></div>
-        <div class="itr"><div class="lbl i1">Financial Interest in any Entity</div><div class="drillcol sf-open" data-sf="sf-fa_interest">⋯</div><div class="st" id="st_fa_interest"></div><div class="schtag"></div></div>
-        <div class="itr"><div class="lbl i1">Immovable Property</div><div class="drillcol sf-open" data-sf="sf-fa_immovable">⋯</div><div class="st" id="st_fa_immovable"></div><div class="schtag"></div></div>
-        <div class="itr"><div class="lbl i1">Other Capital Assets</div><div class="drillcol sf-open" data-sf="sf-fa_othercap">⋯</div><div class="st" id="st_fa_othercap"></div><div class="schtag"></div></div>
-        <div class="itr"><div class="lbl i1">Account in which Assessee is signing authority (not included above)</div><div class="drillcol sf-open" data-sf="sf-fa_signing">⋯</div><div class="st" id="st_fa_signing"></div><div class="schtag"></div></div>
-        <div class="itr"><div class="lbl i1">Trusts in which Assessee is a Trustee / Beneficiary / Settlor</div><div class="drillcol sf-open" data-sf="sf-fa_trusts">⋯</div><div class="st" id="st_fa_trusts"></div><div class="schtag"></div></div>
-        <div class="itr"><div class="lbl i1">Other income not included above or in sch. BP of ITR</div><div class="drillcol sf-open" data-sf="sf-fa_otherincome">⋯</div><div class="st" id="st_fa_otherincome"></div><div class="schtag"></div></div>
-      </div>
-      <div class="itnote-full"><sup>^</sup>Enter all items held (including any beneficial interest) at any time during the calendar year 2025.</div>
-      <div class="itnote-full">Note: If the ZIP code is not available, enter 'XXXXXX'.</div>
+    <!-- full-width checkbox rows -->
+    <div class="itfull"><div class="lbl">Having Foreign assets and Income or Signing authority in Foreign a/c?</div><div class="chkcell"><input type="checkbox" id="f_hasFA" onchange="toggleFA();computeAll()"></div><div class="schtag">FA</div></div>
+    <div class="itnote-full">[Enter all items held (including any beneficial interest) at any time during the calendar year 2025.]</div>
+    <div id="fa-wrap" style="display:none">
+      <div class="itr"><div class="lbl i1">Foreign Depository / Custodial accounts</div><div class="drillcol sf-open" data-sf="sf-fa_depository">⋯</div><div class="st" id="st_fa_depository"></div><div class="schtag"></div></div>
+      <div class="itr"><div class="lbl i1">Investments in Foreign Equity / Debts</div><div class="drillcol sf-open" data-sf="sf-fa_equity">⋯</div><div class="st" id="st_fa_equity"></div><div class="schtag"></div></div>
+      <div class="itr"><div class="lbl i1">Surrender value of Foreign Insurance / Annuity Contract</div><div class="drillcol sf-open" data-sf="sf-fa_insurance">⋯</div><div class="st" id="st_fa_insurance"></div><div class="schtag"></div></div>
+      <div class="itr"><div class="lbl i1">Financial Interest in any Entity</div><div class="drillcol sf-open" data-sf="sf-fa_interest">⋯</div><div class="st" id="st_fa_interest"></div><div class="schtag"></div></div>
+      <div class="itr"><div class="lbl i1">Immovable Property outside India</div><div class="drillcol sf-open" data-sf="sf-fa_immovable">⋯</div><div class="st" id="st_fa_immovable"></div><div class="schtag"></div></div>
+      <div class="itr"><div class="lbl i1">Other Capital Assets outside India</div><div class="drillcol sf-open" data-sf="sf-fa_othercap">⋯</div><div class="st" id="st_fa_othercap"></div><div class="schtag"></div></div>
+      <div class="itr"><div class="lbl i1">Account in which Assessee is signing authority (not included above)</div><div class="drillcol sf-open" data-sf="sf-fa_signing">⋯</div><div class="st" id="st_fa_signing"></div><div class="schtag"></div></div>
+      <div class="itr"><div class="lbl i1">Trusts in which Assessee is a Trustee / Beneficiary / Settlor</div><div class="drillcol sf-open" data-sf="sf-fa_trusts">⋯</div><div class="st" id="st_fa_trusts"></div><div class="schtag"></div></div>
+      <div class="itr"><div class="lbl i1">Other income not included above or in Sch. BP</div><div class="drillcol sf-open" data-sf="sf-fa_otherincome">⋯</div><div class="st" id="st_fa_otherincome"></div><div class="schtag"></div></div>
+    </div>
+    <div class="itfull"><div class="lbl">Having Assets and Liabilities? (if total income &gt; Rs. 1 crore)</div><div class="chkcell"><input type="checkbox" id="f_hasAL" onchange="toggleAL();computeAll()"></div><div class="schtag">AL</div></div>
+    <div id="al-wrap" style="display:none">
+      <div class="it-sub maroon">Items entered in Part A-BS in ITR to be excluded &nbsp;·&nbsp; <span style="color:var(--sub);font-weight:400">Cost at the end of FY (₹)</span></div>
+      <div class="acct-row"><div class="lbl i1">Do you own any Immovable asset ?</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-al="al_immovable" placeholder="0" oninput="computeAll()"></div></div>
+      <div class="acct-row"><div class="lbl i1">Bank Balances &amp; deposits</div><div class="drillcol sf-open" data-sf="sf-al_bank">⋯</div><div class="amtcell"><span class="cv" id="al_bank_cv">0</span></div></div>
+      <div class="acct-row"><div class="lbl i1">Shares and Securities</div><div class="drillcol sf-open" data-sf="sf-al_shares">⋯</div><div class="amtcell"><span class="cv" id="al_shares_cv">0</span></div></div>
+      <div class="acct-row"><div class="lbl i1">Insurance policies</div><div class="drillcol sf-open" data-sf="sf-al_insurance">⋯</div><div class="amtcell"><span class="cv" id="al_insurance_cv">0</span></div></div>
+      <div class="acct-row"><div class="lbl i1">Loans and Advances</div><div class="drillcol sf-open" data-sf="sf-al_loans">⋯</div><div class="amtcell"><span class="cv" id="al_loans_cv">0</span></div></div>
+      <div class="acct-row"><div class="lbl i1">Cash in hand</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-al="al_cash" placeholder="0" oninput="computeAll()"></div></div>
+      <div class="acct-row"><div class="lbl i1">Jewellery, bullion etc.</div><div class="drillcol sf-open" data-sf="sf-al_jewellery">⋯</div><div class="amtcell"><span class="cv" id="al_jewellery_cv">0</span></div></div>
+      <div class="acct-row"><div class="lbl i1">Paintings / Artwork etc.</div><div class="drillcol sf-open" data-sf="sf-al_paintings">⋯</div><div class="amtcell"><span class="cv" id="al_paintings_cv">0</span></div></div>
+      <div class="acct-row"><div class="lbl i1">Vehicles / Boats etc.</div><div class="drillcol sf-open" data-sf="sf-al_vehicles">⋯</div><div class="amtcell"><span class="cv" id="al_vehicles_cv">0</span></div></div>
+      <div class="acct-row"><div class="lbl i1">Interests in assets of Firm/AOP</div><div class="drillcol sf-open" data-sf="sf-al_firm">⋯</div><div class="amtcell"><span class="cv" id="al_firm_cv">0</span></div></div>
+      <div class="acct-row tot"><div class="lbl">Total</div><div class="drillcol"></div><div class="amtcell"><span class="cv" id="al_total">0</span></div></div>
+      <div class="acct-row"><div class="lbl i1">Liabilities relating to the above assets</div><div class="drillcol sf-open" data-sf="sf-al_liab">⋯</div><div class="amtcell"><span class="cv" id="al_liab_cv">0</span></div></div>
+      <div class="itnote-full">^ Details of Assets/ Liabilities are compulsory where Total Income &gt; Rs.1 crore. In case value of an item is 'NIL', please enter '0'.</div>
+    </div>
+    <div class="itfull"><div class="lbl">Having Books not maintained cases of Business/profession?</div><div class="chkcell"><input type="checkbox" id="f_noBooks" onchange="toggleNoBooks();computeAll()"></div><div class="schtag"></div></div>
+    <div id="nobooks-wrap" style="display:none">
+      <div class="it-sub maroon">Financial particulars of the Business / Profession</div>
+      <div class="acct-row"><div class="lbl i1">Sundry creditors</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="nb_creditors" placeholder="0" oninput="computeAll()"></div></div>
+      <div class="acct-row"><div class="lbl i1">Stock- in-trade</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="nb_stock" placeholder="0" oninput="computeAll()"></div></div>
+      <div class="acct-row"><div class="lbl i1">Sundry debtors</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="nb_debtors" placeholder="0" oninput="computeAll()"></div></div>
+      <div class="acct-row"><div class="lbl i1">Cash balance</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="nb_cash" placeholder="0" oninput="computeAll()"></div></div>
     </div>
   </div>
   </div><!-- /pane-info -->
-
   <!-- ============================================================
-       COMPUTATION TAB — embeds the trimmed ITR-1 tax calculator in an iframe
+       TAB 2 — ITR B/S (Balance Sheet)
        ============================================================ -->
+  <div class="tabpane" id="pane-bs">
+  <div class="itpage">
+    <div class="sec-enable"><input type="checkbox" id="bs_enable" checked onchange="computeAll()"> ITR B/S</div>
+    <div class="sec-subhdr">Liabilities</div>
+    <div class="acct-row"><div class="lbl">Proprietor's capital</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_capital" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl">Reserves and surplus</div><div class="drillcol sf-open" data-sf="sf-bs_reserves">⋯</div><div class="amtcell"><input class="num" data-bs="bs_reserves" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row grouphdr"><div class="lbl">Secured loans</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row"><div class="lbl i1">Foreign Currency Loans</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_sec_fcl" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Rupee Loans - Banks</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_sec_rlb" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i2">- Others</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_sec_rlo" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row grouphdr"><div class="lbl">Unsecured loans (including deposits)</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row"><div class="lbl i1">Banks</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_unsec_banks" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Others</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_unsec_others" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl">Deferred tax liability</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_dtl" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl">Advances^^</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_advances" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row grouphdr"><div class="lbl">Current liabilities</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row"><div class="lbl i1">Sundry Creditors</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_cl_creditors" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Liability for Leased Assets</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_cl_leased" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Interest Accrued on above</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_cl_intacc" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Interest accrued but not due on loans</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_cl_intnotdue" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row grouphdr"><div class="lbl">Provisions</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row"><div class="lbl i1">Income Tax</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_prov_it" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Leave encashment/Superannuation/Gratuity</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_prov_leave" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Other provisions</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_prov_other" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row tot"><div class="lbl">Total Liabilities</div><div class="drillcol"></div><div class="amtcell"><span class="cv" id="bs_total_liab">0</span></div></div>
+    <div class="sec-subhdr">Assets</div>
+    <div class="acct-row grouphdr"><div class="lbl">Fixed assets</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row"><div class="lbl i1">Gross block</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_fa_gross" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Less: Depreciation</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_fa_dep" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Capital work-in-progress</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_fa_cwip" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row grouphdr"><div class="lbl">Investments</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row"><div class="lbl i1">Long term - Quoted securities</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_inv_ltq" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i2">- Unquoted securities</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_inv_ltu" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Short term - Equity Shares</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_inv_steq" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i2">- Preference Shares</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_inv_stpref" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i2">- Debentures</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_inv_stdeb" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row grouphdr"><div class="lbl">Current assets</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row grouphdr"><div class="lbl i1">Inventories</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row"><div class="lbl i2">Stores/Consumables/Packing materials</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_inv_stores" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i2">Raw materials</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_inv_raw" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i2">Stock- in- process</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_inv_wip" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i2">Finished Goods/Traded Goods</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_inv_fg" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Sundry debtors</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_ca_debtors" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Cash</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_ca_cash" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Banks</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_ca_banks" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Other Current Assets</div><div class="drillcol sf-open" data-sf="sf-bs_ca_other">⋯</div><div class="amtcell"><input class="num" data-bs="bs_ca_other" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row grouphdr"><div class="lbl">Loans and advances</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row"><div class="lbl i1">Advances</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_la_adv" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Deposits and loans</div><div class="drillcol sf-open" data-sf="sf-bs_la_dep">⋯</div><div class="amtcell"><input class="num" data-bs="bs_la_dep" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Balance with Revenue Authorities</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_la_bra" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl">Miscellaneous expenditure</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_misc" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl">Deferred tax asset</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_dta" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl">Profit and loss A/c (Dr)</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-bs="bs_pldr" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row tot"><div class="lbl">Total Assets</div><div class="drillcol"></div><div class="amtcell"><span class="cv" id="bs_total_assets">0</span></div></div>
+    <div class="acct-row grouphdr maroon"><div class="lbl">^^Additional Data</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row"><div class="lbl">Others</div><div class="drillcol sf-open" data-sf="sf-bs_addl_others">⋯</div><div class="amtcell"><input class="num" data-bs="bs_addl_others" placeholder="0" oninput="computeAll()"></div></div>
+  </div>
+  </div><!-- /pane-bs -->  <!-- ============================================================
+       TAB 3 — ITR P&L (Manufacturing / Trading / P&L)
+       ============================================================ -->
+  <div class="tabpane" id="pane-pl">
+  <div class="itpage">
+    <div class="sec-enable"><input type="checkbox" id="pl_enable" checked onchange="computeAll()"> Manufacturing, Trading and P&amp;L A/c</div>
+    <div class="sec-subhdr">ITR Manufacturing A/c</div>
+    <div class="acct-row grouphdr"><div class="lbl">Opening Stock</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row"><div class="lbl i1">Raw material</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_mfg_os_raw" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Work-in-progress</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_mfg_os_wip" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl">Purchases (net of returns / duty / tax)</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_mfg_purchases" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row grouphdr"><div class="lbl">Expenses</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row"><div class="lbl i1">Direct Wages</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_mfg_wages" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Direct Expenses</div><div class="drillcol sf-open" data-sf="sf-pl_mfg_directexp">⋯</div><div class="amtcell"><input class="num" data-pl="pl_mfg_directexp" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Factory Expenses</div><div class="drillcol sf-open" data-sf="sf-pl_mfg_factory">⋯</div><div class="amtcell"><input class="num" data-pl="pl_mfg_factory" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row grouphdr"><div class="lbl">Less: Closing stock</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row"><div class="lbl i1">Raw material</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_mfg_cs_raw" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Work-in-progress</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_mfg_cs_wip" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row tot"><div class="lbl">Cost of Production</div><div class="drillcol"></div><div class="amtcell"><span class="cv" id="pl_mfg_cop">0</span></div></div>
+    <div class="sec-subhdr">ITR Trading A/c</div>
+    <div class="acct-row grouphdr"><div class="lbl">Incomes</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row grouphdr"><div class="lbl">Sales / Gross receipts of Business (net of returns)</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row"><div class="lbl i1">Sale of products/goods</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_trd_sale_goods" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Sale of services (excluding Professional receipts)</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_trd_sale_services" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Other operating revenues</div><div class="drillcol sf-open" data-sf="sf-pl_trd_other_rev">⋯</div><div class="amtcell"><input class="num" data-pl="pl_trd_other_rev" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl">Gross receipts from Profession</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_trd_gross_prof" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl">Duties, taxes and cess on sales</div><div class="drillcol sf-open" data-sf="sf-pl_trd_duties">⋯</div><div class="amtcell"><input class="num" data-pl="pl_trd_duties" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl">Closing Stock - Finished goods</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_trd_closing_fg" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row tot"><div class="lbl">Total</div><div class="drillcol"></div><div class="amtcell"><span class="cv" id="pl_trd_inc_total">0</span></div></div>
+    <div class="acct-row grouphdr"><div class="lbl">Expenses</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row"><div class="lbl">Opening Stock - Finished goods</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_trd_opening_fg" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl">Purchases (net of returns / duty / tax)</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_trd_purchases" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl">Direct Expenses</div><div class="drillcol sf-open" data-sf="sf-pl_trd_directexp">⋯</div><div class="amtcell"><input class="num" data-pl="pl_trd_directexp" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl">Taxes on Inputs / Purchases</div><div class="drillcol sf-open" data-sf="sf-pl_trd_taxes_inputs">⋯</div><div class="amtcell"><input class="num" data-pl="pl_trd_taxes_inputs" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row tot"><div class="lbl">Cost of Production  (as per Manufacturing A/c)</div><div class="drillcol"></div><div class="amtcell"><span class="cv" id="pl_trd_cop">0</span></div></div>
+    <div class="acct-row tot"><div class="lbl">Gross Profit</div><div class="drillcol"></div><div class="amtcell"><span class="cv" id="pl_trd_gp">0</span></div></div>
+    <div class="acct-row"><div class="lbl">Intraday Trading Income</div><div class="drillcol sf-open" data-sf="sf-pl_trd_intraday">⋯</div><div class="amtcell"><input class="num" data-pl="pl_trd_intraday" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl">Futures & Options Trading Income</div><div class="drillcol sf-open" data-sf="sf-pl_trd_fno">⋯</div><div class="amtcell"><input class="num" data-pl="pl_trd_fno" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="sec-subhdr">ITR P&L A/c</div>
+    <div class="acct-row grouphdr"><div class="lbl">Incomes</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row tot"><div class="lbl">Gross profit (as per Trading A/c)</div><div class="drillcol"></div><div class="amtcell"><span class="cv" id="pl_pl_gp">0</span></div></div>
+    <div class="acct-row"><div class="lbl">Other Income</div><div class="drillcol sf-open" data-sf="sf-pl_pl_other_inc">⋯</div><div class="amtcell"><input class="num" data-pl="pl_pl_other_inc" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row grouphdr"><div class="lbl">Expenses</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row"><div class="lbl i1">Advertisement</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_advert" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Audit fee</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_audit" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Bad debts*</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_baddebts" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Club expenses</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_club" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Commission ^</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_commission" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Conference</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_conference" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Consumption of stores and spares</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_consumption" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Conveyance</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_conveyance" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Donation</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_donation" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Entertainment</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_entertainment" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Festival celebration</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_festival" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Freight outward</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_freight" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Gift</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_gift" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Guest House expenses</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_guesthouse" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Hospitality</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_hospitality" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Hotel, boarding and lodging</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_hotel" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Insurance</div><div class="drillcol sf-open" data-sf="sf-pl_exp_insurance">⋯</div><div class="amtcell"><input class="num" data-pl="pl_exp_insurance" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Power and fuel</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_power" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Professional / Consultancy / Technical fees ^</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_professional" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Provisions</div><div class="drillcol sf-open" data-sf="sf-pl_exp_provisions">⋯</div><div class="amtcell"><input class="num" data-pl="pl_exp_provisions" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Rents</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_rents" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Repairs - Building</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_repairs_bldg" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Repairs - Machinery</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_repairs_mach" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Royalty ^</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_royalty" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Salaries and other benefits ^</div><div class="drillcol sf-open" data-sf="sf-pl_exp_salaries">⋯</div><div class="amtcell"><input class="num" data-pl="pl_exp_salaries" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Sales promotion (excluding Advertisement)</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_salespromo" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Scholarship</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_scholarship" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Staff welfare</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_staff" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Taxes and rates paid</div><div class="drillcol sf-open" data-sf="sf-pl_exp_taxes">⋯</div><div class="amtcell"><input class="num" data-pl="pl_exp_taxes" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Telephone</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_telephone" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Travelling ^</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_exp_travelling" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Other expenses</div><div class="drillcol sf-open" data-sf="sf-pl_exp_other">⋯</div><div class="amtcell"><input class="num" data-pl="pl_exp_other" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row tot"><div class="lbl">Profit before interest, depreciation and taxes (PBIT)</div><div class="drillcol"></div><div class="amtcell"><span class="cv" id="pl_pbit">0</span></div></div>
+    <div class="acct-row"><div class="lbl i1">Less: Interest ^</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_less_interest" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Depreciation</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_less_depreciation" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row tot"><div class="lbl">Profit before Taxes (PBT)</div><div class="drillcol"></div><div class="amtcell"><span class="cv" id="pl_pbt">0</span></div></div>
+    <div class="acct-row"><div class="lbl i1">Less: Provision for - Current tax</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_less_currenttax" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i2">- Deferred Tax</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_less_deferredtax" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row tot"><div class="lbl">Profit after taxes (PAT)</div><div class="drillcol"></div><div class="amtcell"><span class="cv" id="pl_pat">0</span></div></div>
+    <div class="acct-row"><div class="lbl i1">Add: Balance B/F from previous year</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_add_bf" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">Less:  Transfer to Reserves</div><div class="drillcol"></div><div class="amtcell"><input class="num" data-pl="pl_less_reserves" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row tot"><div class="lbl">Balance carried to B/S</div><div class="drillcol"></div><div class="amtcell"><span class="cv" id="pl_balance_bs">0</span></div></div>
+    <div class="acct-row grouphdr maroon"><div class="lbl">Additional Data</div><div class="drillcol"></div><div class="amtcell"></div></div>
+    <div class="acct-row"><div class="lbl i1">^ Foreign payments, included in above</div><div class="drillcol sf-open" data-sf="sf-pl_addl_foreign">⋯</div><div class="amtcell"><input class="num" data-pl="pl_addl_foreign" placeholder="0" oninput="computeAll()"></div></div>
+    <div class="acct-row"><div class="lbl i1">*Analysis of Bad debts</div><div class="drillcol sf-open" data-sf="sf-pl_addl_baddebts">⋯</div><div class="amtcell"><input class="num" data-pl="pl_addl_baddebts" placeholder="0" oninput="computeAll()"></div></div>
+  </div>
+  </div><!-- /pane-pl -->
+
+  <!-- ===== COMPUTATION TAB (calculator in iframe) ===== -->
   <div class="tabpane" id="pane-comp">
     <iframe id="calcFrame" title="Tax Computation" style="width:100%;height:calc(100vh - 150px);border:none;display:block"></iframe>
   </div>
 
-  <!-- ============================================================
-       TAX SUMMARY TAB — read-only figures pulled from the calculator + export/validation
-       ============================================================ -->
+  <!-- ===== TAX SUMMARY TAB (read-only figures from the calculator + export/validation) ===== -->
   <div class="tabpane" id="pane-summary">
     <div class="summary-wrap">
       <div class="sumcard">
@@ -398,8 +586,9 @@ textarea{resize:vertical;min-height:30px}
         <table class="sumtbl">
           <tr><td>Income from Salaries</td><td class="amt" id="sm_salary">₹0</td></tr>
           <tr><td>Income from House Property</td><td class="amt" id="sm_hp">₹0</td></tr>
+          <tr><td>Profits &amp; Gains of Business or Profession</td><td class="amt" id="sm_biz">₹0</td></tr>
+          <tr><td>Income from Capital Gains</td><td class="amt" id="sm_ltcg">₹0</td></tr>
           <tr><td>Income from Other Sources</td><td class="amt" id="sm_os">₹0</td></tr>
-          <tr><td>LTCG u/s 112A (≤ ₹1.25L)</td><td class="amt" id="sm_ltcg">₹0</td></tr>
           <tr class="sub"><td>Gross Total Income</td><td class="amt" id="sm_gti">₹0</td></tr>
           <tr><td>Less: Deductions under Chapter VI-A</td><td class="amt" id="sm_ded">₹0</td></tr>
           <tr class="tot"><td>Total Income</td><td class="amt" id="sm_ti">₹0</td></tr>
@@ -407,14 +596,12 @@ textarea{resize:vertical;min-height:30px}
           <tr><td>Less: TDS / TCS / Advance Tax / SAT</td><td class="amt" id="sm_prepaid">₹0</td></tr>
           <tr class="grand" id="sm_bal_row"><td>Balance Tax Payable</td><td class="amt" id="sm_bal">₹0</td></tr>
         </table>
-        <div class="sumnote">Figures are computed live on the Computation tab. Switch there to enter income details.</div>
+        <div class="sumnote">Figures are computed live on the Computation tab. ITR-3 supports business/profession income (fill the B/S and P&amp;L tabs), multiple employers, multiple house properties and full capital gains.</div>
       </div>
-
       <div class="sumcard">
         <div class="sumcard-h">Validation</div>
         <div id="validationPanel"><div class="valplaceholder">Click "Export ITR JSON" to run validation checks.</div></div>
       </div>
-
       <div class="sumcard" id="aisCard" style="display:none">
         <div class="sumcard-h">AIS Import Preview</div>
         <div id="aisPreview"></div>
@@ -424,6 +611,8 @@ textarea{resize:vertical;min-height:30px}
 
   <!-- ===== STICKY RAIL ===== -->
   <div class="rail">
+    <div class="pill">B/S check <b id="r_bs" style="font-size:13px">—</b></div>
+    <div class="pill">P&amp;L balance to B/S <b id="r_pl">₹0</b></div>
     <div class="pill">Return section <b id="r_sec" style="font-size:13px">139(1)</b></div>
     <div class="pill">Total Income <b id="rail_ti">₹0</b></div>
     <div class="pill">Balance Tax <b id="rail_bal">₹0</b></div>
@@ -529,9 +718,187 @@ textarea{resize:vertical;min-height:30px}
   </div>
 </div>
 
+<!-- Residential status info. -->
+<div class="subform sf-wide" id="sf-residential">
+  <div class="sf-top"><div><h2>Residential status info.</h2><div class="sf-meta">A.Y. 2026-27 · determination of residential status u/s 6</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close>✓ Done</button></div></div>
+  <div class="sf-body">
+    <div class="sf-note">^182 days in case of citizen of India, left India for employment / as a member of crew of Indian ship or Citizen of India / PIO, visited India.</div>
+    <table class="sf-tbl"><colgroup><col class="c-txtwide" style="width:auto"><col class="c-chk"><col class="c-tag"></colgroup>
+      <thead><tr><th class="l">Residential status</th><th></th><th class="l">Section</th></tr></thead>
+      <tbody>
+        <tr class="sect"><td colspan="3">Basic conditions:</td></tr>
+        <tr><td class="l">a) Stayed in India for at least 182 days in the PY?</td><td style="text-align:center"><input type="checkbox" id="res_a" style="width:15px;height:15px;accent-color:var(--blue)" onchange="computeAll()"></td><td class="tag">6 (1)(a)</td></tr>
+        <tr><td class="l">Citizen of India / PIO, visited India during the year &amp; having taxable total income above Rs. 15 lakh from Indian sources?</td><td style="text-align:center"><input type="checkbox" id="res_citizen" style="width:15px;height:15px;accent-color:var(--blue)" onchange="toggleResB();computeAll()"></td><td class="tag"></td></tr>
+        <tr><td class="l" id="res_b_label">b) Stayed in India for at least 60^ days in the PY and at least 365 days in 4 years preceding the PY?</td><td style="text-align:center"><input type="checkbox" id="res_b" style="width:15px;height:15px;accent-color:var(--blue)" onchange="computeAll()"></td><td class="tag" id="res_b_section">6 (1)(c)</td></tr>
+      </tbody></table>
+  </div>
+</div>
 
+<!-- Income of Other persons included in computation (SPI) -->
+<div class="subform sf-wide" id="sf-spi">
+  <div class="sf-top"><div><h2>Income of Other persons included in computation</h2><div class="sf-meta">A.Y. 2026-27 · Schedule SPI</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close>✓ Done</button></div></div>
+  <div class="sf-body">
+    <div class="sf-note">^ Details for these items entered under the head 'Income from other sources' and 'House Property' in Computation window will be directly taken to ITR.</div>
+    <div class="sf-sectit">Minor children's income ^<button class="addbtn" id="addSpiMinorBtn" style="margin-left:14px">+ Add row</button></div>
+    <table class="sf-tbl"><colgroup><col class="c-txt"><col class="c-txt"><col class="c-txt"><col class="c-sel"><col class="c-num"><col class="c-rm"></colgroup>
+      <thead><tr><th class="l">Name</th><th class="l">PAN / Aadhaar No. (optional)</th><th class="l">Relationship</th><th class="l">Head of income</th><th>Amount</th><th></th></tr></thead>
+      <tbody id="spi-minor-rows"></tbody></table>
+    <div class="sf-sectit">Income of other persons ^<button class="addbtn" id="addSpiOtherBtn" style="margin-left:14px">+ Add row</button></div>
+    <table class="sf-tbl"><colgroup><col class="c-txt"><col class="c-txt"><col class="c-txt"><col class="c-sel"><col class="c-num"><col class="c-rm"></colgroup>
+      <thead><tr><th class="l">Name</th><th class="l">PAN / Aadhaar No. (optional)</th><th class="l">Relationship</th><th class="l">Head of income</th><th>Amount</th><th></th></tr></thead>
+      <tbody id="spi-other-rows"></tbody></table>
+    <div class="sf-grand">Total income of other persons <b id="spi_total">₹0</b></div>
+  </div>
+</div>
 
+<!-- Turnover/Gross Receipts reported in GSTR -->
+<div class="subform sf-wide" id="sf-gstr">
+  <div class="sf-top"><div><h2>Turnover/Gross Receipts reported in GSTR</h2><div class="sf-meta">A.Y. 2026-27 · GSTIN-wise outward supplies</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close>✓ Done</button></div></div>
+  <div class="sf-body">
+    <div class="sf-sectit">GSTIN-wise outward supplies<button class="addbtn" id="addGstrBtn" style="margin-left:14px">+ Add row</button></div>
+    <table class="sf-tbl"><colgroup><col class="c-txt"><col class="c-num"><col class="c-rm"></colgroup>
+      <thead><tr><th class="l">GSTIN</th><th>Outward supplies as per GST return</th><th></th></tr></thead>
+      <tbody id="gstr-rows"></tbody></table>
+    <div class="sf-grand">Total outward supplies <b id="gstr_total">₹0</b></div>
+  </div>
+</div>
 
+<!-- Other Audits (excluding u/s 44AB of Income Tax Act) -->
+<div class="subform sf-wide" id="sf-otheraudits">
+  <div class="sf-top"><div><h2>Other Audits (excluding u/s 44AB of Income Tax Act)</h2><div class="sf-meta">A.Y. 2026-27</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close>✓ Done</button></div></div>
+  <div class="sf-body">
+    <table class="sf-tbl"><colgroup><col class="c-txtwide" style="width:auto"><col class="c-date"><col class="c-txt"><col class="c-sel"></colgroup>
+      <thead><tr><th class="l" style="color:#9a3b2e">Audits under Income Tax Act</th><th></th><th></th><th></th></tr></thead>
+      <tbody>
+        <tr class="subtot"><td class="l">Section</td><td class="l">Date of furnishing Report</td><td class="l">Acknowledgement number</td><td class="l">Whether furnished?</td></tr>
+        <tr><td class="l" style="color:var(--blue)">10AA</td>
+          <td><input type="text" id="oa_itax_0_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_itax_0_ack" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_itax_0_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">115JC</td>
+          <td><input type="text" id="oa_itax_1_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_itax_1_ack" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_itax_1_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">50B</td>
+          <td><input type="text" id="oa_itax_2_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_itax_2_ack" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_itax_2_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">44DA</td>
+          <td><input type="text" id="oa_itax_3_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_itax_3_ack" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_itax_3_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">50B</td>
+          <td><input type="text" id="oa_itax_4_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_itax_4_ack" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_itax_4_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">80-IA</td>
+          <td><input type="text" id="oa_itax_5_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_itax_5_ack" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_itax_5_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">80-IAB</td>
+          <td><input type="text" id="oa_itax_6_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_itax_6_ack" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_itax_6_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">80-IB</td>
+          <td><input type="text" id="oa_itax_7_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_itax_7_ack" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_itax_7_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">80-IE</td>
+          <td><input type="text" id="oa_itax_8_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_itax_8_ack" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_itax_8_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">80JJAA</td>
+          <td><input type="text" id="oa_itax_9_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_itax_9_ack" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_itax_9_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">92E</td>
+          <td><input type="text" id="oa_itax_10_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_itax_10_ack" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_itax_10_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+      </tbody></table>
+    <table class="sf-tbl" style="margin-top:14px"><colgroup><col class="c-txtwide" style="width:auto"><col class="c-date"><col class="c-txt"><col class="c-sel"></colgroup>
+      <thead><tr><th class="l" style="color:#9a3b2e">Audits under other Acts</th><th></th><th></th><th></th></tr></thead>
+      <tbody>
+        <tr class="subtot"><td class="l">Act</td><td class="l">Date of furnishing Report</td><td class="l">Section</td><td class="l">Whether furnished?</td></tr>
+        <tr><td class="l" style="color:var(--blue)">Central Excise Act, 1944</td>
+          <td><input type="text" id="oa_other_0_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_other_0_section" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_other_0_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">Central GST Act, 2017</td>
+          <td><input type="text" id="oa_other_1_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_other_1_section" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_other_1_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">Central Sales Tax Act, 1956</td>
+          <td><input type="text" id="oa_other_2_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_other_2_section" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_other_2_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">Employees Provident Fund and Miscellaneous Provisions Act, 1952</td>
+          <td><input type="text" id="oa_other_3_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_other_3_section" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_other_3_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">Foreign Exchange Management Act, 1999</td>
+          <td><input type="text" id="oa_other_4_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_other_4_section" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_other_4_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">Foreign Exchange Management Act, 1999</td>
+          <td><input type="text" id="oa_other_5_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_other_5_section" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_other_5_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">Integrated GST Act, 2017</td>
+          <td><input type="text" id="oa_other_6_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_other_6_section" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_other_6_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">Payment of Gratuity Act, 1972</td>
+          <td><input type="text" id="oa_other_7_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_other_7_section" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_other_7_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">SEBI Act, 1992</td>
+          <td><input type="text" id="oa_other_8_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_other_8_section" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_other_8_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">Securities Contract (Regulation) Act, 1956</td>
+          <td><input type="text" id="oa_other_9_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_other_9_section" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_other_9_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">State GST Act, 2017</td>
+          <td><input type="text" id="oa_other_10_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_other_10_section" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_other_10_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">Union Territories GST Act, 2017</td>
+          <td><input type="text" id="oa_other_11_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_other_11_section" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_other_11_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+        <tr><td class="l" style="color:var(--blue)">Other:</td>
+          <td><input type="text" id="oa_other_12_date" placeholder="DD/MM/YYYY" oninput="fmtDate(this)" style="text-align:left"></td>
+          <td><input type="text" id="oa_other_12_section" style="text-align:left"></td>
+          <td style="background:#e8f3e9"><select id="oa_other_12_furn"><option>—</option><option>Yes</option><option>No</option></select></td></tr>
+      </tbody></table>
+  </div>
+</div>
+<!-- Tax paid u/s 92CE -->
+<div class="subform sf-wide" id="sf-92ce">
+  <div class="sf-top"><div><h2>Tax paid u/s 92CE</h2><div class="sf-meta">A.Y. 2026-27 · secondary adjustment</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close>✓ Done</button></div></div>
+  <div class="sf-body">
+    <table class="sf-tbl sf-simple" style="max-width:640px"><colgroup><col style="width:360px"><col class="c-num"></colgroup><tbody>
+      <tr><td class="l">Amount on which option u/s 92CE(2A) is exercised</td><td><input type="text" id="ce_amount" class="num" oninput="computeAll()"></td></tr>
+      <tr><td class="l">Additional Income tax @ 18%</td><td class="calc pink" id="ce_addtax">0</td></tr>
+      <tr><td class="l">Surcharge @ 12%</td><td class="calc pink" id="ce_surcharge">0</td></tr>
+      <tr><td class="l">Cess @ 4%</td><td class="calc pink" id="ce_cess">0</td></tr>
+      <tr class="subtot"><td class="l">Total Tax payable (A)</td><td class="calc" id="ce_total_a">0</td></tr>
+      <tr><td class="l">Tax paid (B)</td><td><input type="text" id="ce_paid_b" class="num" oninput="computeAll()"></td></tr>
+      <tr class="subtot"><td class="l">Net Tax payable (A - B)</td><td class="calc" id="ce_net">0</td></tr>
+    </tbody></table>
+    <div class="sf-sectit">Details of tax deposit:<button class="addbtn" id="addCeDepositBtn" style="margin-left:14px">+ Add row</button></div>
+    <table class="sf-tbl"><colgroup><col class="c-txtwide" style="width:auto"><col class="c-txt"><col class="c-date"><col class="c-txt"><col class="c-num"><col class="c-rm"></colgroup>
+      <thead><tr><th class="l">Name of the Bank &amp; Branch</th><th class="l">BSR Code</th><th class="l">Date of deposit</th><th class="l">Challan no.</th><th>Amount</th><th></th></tr></thead>
+      <tbody id="ce-deposit-rows"></tbody></table>
+  </div>
+</div>
 
 <!-- Tax deferred on Sweat Equity (ESOP) -->
 <div class="subform sf-wide" id="sf-esop">
@@ -605,6 +972,19 @@ textarea{resize:vertical;min-height:30px}
   </div>
 </div>
 
+<!-- Nature of Business / Profession -->
+<div class="subform sf-wide" id="sf-nature">
+  <div class="sf-top"><div><h2>Nature of Business / Profession</h2><div class="sf-meta">A.Y. 2026-27 · business / profession activity codes</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close>✓ Done</button></div></div>
+  <div class="sf-body">
+    <div class="sf-note">Select the Sector and Sub-Sector; the Code is picked from the prescribed list of business/profession codes. Enter trade name(s) under which the business is carried on.</div>
+    <div class="sf-sectit">Activities<button class="addbtn" id="addNatureBtn" style="margin-left:14px">+ Add row</button></div>
+    <table class="sf-tbl"><colgroup><col class="c-txtwide"><col class="c-txtwide"><col class="c-num"><col class="c-txt"><col class="c-txt"><col class="c-rm"></colgroup>
+      <thead><tr><th class="l">Sector</th><th class="l">Sub-Sector</th><th class="l">Code</th><th class="l">Trade name 1</th><th class="l">Trade name 2</th><th></th></tr></thead>
+      <tbody id="nature-rows"></tbody></table>
+    <div class="sf-grand">Activities entered <b id="nature_count">0</b></div>
+  </div>
+</div>
 
 <!-- Pass Through Income (PTI) -->
 <div class="subform sf-wide" id="sf-pti">
@@ -620,6 +1000,33 @@ textarea{resize:vertical;min-height:30px}
   </div>
 </div>
 
+<!-- 44AB Tax Audit details -->
+<div class="subform sf-wide" id="sf-44ab">
+  <div class="sf-top"><div><h2>44AB Tax Audit details</h2><div class="sf-meta">A.Y. 2026-27 · applicable when liable to audit u/s 44AB</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close>✓ Done</button></div></div>
+  <div class="sf-body">
+    <table class="sf-tbl" style="max-width:900px"><colgroup><col style="width:auto"><col class="c-sel"><col class="c-num"></colgroup><tbody>
+      <tr><td class="l">Date of furnishing audit report</td><td><input type="text" id="ab_date" oninput="fmtDate(this)" placeholder="DD/MM/YYYY" style="text-align:left"></td><td></td></tr>
+      <tr><td class="l">Acknowledgement number</td><td><input type="text" id="ab_ack" style="text-align:left"></td><td></td></tr>
+      <tr class="sect"><td colspan="3">Tax audit data in Part A - OI of ITR</td></tr>
+      <tr class="subtot"><td class="l" colspan="3">Method of valuation of closing stock [Sl. no. 4 of OI]</td></tr>
+      <tr><td class="l" style="padding-left:24px">Raw materials</td><td><select id="ab_val_raw"><option>Lower of Cost/Market rate</option><option>At Cost</option><option>At Market rate</option></select></td><td></td></tr>
+      <tr><td class="l" style="padding-left:24px">Finished goods</td><td><select id="ab_val_fg"><option>Lower of Cost/Market rate</option><option>At Cost</option><option>At Market rate</option></select></td><td></td></tr>
+      <tr><td class="l" style="padding-left:24px">Is there any change in method of valuation?</td><td style="text-align:center"><input type="checkbox" id="ab_val_change" style="width:15px;height:15px;accent-color:var(--blue)"></td><td></td></tr>
+      <tr class="subtot"><td class="l" colspan="3">Duties / taxes - Credit outstanding in accounts [Sl. no. 12 of OI]</td></tr>
+      <tr><td class="l" style="padding-left:24px">Central GST (CGST)</td><td></td><td><input type="text" id="ab_cgst" class="num" oninput="computeAll()"></td></tr>
+      <tr><td class="l" style="padding-left:24px">State GST (SGST)</td><td></td><td><input type="text" id="ab_sgst" class="num" oninput="computeAll()"></td></tr>
+      <tr><td class="l" style="padding-left:24px">Integrated GST (IGST)</td><td></td><td><input type="text" id="ab_igst" class="num" oninput="computeAll()"></td></tr>
+      <tr><td class="l" style="padding-left:24px">Union Territory GST (UTGST)</td><td></td><td><input type="text" id="ab_utgst" class="num" oninput="computeAll()"></td></tr>
+      <tr><td class="l" style="padding-left:24px">Union Excise Duty</td><td></td><td><input type="text" id="ab_excise" class="num" oninput="computeAll()"></td></tr>
+      <tr><td class="l" style="padding-left:24px">Service tax</td><td></td><td><input type="text" id="ab_servicetax" class="num" oninput="computeAll()"></td></tr>
+      <tr><td class="l" style="padding-left:24px">VAT/Sales tax</td><td></td><td><input type="text" id="ab_vat" class="num" oninput="computeAll()"></td></tr>
+      <tr><td class="l" style="padding-left:24px">Any other tax</td><td></td><td><input type="text" id="ab_othertax" class="num" oninput="computeAll()"></td></tr>
+      <tr class="subtot"><td class="l">Total</td><td></td><td class="calc" id="ab_duties_total">0</td></tr>
+    </tbody></table>
+    <div class="sf-note" style="color:var(--blue2);background:#eef4fb;border-color:#cfe0f2">Note: Tax audit &amp; stock details for ITR (Part A - OI &amp; QD) are to be filled in 3CD window.</div>
+  </div>
+</div>
 
 <!-- ===== Foreign Asset schedules (9 repeaters) — same as ITR-4 ===== -->
 <div class="subform" id="sf-fa_depository">
@@ -735,7 +1142,119 @@ textarea{resize:vertical;min-height:30px}
     <div class="sf-actions"><button class="sf-btn" data-close-fadetail>✓ Done</button></div></div>
   <div class="sf-body" id="fadet_body"></div>
 </div>
+<!-- ===== Assets/Liabilities (AL) drill popups ===== -->
+<div class="subform" id="sf-al_bank">
+  <div class="sf-top"><div><h2>Bank Balances & deposits</h2><div class="sf-meta">A.Y. 2026-27 · Schedule AL · cost at end of FY</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close>✓ Done</button></div></div>
+  <div class="sf-body">
+    <div class="sf-sectit">Break-up<button class="addbtn" id="addBk_al_bank" style="margin-left:14px">+ Add row</button></div>
+    <table class="sf-tbl" style="max-width:720px"><colgroup><col style="width:auto"><col class="c-num"><col class="c-rm"></colgroup>
+      <thead><tr><th class="l">Particulars</th><th>Amount</th><th></th></tr></thead><tbody id="bk_al_bank_body"></tbody></table>
+    <div class="sf-grand">Total <b id="bk_al_bank_total">₹0</b></div>
+  </div>
+</div>
+<div class="subform" id="sf-al_shares">
+  <div class="sf-top"><div><h2>Shares and Securities</h2><div class="sf-meta">A.Y. 2026-27 · Schedule AL · cost at end of FY</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close>✓ Done</button></div></div>
+  <div class="sf-body">
+    <div class="sf-sectit">Break-up<button class="addbtn" id="addBk_al_shares" style="margin-left:14px">+ Add row</button></div>
+    <table class="sf-tbl" style="max-width:720px"><colgroup><col style="width:auto"><col class="c-num"><col class="c-rm"></colgroup>
+      <thead><tr><th class="l">Particulars</th><th>Amount</th><th></th></tr></thead><tbody id="bk_al_shares_body"></tbody></table>
+    <div class="sf-grand">Total <b id="bk_al_shares_total">₹0</b></div>
+  </div>
+</div>
+<div class="subform" id="sf-al_insurance">
+  <div class="sf-top"><div><h2>Insurance policies</h2><div class="sf-meta">A.Y. 2026-27 · Schedule AL · cost at end of FY</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close>✓ Done</button></div></div>
+  <div class="sf-body">
+    <div class="sf-sectit">Break-up<button class="addbtn" id="addBk_al_insurance" style="margin-left:14px">+ Add row</button></div>
+    <table class="sf-tbl" style="max-width:720px"><colgroup><col style="width:auto"><col class="c-num"><col class="c-rm"></colgroup>
+      <thead><tr><th class="l">Particulars</th><th>Amount</th><th></th></tr></thead><tbody id="bk_al_insurance_body"></tbody></table>
+    <div class="sf-grand">Total <b id="bk_al_insurance_total">₹0</b></div>
+  </div>
+</div>
+<div class="subform" id="sf-al_loans">
+  <div class="sf-top"><div><h2>Loans and Advances</h2><div class="sf-meta">A.Y. 2026-27 · Schedule AL · cost at end of FY</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close>✓ Done</button></div></div>
+  <div class="sf-body">
+    <div class="sf-sectit">Break-up<button class="addbtn" id="addBk_al_loans" style="margin-left:14px">+ Add row</button></div>
+    <table class="sf-tbl" style="max-width:720px"><colgroup><col style="width:auto"><col class="c-num"><col class="c-rm"></colgroup>
+      <thead><tr><th class="l">Particulars</th><th>Amount</th><th></th></tr></thead><tbody id="bk_al_loans_body"></tbody></table>
+    <div class="sf-grand">Total <b id="bk_al_loans_total">₹0</b></div>
+  </div>
+</div>
+<div class="subform" id="sf-al_jewellery">
+  <div class="sf-top"><div><h2>Jewellery, bullion etc.</h2><div class="sf-meta">A.Y. 2026-27 · Schedule AL · cost at end of FY</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close>✓ Done</button></div></div>
+  <div class="sf-body">
+    <div class="sf-sectit">Break-up<button class="addbtn" id="addBk_al_jewellery" style="margin-left:14px">+ Add row</button></div>
+    <table class="sf-tbl" style="max-width:720px"><colgroup><col style="width:auto"><col class="c-num"><col class="c-rm"></colgroup>
+      <thead><tr><th class="l">Particulars</th><th>Amount</th><th></th></tr></thead><tbody id="bk_al_jewellery_body"></tbody></table>
+    <div class="sf-grand">Total <b id="bk_al_jewellery_total">₹0</b></div>
+  </div>
+</div>
+<div class="subform" id="sf-al_paintings">
+  <div class="sf-top"><div><h2>Paintings / Artwork etc.</h2><div class="sf-meta">A.Y. 2026-27 · Schedule AL · cost at end of FY</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close>✓ Done</button></div></div>
+  <div class="sf-body">
+    <div class="sf-sectit">Break-up<button class="addbtn" id="addBk_al_paintings" style="margin-left:14px">+ Add row</button></div>
+    <table class="sf-tbl" style="max-width:720px"><colgroup><col style="width:auto"><col class="c-num"><col class="c-rm"></colgroup>
+      <thead><tr><th class="l">Particulars</th><th>Amount</th><th></th></tr></thead><tbody id="bk_al_paintings_body"></tbody></table>
+    <div class="sf-grand">Total <b id="bk_al_paintings_total">₹0</b></div>
+  </div>
+</div>
+<div class="subform" id="sf-al_vehicles">
+  <div class="sf-top"><div><h2>Vehicles / Boats etc.</h2><div class="sf-meta">A.Y. 2026-27 · Schedule AL · cost at end of FY</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close>✓ Done</button></div></div>
+  <div class="sf-body">
+    <div class="sf-sectit">Break-up<button class="addbtn" id="addBk_al_vehicles" style="margin-left:14px">+ Add row</button></div>
+    <table class="sf-tbl" style="max-width:720px"><colgroup><col style="width:auto"><col class="c-num"><col class="c-rm"></colgroup>
+      <thead><tr><th class="l">Particulars</th><th>Amount</th><th></th></tr></thead><tbody id="bk_al_vehicles_body"></tbody></table>
+    <div class="sf-grand">Total <b id="bk_al_vehicles_total">₹0</b></div>
+  </div>
+</div>
+<div class="subform" id="sf-al_liab">
+  <div class="sf-top"><div><h2>Liabilities relating to the above assets</h2><div class="sf-meta">A.Y. 2026-27 · Schedule AL · cost at end of FY</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close>✓ Done</button></div></div>
+  <div class="sf-body">
+    <div class="sf-sectit">Break-up<button class="addbtn" id="addBk_al_liab" style="margin-left:14px">+ Add row</button></div>
+    <table class="sf-tbl" style="max-width:720px"><colgroup><col style="width:auto"><col class="c-num"><col class="c-rm"></colgroup>
+      <thead><tr><th class="l">Particulars</th><th>Amount</th><th></th></tr></thead><tbody id="bk_al_liab_body"></tbody></table>
+    <div class="sf-grand">Total <b id="bk_al_liab_total">₹0</b></div>
+  </div>
+</div>
+<div class="subform sf-wide" id="sf-al_firm">
+  <div class="sf-top"><div><h2>Interests in assets of Firm/AOP</h2><div class="sf-meta">A.Y. 2026-27 · Schedule AL</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close>✓ Done</button></div></div>
+  <div class="sf-body">
+    <div class="sf-sectit">Firms / AOPs<button class="addbtn" id="addAlFirmBtn" style="margin-left:14px">+ Add row</button></div>
+    <table class="sf-tbl"><colgroup><col class="c-txt"><col class="c-num"><col class="c-txt"><col class="c-txt"><col class="c-txt"><col class="c-txt"><col class="c-txt"><col class="c-txt"><col class="c-txt"><col class="c-zip"><col class="c-txt"><col class="c-rm"></colgroup>
+      <thead><tr><th class="l">Name of Firm/AOP</th><th>Investment (cost)</th><th class="l">PAN</th><th class="l">Flat / Door / House No.</th><th class="l">Premises</th><th class="l">Road</th><th class="l">Area/Locality</th><th class="l">Town/City</th><th class="l">State</th><th class="l">PIN / ZIP code</th><th class="l">Country</th><th></th></tr></thead>
+      <tbody id="al-firm-rows"></tbody></table>
+    <div class="sf-grand">Total investment <b id="al_firm_total">₹0</b></div>
+  </div>
+</div>
 
+<!-- Manage Default Particulars -->
+<div id="sf-defaults" class="subform">
+  <div class="sf-top"><div><h2>Manage Default Particulars</h2><div class="sf-meta">Reusable label templates · saved on this machine · amounts are never stored</div></div>
+    <div class="sf-actions"><button class="sf-btn" data-close-defaults>✓ Done</button></div></div>
+  <div class="sf-body" style="max-width:920px">
+    <div class="def-storagewarn" id="def_storagewarn">⚠ Browser storage is blocked in this preview, so templates last only for this session. When you download and open this file locally, they will be saved permanently on your machine.</div>
+    <div class="def-toggle">
+      <span class="sw"><input type="checkbox" id="def_autofill_chk"><label for="def_autofill_chk"></label></span>
+      <span class="txt"><b>Auto-fill defaults</b> when a break-up opens empty</span>
+    </div>
+    <div class="def-iobar">
+      <button class="def-iobtn" id="def_export">⭳ Export templates (.json)</button>
+      <button class="def-iobtn" id="def_import">⭱ Import templates</button>
+      <input type="file" id="def_import_file" accept="application/json,.json" style="display:none">
+      <button class="def-iobtn danger" id="def_clearall">Clear all templates</button>
+    </div>
+    <div class="sf-note">Enter one label per line for each break-up you use often (e.g. under Direct Expenses: Freight, Loading &amp; unloading, Octroi). Leave a line blank to skip it.</div>
+    <div id="def_groups"></div>
+  </div>
+</div>
 
 <!-- ONE shared detail popup (for PTI, directorship, unlisted, and the small B/S/P&L drills) -->
 <div class="subform" id="sf-detail">
@@ -1008,13 +1527,14 @@ const FIXED_BREAKUP={
 
 /* ===== state ===== */
 const data={
-  flags:{partner:'no',unlisted:'no',director:'no',rep_deceased:'no'},
+  flags:{audit44ab:'no',partner:'no',unlisted:'no',director:'no',rep_deceased:'no'},
   assessee:{}, verifier:{}, repassessee:{}, otherforms:{optearlier:'Yes',trp:false},
   bank:[newBankRow()], spiMinor:[newSpiRow()], spiOther:[newSpiRow()], gstr:[newGstrRow()],
   ceDeposit:[newCeDepRow()], esop:{years:{}, sold:false, soldRows:[newEsopSoldRow()]},
   director:[newDirectorRow()], unlisted:[newUnlistedRow()], pti:[newPtiRow()],
   nature:[newNatureRow()],
   residential:{a:false,citizen:false,b:false},
+  audit44ab_data:{},
   bs:{}, pl:{}, al:{},
   alFirm:[newAlFirmRow()],
   breakups:{},        // key -> [ {particulars, amount} ]  (generic add-row)
@@ -1430,9 +1950,92 @@ function saveSubFormField(sfId,inp){const id=inp.id,v=inp.value;let m;
 let _bsNodes=null,_plNodes=null,_parentNodeCache={};
 function __resetComputeCache(){_bsNodes=null;_plNodes=null;_parentNodeCache={};}
 function computeAll(){
-  // ---- PTI totals ----
-  const ptiInc=data.pti.reduce((s,r)=>s+num(r.income),0), ptiTds=data.pti.reduce((s,r)=>s+num(r.tds),0);
-  if($('pti_income_total')){$('pti_income_total').textContent=inr(ptiInc);$('pti_tds_total').textContent=inr(ptiTds);}
+  // cache node lists (querySelectorAll on every keystroke is what froze the sheet)
+  if(!_bsNodes||!_bsNodes.length)_bsNodes=document.querySelectorAll('[data-bs]');
+  if(!_plNodes||!_plNodes.length)_plNodes=document.querySelectorAll('[data-pl]');
+  const active=(typeof document.activeElement!=='undefined')?document.activeElement:null;
+  // read all B/S & P&L inputs into state
+  _bsNodes.forEach(el=>data.bs[el.dataset.bs]=num(el.value));
+  _plNodes.forEach(el=>data.pl[el.dataset.pl]=num(el.value));
+
+  // breakup totals → parent field (only when the breakup actually holds data,
+  // and never overwrite the input the user is currently editing)
+  Object.keys(BREAKUP_TITLES).forEach(key=>{
+    let t=0,hasData=false;
+    const spec=FIXED_BREAKUP[key];
+    if(spec){
+      const store=data.fixedBreakups[key]||{};
+      spec.rows.forEach(r=>{ if(String(store[r.k]||'').trim()!=='')hasData=true; });
+      if(spec.net){ spec.net.forEach((rk,i)=>{ t += (i===0?1:-1)*num(store[rk]); }); }
+      else { spec.rows.forEach(r=>{ t+=num(store[r.k]); }); }
+    } else {
+      data.breakups[key].forEach(r=>{ if(String(r.amount||'').trim()!==''||String(r.particulars||'').trim()!=='')hasData=true; });
+      t=data.breakups[key].reduce((s,r)=>s+num(r.amount),0);
+    }
+    const bt=$('bk_'+key+'_total'); if(bt)bt.textContent=inr(t);
+    if(hasData){
+      if(!(key in _parentNodeCache))_parentNodeCache[key]=document.querySelector(`[data-bs="${key}"],[data-pl="${key}"]`);
+      const inp=_parentNodeCache[key];
+      if(inp&&inp!==active){inp.value=t;}
+      if(key.startsWith('bs_'))data.bs[key]=t;else data.pl[key]=t;
+    }
+  });
+
+  const B=data.bs, P=data.pl;
+  // ---- B/S totals ----
+  const secured=num(B.bs_sec_fcl)+num(B.bs_sec_rlb)+num(B.bs_sec_rlo);
+  const unsecured=num(B.bs_unsec_banks)+num(B.bs_unsec_others);
+  const curliab=num(B.bs_cl_creditors)+num(B.bs_cl_leased)+num(B.bs_cl_intacc)+num(B.bs_cl_intnotdue);
+  const provisions=num(B.bs_prov_it)+num(B.bs_prov_leave)+num(B.bs_prov_other);
+  const totalLiab=num(B.bs_capital)+num(B.bs_reserves)+secured+unsecured+num(B.bs_dtl)+num(B.bs_advances)+curliab+provisions;
+  setTxt('bs_total_liab',totalLiab);
+  const fixedassets=num(B.bs_fa_gross)-num(B.bs_fa_dep)+num(B.bs_fa_cwip);
+  const investments=num(B.bs_inv_ltq)+num(B.bs_inv_ltu)+num(B.bs_inv_steq)+num(B.bs_inv_stpref)+num(B.bs_inv_stdeb);
+  const inventories=num(B.bs_inv_stores)+num(B.bs_inv_raw)+num(B.bs_inv_wip)+num(B.bs_inv_fg);
+  const curassets=inventories+num(B.bs_ca_debtors)+num(B.bs_ca_cash)+num(B.bs_ca_banks)+num(B.bs_ca_other);
+  const loansadv=num(B.bs_la_adv)+num(B.bs_la_dep)+num(B.bs_la_bra);
+  const totalAssets=fixedassets+investments+curassets+loansadv+num(B.bs_misc)+num(B.bs_dta)+num(B.bs_pldr);
+  setTxt('bs_total_assets',totalAssets);
+
+  // ---- P&L: Manufacturing ----
+  const mfgOpen=num(P.pl_mfg_os_raw)+num(P.pl_mfg_os_wip);
+  const mfgExp=num(P.pl_mfg_wages)+num(P.pl_mfg_directexp)+num(P.pl_mfg_factory);
+  const mfgClose=num(P.pl_mfg_cs_raw)+num(P.pl_mfg_cs_wip);
+  const cop=mfgOpen+num(P.pl_mfg_purchases)+mfgExp-mfgClose;
+  setTxt('pl_mfg_cop',cop);
+  // ---- P&L: Trading ----
+  const trdInc=num(P.pl_trd_sale_goods)+num(P.pl_trd_sale_services)+num(P.pl_trd_other_rev)+num(P.pl_trd_gross_prof)+num(P.pl_trd_duties)+num(P.pl_trd_closing_fg);
+  setTxt('pl_trd_inc_total',trdInc);
+  setTxt('pl_trd_cop',cop); // cost of production carried from mfg
+  const trdExpBeforeGP=num(P.pl_trd_opening_fg)+num(P.pl_trd_purchases)+num(P.pl_trd_directexp)+num(P.pl_trd_taxes_inputs)+cop;
+  const grossProfit=trdInc-trdExpBeforeGP;
+  setTxt('pl_trd_gp',grossProfit);
+  // ---- P&L account ----
+  setTxt('pl_pl_gp',grossProfit);
+  const expenseKeys=['pl_exp_advert','pl_exp_audit','pl_exp_baddebts','pl_exp_club','pl_exp_commission','pl_exp_conference','pl_exp_consumption','pl_exp_conveyance','pl_exp_donation','pl_exp_entertainment','pl_exp_festival','pl_exp_freight','pl_exp_gift','pl_exp_guesthouse','pl_exp_hospitality','pl_exp_hotel','pl_exp_insurance','pl_exp_power','pl_exp_professional','pl_exp_provisions','pl_exp_rents','pl_exp_repairs_bldg','pl_exp_repairs_mach','pl_exp_royalty','pl_exp_salaries','pl_exp_salespromo','pl_exp_scholarship','pl_exp_staff','pl_exp_taxes','pl_exp_telephone','pl_exp_travelling','pl_exp_other'];
+  const totalExp=expenseKeys.reduce((s,k)=>s+num(P[k]),0);
+  const otherInc=num(P.pl_pl_other_inc);
+  const intraday=num(P.pl_trd_intraday), fno=num(P.pl_trd_fno);
+  const pbit=grossProfit+otherInc+intraday+fno-totalExp;
+  setTxt('pl_pbit',pbit);
+  const pbt=pbit-num(P.pl_less_interest)-num(P.pl_less_depreciation);
+  setTxt('pl_pbt',pbt);
+  const pat=pbt-num(P.pl_less_currenttax)-num(P.pl_less_deferredtax);
+  setTxt('pl_pat',pat);
+  const balBS=pat+num(P.pl_add_bf)-num(P.pl_less_reserves);
+  setTxt('pl_balance_bs',balBS);
+
+  // ---- 44AB duties/taxes credit outstanding total ----
+  const ab=data.audit44ab_data||{};
+  const abTotal=num(ab.cgst)+num(ab.sgst)+num(ab.igst)+num(ab.utgst)+num(ab.excise)+num(ab.servicetax)+num(ab.vat)+num(ab.othertax);
+  if($('ab_duties_total'))$('ab_duties_total').textContent=fmt(abTotal);
+
+  // ---- 92CE tax ----
+  const ceAmt=num(data.ce_amount);
+  const ceAdd=ceAmt*0.18, ceSur=ceAdd*0.12, ceCess=(ceAdd+ceSur)*0.04;
+  const ceTotal=ceAdd+ceSur+ceCess;
+  const ceNet=ceTotal-num(data.ce_paid_b);
+  if($('ce_addtax')){$('ce_addtax').textContent=fmt(ceAdd);$('ce_surcharge').textContent=fmt(ceSur);$('ce_cess').textContent=fmt(ceCess);$('ce_total_a').textContent=fmt(ceTotal);$('ce_net').textContent=fmt(ceNet);}
 
   // ---- ESOP totals + balance C/F ----
   let esBf=0,esSale=0,esCy=0,esCf=0;
@@ -1440,7 +2043,46 @@ function computeAll(){
     const cell=$('esop_'+y+'_cf');if(cell)cell.textContent=fmt(cf);esBf+=bf;esSale+=sale;esCy+=cy;esCf+=cf;});
   if($('esop_bf_tot')){$('esop_bf_tot').textContent=fmt(esBf);$('esop_sale_tot').textContent=fmt(esSale);$('esop_cy_tot').textContent=fmt(esCy);$('esop_cf_tot').textContent=fmt(esCf);}
 
-  // ---- counts ----
+  // ---- SPI total ----
+  const spiTotal=data.spiMinor.reduce((s,r)=>s+num(r.amount),0)+data.spiOther.reduce((s,r)=>s+num(r.amount),0);
+  if($('spi_total'))$('spi_total').textContent=inr(spiTotal);
+
+  // ---- GSTR / bank counts ----
+  const gstrTotal=data.gstr.reduce((s,r)=>s+num(r.outward),0);
+  if($('gstr_total'))$('gstr_total').textContent=inr(gstrTotal);
+  const ptiInc=data.pti.reduce((s,r)=>s+num(r.income),0),ptiTds=data.pti.reduce((s,r)=>s+num(r.tds),0);
+  if($('pti_income_total')){$('pti_income_total').textContent=inr(ptiInc);$('pti_tds_total').textContent=inr(ptiTds);}
+  const natN=data.nature.filter(r=>r.sector||r.code||r.trade1||r.trade2).length;
+  if($('nature_count'))$('nature_count').textContent=String(natN);
+
+  // ---- Assets/Liabilities (AL) ----
+  // read direct AL inputs
+  document.querySelectorAll('[data-al]').forEach(el=>data.al[el.dataset.al]=num(el.value));
+  // AL generic breakups → their _cv cells
+  const alBreakupTotals={};
+  AL_BREAKUP_KEYS.forEach(key=>{
+    const t=(data.breakups[key]||[]).reduce((s,r)=>s+num(r.amount),0);
+    alBreakupTotals[key]=t;
+    const bt=$('bk_'+key+'_total'); if(bt)bt.textContent=inr(t);
+    const cv=$(key+'_cv'); if(cv)cv.textContent=fmt(t);
+  });
+  // AL firm/AOP grid total
+  const alFirmTotal=data.alFirm.reduce((s,r)=>s+num(r.cost),0);
+  if($('al_firm_total'))$('al_firm_total').textContent=inr(alFirmTotal);
+  if($('al_firm_cv'))$('al_firm_cv').textContent=fmt(alFirmTotal);
+  // AL grand total (assets only; liabilities shown separately)
+  const alAssets=num(data.al.al_immovable)+num(alBreakupTotals.al_bank)+num(alBreakupTotals.al_shares)+num(alBreakupTotals.al_insurance)
+    +num(alBreakupTotals.al_loans)+num(data.al.al_cash)+num(alBreakupTotals.al_jewellery)+num(alBreakupTotals.al_paintings)
+    +num(alBreakupTotals.al_vehicles)+alFirmTotal;
+  if($('al_total'))$('al_total').textContent=fmt(alAssets);
+  if($('al_liab_cv'))$('al_liab_cv').textContent=fmt(alBreakupTotals.al_liab);
+
+  // ---- FA schedule counts (status cells) ----
+  FA_KEYS.forEach(k=>{
+    const n=data[k].filter(r=>Object.values(r).some(v=>String(v||'').trim()!==''&&v!=='(Select)')).length;
+    const cnt=$(k+'_count'); if(cnt)cnt.textContent=String(n);
+    stCnt('st_'+k, n, 'entry');
+  });
   const bankN=data.bank.filter(r=>r.name||r.acc).length;
   if($('bank_count'))$('bank_count').textContent=String(bankN);
   const dirN=data.director.filter(r=>r.company||r.din).length;
@@ -1448,32 +2090,38 @@ function computeAll(){
   if($('director_count'))$('director_count').textContent=String(dirN);
   if($('unlisted_count'))$('unlisted_count').textContent=String(unlN);
 
-  // ---- FA schedule counts ----
-  FA_KEYS.forEach(k=>{
-    const n=data[k].filter(r=>Object.values(r).some(v=>String(v||'').trim()!==''&&v!=='(Select)')).length;
-    const cnt=$(k+'_count'); if(cnt)cnt.textContent=String(n);
-    stCnt('st_'+k, n, 'entry');
-  });
-
   // ---- status cells (NO required tags) ----
   stDone('st_assessee', !!data.assessee.email);
   stDone('st_verifier', !!(data.verifier.name&&data.verifier.pan));
   stCnt('st_bank', bankN, 'account');
+  stDone('st_residential', chk('res_a')||chk('res_b'));
   stDone('st_repassessee', !!data.repassessee.name);
   stCnt('st_pti', data.pti.filter(r=>r.name||r.income).length, 'entry');
+  stCnt('st_spi', data.spiMinor.filter(r=>r.name).length+data.spiOther.filter(r=>r.name).length, 'person');
+  stDone('st_otheraudits', false); // optional; leave neutral
+  stCnt('st_nature', data.nature.filter(r=>r.sector||r.code||r.trade1||r.trade2).length, 'activity');
+  stCnt('st_gstr', data.gstr.filter(r=>r.gstin||r.outward).length, 'GSTIN');
+  stDone('st_92ce', ceAmt>0);
+  stDone('st_44ab', !!(ab.date||abTotal>0));
   stCnt('st_unlisted', unlN, 'company');
   stCnt('st_directorship', dirN, 'company');
   stDone('st_esop', !!(data.esop.pan||esBf>0));
   stDone('st_otherforms', !!(data.otherforms.optearlier&&data.otherforms.optearlier!=='Yes'||data.otherforms.trpId||data.otherforms.ay));
 
   // ---- rail ----
+  const bsEnabled=chk('bs_enable');
+  const bsDiff=totalLiab-totalAssets;
+  if($('r_bs')){ if(!bsEnabled){$('r_bs').textContent='off';} else if(bsDiff===0&&totalLiab!==0){$('r_bs').textContent='✓ tallied';} else if(totalLiab===0&&totalAssets===0){$('r_bs').textContent='—';} else {$('r_bs').textContent='Δ '+inr(Math.abs(bsDiff));} }
+  if($('r_pl'))$('r_pl').textContent=inr(balBS);
   if($('r_sec'))$('r_sec').textContent=$('f_section')?$('f_section').value:'139(1)';
+
   refreshBanner();
 }
 function stDone(id,ok){const e=$(id);if(e)e.innerHTML=ok?'<span class="done">Entered</span>':'<span class="empty">Not entered</span>';}
 function stCnt(id,n,noun){const e=$(id);if(e)e.innerHTML=n>0?`<span class="cnt">${n} ${noun}${n>1?'s':''}</span>`:'<span class="empty">Empty</span>';}
 function refreshBanner(){
-  if($('bannerSub'))$('bannerSub').textContent='For Resident Individual having Income only from Salary / One House Property / Other Sources · computed u/s 115BAC by default';
+  const status=$('cl_status')?$('cl_status').value:'Individual';
+  if($('bannerSub'))$('bannerSub').textContent=`For ${status} having Income from Business or Profession · computed u/s 115BAC by default`;
 }
 
 /* ===== shared wiring ===== */
@@ -1530,15 +2178,20 @@ document.addEventListener('click',e=>{const btn=e.target.closest('.yn-tabs butto
 function onFlagChange(fld,v){
   if(fld==='unlisted'){const r=$('row-unlisted');if(r)r.style.display=v==='yes'?'':'none';}
   if(fld==='director'){const r=$('row-directorship');if(r)r.style.display=v==='yes'?'':'none';}
+  if(fld==='audit44ab'){const r=$('row-44ab');if(r)r.style.display=v==='yes'?'':'none';}
 }
 
 // add-row buttons
-[['addBankBtn',()=>{data.bank.push(newBankRow());renderBank();computeAll();}],
- ['addEsopSoldBtn',()=>{data.esop.soldRows.push(newEsopSoldRow());renderEsopSold();computeAll();}],
- ['add_director_Btn',()=>{data.director.push(newDirectorRow());renderDirector();computeAll();}],
- ['add_unlisted_Btn',()=>{data.unlisted.push(newUnlistedRow());renderUnlisted();computeAll();}],
- ['addPtiBtn',()=>{data.pti.push(newPtiRow());renderPti();computeAll();}]
-].forEach(([id,fn])=>{const b=$(id);if(b)b.addEventListener('click',fn);});
+$('addBankBtn').addEventListener('click',()=>{data.bank.push(newBankRow());renderBank();computeAll();});
+$('addSpiMinorBtn').addEventListener('click',()=>{data.spiMinor.push(newSpiRow());renderSpi();computeAll();});
+$('addSpiOtherBtn').addEventListener('click',()=>{data.spiOther.push(newSpiRow());renderSpi();computeAll();});
+$('addGstrBtn').addEventListener('click',()=>{data.gstr.push(newGstrRow());renderGstr();computeAll();});
+$('addCeDepositBtn').addEventListener('click',()=>{data.ceDeposit.push(newCeDepRow());renderCeDeposit();computeAll();});
+$('addEsopSoldBtn').addEventListener('click',()=>{data.esop.soldRows.push(newEsopSoldRow());renderEsopSold();computeAll();});
+$('add_director_Btn').addEventListener('click',()=>{data.director.push(newDirectorRow());renderDirector();computeAll();});
+$('add_unlisted_Btn').addEventListener('click',()=>{data.unlisted.push(newUnlistedRow());renderUnlisted();computeAll();});
+$('addNatureBtn').addEventListener('click',()=>{data.nature.push(newNatureRow());renderNature();computeAll();});
+$('addPtiBtn').addEventListener('click',()=>{data.pti.push(newPtiRow());renderPti();computeAll();});
 FA_KEYS.forEach(k=>{const btn=$('add_'+k+'_Btn');if(btn)btn.addEventListener('click',()=>{data[k].push(newFaRow(k));renderFa(k);computeAll();});});
 {const b=$('addAlFirmBtn');if(b)b.addEventListener('click',()=>{data.alFirm.push(newAlFirmRow());renderAlFirm();computeAll();});}
 
@@ -1550,15 +2203,32 @@ let toastTmr=null;
 function toast(msg){let t=$('__toast');if(!t){t=document.createElement('div');t.id='__toast';t.className='toast';document.body.appendChild(t);}t.textContent=msg;t.classList.add('show');clearTimeout(toastTmr);toastTmr=setTimeout(()=>t.classList.remove('show'),2600);}
 
 /* ===== init ===== */
+// load saved default-particulars templates + auto-fill pref (per machine)
+loadTemplates();
+// wire the Manage Defaults panel
+{
+  const gb=$('openDefaultsBtn'); if(gb)gb.addEventListener('click',openDefaults);
+  document.querySelectorAll('[data-close-defaults]').forEach(b=>b.addEventListener('click',closeDefaults));
+  const tg=$('def_autofill_chk'); if(tg)tg.addEventListener('change',()=>{autofillOn=tg.checked;saveAutofillPref();});
+  const ex=$('def_export'); if(ex)ex.addEventListener('click',exportTemplates);
+  const im=$('def_import'); if(im)im.addEventListener('click',()=>{const f=$('def_import_file');if(f)f.click();});
+  const imf=$('def_import_file'); if(imf)imf.addEventListener('change',e=>{if(e.target.files&&e.target.files[0]){importTemplates(e.target.files[0]);e.target.value='';}});
+  const cl=$('def_clearall'); if(cl)cl.addEventListener('click',()=>{
+    if(Object.keys(templates).length===0){toast('No templates to clear');return;}
+    templates={}; saveTemplates(); renderDefaultsPanel(); toast('All templates cleared');});
+}
 Object.entries(data.flags).forEach(([f,v])=>setYn(f,v));
-renderBank();renderEsop();renderEsopSold();renderDirector();renderUnlisted();renderPti();renderOtherForms();
-FA_KEYS.forEach(renderFa);
+renderBank();renderSpi();renderGstr();renderCeDeposit();renderEsop();renderEsopSold();renderDirector();renderUnlisted();renderNature();renderPti();renderOtherForms();
+FA_KEYS.forEach(renderFa);renderAlFirm();AL_BREAKUP_KEYS.forEach(renderAlBreakup);
 computeAll();
 
 /* ============================================================
-   INTEGRATION LAYER — Computation calculator (iframe) + AIS + Export
+   INTEGRATION LAYER (ITR-3) — Computation calculator (iframe) + AIS import + JSON export
+   Reuses the proven ITR-1/ITR-2 machinery; ITR-3-specific schema in buildItr3Json/validateItr3.
+   Full business/BS/P&L support. References the form's own globals: $, data, computeAll, r0, inr.
    ============================================================ */
 let calcReady=false;
+/* inr() currency formatter is already defined by the form's script — reused here. */
 function calcDoc(){ const f=$('calcFrame'); return f&&f.contentWindow?f.contentWindow.document:null; }
 function calcWin(){ const f=$('calcFrame'); return f?f.contentWindow:null; }
 function calcVal(id){ const d=calcDoc(); if(!d)return 0; const el=d.getElementById(id); if(!el)return 0; return num(el.textContent||el.value||0); }
@@ -1594,15 +2264,16 @@ function refreshSummary(){
   const salary=calcVal('it_sal_total');
   const hp=calcVal('it_hp_income');
   const os=calcVal('it_os_interest')+calcVal('it_os_dividend')+calcVal('it_os_familypension')+calcVal('it_os_other')+calcVal('it_os_winnings');
-  const ltcg=calcVal('it_cg_112a');
+  const biz=calcVal('it_bp_income');
+  const ltcg=calcVal('it_cg_112a')+calcVal('it_cg_ltcg1')+calcVal('it_cg_ltauto')+calcVal('it_cg_stcg1')+calcVal('it_cg_auto');
   const ded=calcVal('it_80_total');
   const ti=calcVal('it_totalIncome');
-  const gti=salary+Math.max(0,hp)+os+ltcg;
+  const gti=salary+Math.max(0,hp)+biz+os+ltcg;
   const tax=calcVal('it_taxOnTI');
   const bal=calcVal('it_balancePayable');
   const prepaid=Math.max(0, tax-bal);
   const set=(id,v)=>{const e=$(id);if(e)e.textContent=inr(v);};
-  set('sm_salary',salary);set('sm_hp',Math.max(0,hp));set('sm_os',os);set('sm_ltcg',ltcg);
+  set('sm_salary',salary);set('sm_hp',Math.max(0,hp));set('sm_biz',Math.max(0,biz));set('sm_os',os);set('sm_ltcg',ltcg);
   set('sm_gti',gti);set('sm_ded',ded);set('sm_ti',ti);set('sm_tax',tax);set('sm_prepaid',prepaid);
   set('sm_bal',Math.abs(bal));
   const balRow=$('sm_bal_row'); if(balRow){balRow.querySelector('td').textContent=bal>=0?'Balance Tax Payable':'Refund Due';}
@@ -1850,25 +2521,12 @@ function applyAisToCalc(ais){
 function trySetCalcInput(d,ids,val){ for(const id of ids){ const el=d.getElementById(id); if(el){ el.value=String(val); el.dispatchEvent(new Event('input',{bubbles:true})); return true; } } return false; }
 
 // Build the Chapter VI-A deduction object (all Section80* fields required by schema)
-function chapVIA(total){
-  const g=id=>Math.round(calcVal(id));
-  return {
-    Section80C:g('it_80_c'), Section80CCC:g('it_80_ccc'), Section80CCDEmployeeOrSE:g('it_80_ccd1'),
-    Section80CCD1B:g('it_80_ccd1b'), Section80CCDEmployer:g('it_80_ccd2'),
-    Section80D:g('it_80_d'), Section80DD:g('it_80_dd'), Section80DDB:g('it_80_ddb'),
-    Section80E:g('it_80_e'), Section80EE:0, Section80EEA:0, Section80EEB:0,
-    Section80G:g('it_80_g'), Section80GG:g('it_80_gg'), Section80GGA:0, Section80GGC:0,
-    Section80U:g('it_80_u'), Section80TTA:g('it_80_tta'), Section80TTB:g('it_80_ttb'),
-    AnyOthSec80CCH:g('it_80_cch'), TotalChapVIADeductions:total
-  };
-}
-
-/* ---------- JSON EXPORT + VALIDATION ---------- */
+/* ---------- JSON EXPORT + VALIDATION (ITR-3) ---------- */
 $('exportJsonBtn').addEventListener('click',()=>{
   switchMainTab('summary');
-  const {errors,warnings}=validateItr1();
+  const {errors,warnings}=validateItr3();
   renderValidation(errors,warnings);
-  if(errors.length===0){ doExportItr1(); }
+  if(errors.length===0){ doExportItr3(); }
 });
 function renderValidation(errors,warnings){
   const p=$('validationPanel'); let html='';
@@ -1878,7 +2536,7 @@ function renderValidation(errors,warnings){
   html+=`<div class="val-summary">${errors.length} error(s), ${warnings.length} warning(s)</div>`;
   p.innerHTML=html;
 }
-function validateItr1(){
+function validateItr3(){
   const errors=[],warnings=[];
   const pan=($('cl_pan').value||'').toUpperCase().trim();
   const name=($('cl_name').value||'').trim();
@@ -1886,82 +2544,127 @@ function validateItr1(){
   if(!/^[A-Z]{5}\d{4}[A-Z]$/.test(pan)) errors.push('PAN is missing or invalid (format ABCDE1234F).');
   if(!name) errors.push('Name of Assessee is required.');
   if(!/^\d{2}\/\d{2}\/\d{4}$/.test(dob)) warnings.push('Date of Birth should be DD/MM/YYYY (needed for correct age-based slab).');
-  const ti=calcVal('it_totalIncome');
-  if(ti>5000000) errors.push('Total Income exceeds ₹50 lakh — ITR-1 cannot be used; use ITR-2.');
-  const ltcg=calcVal('it_cg_112a');
-  if(ltcg>125000) errors.push('LTCG u/s 112A exceeds ₹1.25 lakh — not allowed in ITR-1; use ITR-2.');
-  // bank account presence (for refund)
+  // ITR-3 covers all income including business/profession — no income ceiling, full capital gains allowed.
+  const biz=calcVal('it_bp_income');
+  if(biz>0){ warnings.push('Business/Profession income is present — review the Balance Sheet and P&L tabs and, if the accounts are audited u/s 44AB, set the audit flags before filing.'); }
   const bal=calcVal('it_balancePayable');
   if(bal<0){ const hasBank=(data.bank||[]).some(b=>b.acc&&b.ifsc); if(!hasBank) warnings.push('Refund due but no bank account with IFSC entered — add one for the refund to be credited.'); }
   if(!calcReady) warnings.push('Open the Computation tab at least once so tax figures are available.');
   return {errors,warnings};
 }
-function doExportItr1(){
-  const json=buildItr1Json();
+function doExportItr3(){
+  const json=buildItr3Json();
   const blob=new Blob([JSON.stringify(json,null,1)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   const pan=($('cl_pan').value||'PAN').toUpperCase().trim();
-  const a=document.createElement('a'); a.href=url; a.download=`${pan}_2026-27_ITR1.json`;
+  const a=document.createElement('a'); a.href=url; a.download=`${pan}_2026-27_ITR3.json`;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
-// Build the schema-shaped ITR-1 JSON (key nodes; portal upload format)
-function buildItr1Json(){
+// Build the schema-shaped ITR-3 JSON. Business/BS/P&L/ScheduleBP are filled from schema-complete
+// zero skeletons (every required field present with correct type); computed figures overlay on top.
+function buildItr3Json(){
+  const R=n=>Math.round(n||0);
   const pan=($('cl_pan').value||'').toUpperCase().trim();
   const name=($('cl_name').value||'').trim();
   const dob=($('cl_dob').value||'').trim();
   const dobM=dob.match(/^(\d{2})\/(\d{2})\/(\d{4})$/); const dobIso=dobM?`${dobM[3]}-${dobM[2]}-${dobM[1]}`:'';
-  const salary=Math.round(calcVal('it_sal_total'));
-  const hp=Math.round(calcVal('it_hp_income'));
-  const os=Math.round(calcVal('it_os_interest')+calcVal('it_os_dividend')+calcVal('it_os_familypension')+calcVal('it_os_other')+calcVal('it_os_winnings'));
-  const ltcg=Math.round(calcVal('it_cg_112a'));
-  const ded=Math.round(calcVal('it_80_total'));
-  const ti=Math.round(calcVal('it_totalIncome'));
-  const gti=salary+Math.max(0,hp)+os;
-  const tax=Math.round(calcVal('it_taxOnTI'));
-  const bal=Math.round(calcVal('it_balancePayable'));
+  const salary=R(calcVal('it_sal_total'));
+  const hp=R(calcVal('it_hp_income'));
+  const osNormal=R(calcVal('it_os_interest')+calcVal('it_os_dividend')+calcVal('it_os_familypension')+calcVal('it_os_other'));
+  const winnings=R(calcVal('it_os_winnings'));
+  const osTotal=osNormal+winnings;
+  const ltcg=R(calcVal('it_cg_112a')+calcVal('it_cg_ltcg1')+calcVal('it_cg_ltauto'));
+  const stcg=R(calcVal('it_cg_stcg1')+calcVal('it_cg_auto'));
+  const cgTotal=ltcg+stcg;
+  const biz=R(calcVal('it_bp_income'));
+  const ded=R(calcVal('it_80_total'));
+  const ti=R(calcVal('it_totalIncome'));
+  const gti=salary+Math.max(0,hp)+biz+osTotal+cgTotal;
+  const tax=R(calcVal('it_taxOnTI'));
+  const bal=R(calcVal('it_balancePayable'));
   const prepaid=Math.max(0,tax-bal);
+  const advTax=window.__aisData?R(window.__aisData.advanceTax):0;
+  const satTax=window.__aisData?R(window.__aisData.selfAssessmentTax):0;
+  const tdsTax=Math.max(0,prepaid-advTax-satTax);
+  const splRate=ltcg+winnings;
   const isNew=(()=>{const d=calcDoc();if(!d)return true;const r=d.getElementById('it_regime');return r?r.value==='New':true;})();
-  const ay='2026-27';
-  const A=data.assessee||{};
-  const V=data.verifier||{};
-  // Address block (required by schema) — pull from Assessee popup, fall back to placeholders
+  const today=new Date().toISOString().slice(0,10);
+  const A=data.assessee||{}; const V=data.verifier||{};
+  const hasBank=(data.bank||[]).some(b=>b.acc);
+  const bankRows=(data.bank||[]).filter(b=>b.acc).map(b=>({IFSCCode:b.ifsc||'',BankName:b.name||'',BankAccountNo:b.acc||'',AccountType:b.type||'SB'}));
   const addr={
     ResidenceNo:A.flat||A.premises||'NA', ResidenceName:A.premises||'', RoadOrStreet:A.road||'',
     LocalityOrArea:A.area||A.locality||'NA', CityOrTownOrDistrict:A.city||'NA',
     StateCode:A.stateCode||'99', CountryCode:'91', PinCode:A.pin||A.pincode||'',
     CountryCodeMobile:'91', MobileNo:A.mobile||V.contact||'', EmailAddress:A.email||V.email||''
   };
-  // assemble
-  const j={ ITR:{ ITR1:{
-    CreationInfo:{ SWVersionNo:'1.0', SWCreatedBy:'SW20000000', JSONCreatedBy:'SW20000000', JSONCreationDate:new Date().toISOString().slice(0,10), IntermediaryCity:'NA', Digest:'-' },
-    Form_ITR1:{ FormName:'ITR-1', Description:'For Indl having Income from Salary/One HP/Other Sources', AssessmentYear:'2026', SchemaVer:'Ver1.1', FormVer:'Ver1.0' },
-    PersonalInfo:{ AssesseeName:{ FirstName:name.split(' ')[0]||name, MiddleName:'', SurNameOrOrgName:name.split(' ').slice(1).join(' ')||name }, PAN:pan, Address:addr, SecondaryAdd:'', DOB:dobIso, EmployerCategory:A.employerCategory||'OTH', AadhaarCardNo:A.aadhaar||'' },
-    FilingStatus:{ ReturnFileSec:11, OptOutNewTaxRegime:isNew?'N':'Y', AsseseeRepFlg:'N', ItrFilingDueDate:'2026-07-31' },
-    ITR1_IncomeDeductions:{
-      GrossSalary:salary, Salary:salary, NetSalary:salary, DeductionUs16:0, IncomeFromSal:salary,
-      TotalIncomeChargeableUnHP:hp, IncomeOthSrc:os,
-      GrossTotIncome:gti, GrossTotIncomeIncLTCG112A:gti+ltcg,
-      UsrDeductUndChapVIA:chapVIA(ded), DeductUndChapVIA:chapVIA(ded), TotalIncome:ti
+  // --- schema-complete zero skeletons for the business schedules ---
+  const partA_GEN2=JSON.parse('{"AuditInfo":{"LiableSec44AAflg":"N","IncDclrdUs":"N","LiableSec44ABflg":"N","LiableSec92Eflg":"N","AccountAuditFlag":"N"}}');
+  const partA_BS=JSON.parse('{"FundSrc":{"PropFund":{"PropCap":0,"ResrNSurp":{"RevResr":0,"CapResr":0,"StatResr":0,"OthResr":0,"TotResrNSurp":0},"TotPropFund":0},"LoanFunds":{"SecrLoan":{"ForeignCurrLoan":0,"RupeeLoan":{"FrmBank":0,"FrmOthrs":0,"TotRupeeLoan":0},"TotSecrLoan":0},"UnsecrLoan":{"FrmBank":0,"FrmOthrs":0,"TotUnSecrLoan":0},"TotLoanFund":0},"DeferredTax":0,"Advances":{"TotalAdvances":0},"TotFundSrc":0},"FundApply":{"FixedAsset":{"GrossBlock":0,"Depreciation":0,"NetBlock":0,"CapWrkProg":0,"TotFixedAsset":0},"Investments":{"LongTermInv":{"GovtOthSecQuoted":0,"GovOthSecUnQoted":0,"TotLongTermInv":0},"TradeInv":{"EquityShares":0,"PreferShares":0,"Debenture":0,"TotTradeInv":0},"TotInvestments":0},"CurrAssetLoanAdv":{"CurrAsset":{"Inventories":{"StoresConsumables":0,"RawMatl":0,"StkInProcess":0,"FinOrTradGood":0,"TotInventries":0},"SndryDebtors":0,"CashOrBankBal":{"CashinHand":0,"BankBal":0,"TotCashOrBankBal":0},"OthCurrAsset":0,"TotCurrAsset":0},"LoanAdv":{"AdvRecoverable":0,"Deposits":0,"BalWithRevAuth":0,"TotLoanAdv":0},"TotCurrAssetLoanAdv":0,"CurrLiabilitiesProv":{"CurrLiabilities":{"SundryCred":0,"LiabForLeasedAsset":0,"AccrIntonLeasedAsset":0,"AccrIntNotDue":0,"TotCurrLiabilities":0},"Provisions":{"ITProvision":0,"ELSuperAnnGratProvision":0,"OthProvision":0,"TotProvisions":0},"TotCurrLiabilitiesProvision":0},"NetCurrAsset":0},"MiscAdjust":{"MiscExpndr":0,"DefTaxAsset":0,"AccumaltedLosses":0,"TotMiscAdjust":0},"TotFundApply":0}}');
+  const partA_PL=JSON.parse('{"CreditsToPL":{"OthIncome":{"RentInc":0,"Comissions":0,"Dividends":0,"InterestInc":0,"ProfitOnSaleFixedAsset":0,"ProfitOnInvChrSTT":0,"ProfitOnOthInv":0,"ProfitOnCurrFluct":0,"ProfitOnCnvInvntryToCapAsst":0,"ProfitOnAgriIncome":0,"MiscOthIncome":0,"TotOthIncome":0},"TotCreditsToPL":0},"DebitsToPL":{"Freight":0,"ConsumptionOfStores":0,"PowerFuel":0,"RentExpdr":0,"RepairsBldg":0,"RepairMach":0,"EmployeeComp":{"SalsWages":0,"Bonus":0,"MedExpReimb":0,"LeaveEncash":0,"LeaveTravelBenft":0,"ContToSuperAnnFund":0,"ContToPF":0,"ContToGratFund":0,"ContToOthFund":0,"OthEmpBenftExpdr":0,"TotEmployeeComp":0},"Insurances":{"MedInsur":0,"LifeInsur":0,"KeyManInsur":0,"OthInsur":0,"TotInsurances":0},"StaffWelfareExp":0,"Entertainment":0,"Hospitality":0,"Conference":0,"SalePromoExp":0,"Advertisement":0,"CommissionExpdrDtls":{"NonResOtherCompany":0,"Others":0,"Total":0},"RoyalityDtls":{"NonResOtherCompany":0,"Others":0,"Total":0},"ProfessionalConstDtls":{"NonResOtherCompany":0,"Others":0,"Total":0},"HotelBoardLodge":0,"TravelExp":0,"ForeignTravelExp":0,"ConveyanceExp":0,"TelephoneExp":0,"GuestHouseExp":0,"ClubExp":0,"FestivalCelebExp":0,"Scholarship":0,"Gift":0,"Donation":0,"RatesTaxesPays":{"ExciseCustomsVAT":{"UnionExciseDuty":0,"ServiceTax":0,"VATorSaleTax":0,"CentralGoodServiceTax":0,"StateGoodServiceTax":0,"IntegratedGoodServiceTax":0,"UnionTerrGoodServiceTax":0,"OthDutyTaxCess":0,"TotExciseCustomsVAT":0}},"AuditFee":0,"OtherExpenses":0,"BadDebtDtls":{"OthersPANNotAvlblDtlTotal":0,"OthersAmtLt1Lakh":0,"BadDebtAmtDtlsTotal":0,"BadDebt":0},"ProvForBadDoubtDebt":0,"OthProvisionsExpdr":0,"PBIDTA":0,"InterestExpdrtDtls":{"NonResOtherCompany":0,"Others":0,"InterestExpdr":0},"DepreciationAmort":0,"PBT":0},"TaxProvAppr":{"ProvForCurrTax":0,"ProvDefTax":0,"ProfitAfterTax":0,"BalBFPrevYr":0,"AmtAvlAppr":0,"TrfToReserves":0,"ProprietorAccBalTrf":0},"NoBooksOfAccPL":{"GrossReceipt":0,"GrsRcptAccPayeeOrBankMode":0,"GrsRcptOtherMode":0,"GrossProfit":0,"Expenses":0,"NetProfit":0,"GrossReceiptPrf":0,"GrsRcptAccPayeeOrBankModePrf":0,"GrsRcptOtherModePrf":0,"GrossProfitPrf":0,"ExpensesPrf":0,"NetProfitPrf":0,"TotBusinessProfession":0},"TurnverFrmSpecActivity":0,"NetIncomeFrmSpecActivity":0}');
+  const scheduleBP=JSON.parse('{"BusinessIncOthThanSpec":{"ProfBfrTaxPL":0,"NetPLFromSpecBus":0,"NetPLFromSpecifiedBus":0,"IncRecCredPLOthHeadDtls":{"Salary":0,"HouseProperty":0,"CapitalGains":0,"OtherSources":0,"Dividend":0,"OtherThanDividend":0,"Us115BBF":0,"Us115BBG":0,"115BBH":0},"PLUs44sChapXIIG":0,"ProfitLossInclRefrdSec":{"ProfitLossUs44AD":0,"ProfitLossUs44ADA":0,"ProfitLossUs44AE":0,"ProfitLossUs44B":0,"ProfitLossUs44BB":0,"ProfitLossUs44BBA":0,"ProfitLossUs44BBC":0,"ProfitLossUs44BBD":0,"ProfitLossUs44DA":0},"TotalProfitFrmActCvrd":0,"ProfitFrmActCvrd":{"ProfitFrmActCvrdUndrRule7":0,"ProfitFrmActCvrdUndrRule7A":0,"ProfitFrmActCvrdUndrRule7B1":0,"ProfitFrmActCvrdUndrRule7B1A":0,"ProfitFrmActCvrdUndrRule8":0},"IncCredPL":{"FirmShareInc":0,"AOPBOISharInc":0,"OthExempInc":0,"TotExempIncPL":0},"BalancePLOthThanSpecBus":0,"ExpDebToPLOthHeadDtls":{"Salary":0,"HouseProperty":0,"CapitalGains":0,"OtherSources":0,"Us115BBF":0,"Us115BBG":0,"115BBH":0},"ExpDebToPLExemptInc":0,"ExpDebToPLExemptIncDisAllwUs14A":0,"TotExpDebPL":0,"AdjustedPLOthThanSpecBus":0,"DepreciationDebPLCosAct":0,"DepreciationAllowITAct32":{"DepreciationAllowUs32_1_ii":0,"DepreciationAllowUs32_1_i":0,"TotDeprAllowITAct":0},"AdjustPLAfterDeprOthSpecInc":0,"AmtDebPLDisallowUs36":0,"AmtDebPLDisallowUs37":0,"AmtDebPLDisallowUs40":0,"AmtDebPLDisallowUs40A":0,"AmtDebPLDisallowUs43B":0,"InterestDisAllowUs23SMEAct":0,"DeemIncUs41":0,"DeemIncUs3380HHD80IA":0,"DeemIncUs43CA":0,"OthItemDisallowUs28To44DA":0,"AnyOthIncNotInclInExpDisallowPL":0,"AnyOthIncNotInclInSalary":0,"AnyOthIncNotInclInBonus":0,"AnyOthIncNotInclInCommission":0,"AnyOthIncNotInclInInterest":0,"AnyOthIncNotInclInOthers":0,"IncProfDecLossAccICDSAdj":0,"TotAfterAddToPLDeprOthSpecInc":0,"DeductUs32_1_iii":0,"DebPLUs35ExcessAmt":0,"AmtDisallUs40NowAllow":0,"AmtDisallUs43BNowAllow":0,"AnyOthAmtAllDeduct":0,"DecProfIncLossAccICDSAdj":0,"TotDeductionAmts":0,"PLAftAdjDedBusOthThanSpec":0,"DeemedProfitBusUs":{"Section44AD":0,"Section44ADA":0,"Section44AE":0,"Section44B":0,"Section44BB":0,"Section44BBA":0,"Section44BBC":0,"Section44BBD":0,"Section44DA":0,"TotDeemedProfitBusUs":0},"NetPLAftAdjBusOthThanSpec":0,"NetPLBusOthThanSpec7A7B7C":0,"ChrgblIncUndrRule7":0,"DeemedChrgblIncUndrRule7A":0,"DeemedChrgblIncUndrRule7B1":0,"DeemedChrgblIncUndrRule7B1A":0,"DeemedChrgblIncUndrRule8":0,"IncomeOtherThanRule":0,"BalIncDeemedFrmAgri":0},"SpecBusinessInc":{"NetPLFrmSpecBus":0,"AdditionUs28to44DA":0,"DeductUs28to44DA":0,"AdjustedPLFrmSpecuBus":0},"SpecifiedBusinessInc":{"NetPLFrmSpecifiedBus":0,"AddSec28to44DA":0,"DedSec28to44DAOTDedSec35AD":0,"ProfitLossSpecifiedBusiness":0,"PLFrmSpecifiedBus":0},"IncChrgUnHdProftGain":0,"BusSetoffCurrYr":{"LossSetOffOnBusLoss":0,"TotLossSetOffOnBus":0,"LossRemainSetOffOnBus":0}}');
+  const cyla=JSON.parse('{"STCG20Per":{"IncCYLA":{"IncOfCurYrUnderThatHead":0,"IncOfCurYrAfterSetOff":0}},"STCG30Per":{"IncCYLA":{"IncOfCurYrUnderThatHead":0,"IncOfCurYrAfterSetOff":0}},"STCGAppRate":{"IncCYLA":{"IncOfCurYrUnderThatHead":0,"IncOfCurYrAfterSetOff":0}},"STCGDTAARate":{"IncCYLA":{"IncOfCurYrUnderThatHead":0,"IncOfCurYrAfterSetOff":0}},"LTCG12_5Per":{"IncCYLA":{"IncOfCurYrUnderThatHead":0,"IncOfCurYrAfterSetOff":0}},"LTCGDTAARate":{"IncCYLA":{"IncOfCurYrUnderThatHead":0,"IncOfCurYrAfterSetOff":0}},"TotalCurYr":{"TotHPlossCurYr":0,"TotBusLoss":0,"TotOthSrcLossNoRaceHorse":0},"TotalLossSetOff":{"TotHPlossCurYrSetoff":0,"TotBusLossSetoff":0,"TotOthSrcLossNoRaceHorseSetoff":0},"LossRemAftSetOff":{"BalHPlossCurYrAftSetoff":0,"BalBusLossAftSetoff":0,"BalOthSrcLossNoRaceHorseAftSetoff":0}}');
+  const bfla=JSON.parse('{"Salary":{"IncBFLA":{"IncOfCurYrUndHeadFromCYLA":0,"IncOfCurYrAfterSetOffBFLosses":0}},"STCG20Per":{"IncBFLA":{"IncOfCurYrUndHeadFromCYLA":0,"BFUnabsorbedDeprSetoff":0,"BFAllUs35Cl4Setoff":0,"IncOfCurYrAfterSetOffBFLosses":0}},"STCG30Per":{"IncBFLA":{"IncOfCurYrUndHeadFromCYLA":0,"BFUnabsorbedDeprSetoff":0,"BFAllUs35Cl4Setoff":0,"IncOfCurYrAfterSetOffBFLosses":0}},"STCGAppRate":{"IncBFLA":{"IncOfCurYrUndHeadFromCYLA":0,"BFUnabsorbedDeprSetoff":0,"BFAllUs35Cl4Setoff":0,"IncOfCurYrAfterSetOffBFLosses":0}},"STCGDTAARate":{"IncBFLA":{"IncOfCurYrUndHeadFromCYLA":0,"BFUnabsorbedDeprSetoff":0,"BFAllUs35Cl4Setoff":0,"IncOfCurYrAfterSetOffBFLosses":0}},"LTCG12_5Per":{"IncBFLA":{"IncOfCurYrUndHeadFromCYLA":0,"BFUnabsorbedDeprSetoff":0,"BFAllUs35Cl4Setoff":0,"IncOfCurYrAfterSetOffBFLosses":0}},"LTCGDTAARate":{"IncBFLA":{"IncOfCurYrUndHeadFromCYLA":0,"BFUnabsorbedDeprSetoff":0,"BFAllUs35Cl4Setoff":0,"IncOfCurYrAfterSetOffBFLosses":0}},"TotalBFLossSetOff":{"TotBFLossSetoff":0,"TotUnabsorbedDeprSetoff":0,"TotAllUs35cl4Setoff":0},"IncomeOfCurrYrAftCYLABFLA":0}');
+  // --- overlay business income (simplest valid "no books" representation) ---
+  if(partA_PL.NoBooksOfAccPL){ partA_PL.NoBooksOfAccPL.NetProfit=biz; partA_PL.NoBooksOfAccPL.TotBusinessProfession=biz; }
+  if(scheduleBP.BusinessIncOthThanSpec){ scheduleBP.BusinessIncOthThanSpec.ProfBfrTaxPL=biz; scheduleBP.BusinessIncOthThanSpec.NetPLAftAdjBusOthThanSpec=biz; scheduleBP.BusinessIncOthThanSpec.NetPLBusOthThanSpec7A7B7C=biz; }
+  scheduleBP.IncChrgUnHdProftGain=biz;
+  // --- CYLA / BFLA pass-through (no losses assumed) ---
+  const setC=(k,v)=>{ if(cyla[k]&&cyla[k].IncCYLA){cyla[k].IncCYLA.IncOfCurYrUnderThatHead=v;cyla[k].IncCYLA.IncOfCurYrAfterSetOff=v;} };
+  setC('STCGAppRate',stcg); setC('LTCG12_5Per',ltcg);
+  const setB=(k,v)=>{ if(bfla[k]&&bfla[k].IncBFLA){bfla[k].IncBFLA.IncOfCurYrUndHeadFromCYLA=v;bfla[k].IncBFLA.IncOfCurYrAfterSetOffBFLosses=v;} };
+  setB('Salary',salary); setB('STCGAppRate',stcg); setB('LTCG12_5Per',ltcg);
+  bfla.IncomeOfCurrYrAftCYLABFLA=salary+Math.max(0,hp)+biz+osTotal+cgTotal;
+  // --- assemble ---
+  const j={ ITR:{ ITR3:{
+    CreationInfo:{ SWVersionNo:'1.0', SWCreatedBy:'SW20000000', JSONCreatedBy:'SW20000000', JSONCreationDate:today, IntermediaryCity:'NA', Digest:'-' },
+    Form_ITR3:{ FormName:'ITR-3', Description:'For individuals and HUFs having income from profits and gains of business or profession', AssessmentYear:'2026', SchemaVer:'Ver1.1', FormVer:'Ver1.0' },
+    PartA_GEN1:{
+      PersonalInfo:{ AssesseeName:{ FirstName:name.split(' ')[0]||name, MiddleName:'', SurNameOrOrgName:name.split(' ').slice(1).join(' ')||name }, PAN:pan, Address:addr, SecondaryAdd:'N', DOB:dobIso, Status:($('cl_status').value==='HUF'?'H':'I'), AadhaarCardNo:A.aadhaar||'' },
+      FilingStatus:{ ReturnFileSec:11, OptOutNewTaxRegime:isNew?'N':'Y', IncFrmBusOrProf:'Y', SeventhProvisio139:'N', ResidentialStatus:'RES', HeldUnlistedEqShrPrYrFlg:'N', ForeignExchangeFlag:'N', FiiFpiFlag:'N', AsseseeRepFlg:'N', ItrFilingDueDate:'2026-07-31' }
     },
-    ITR1_TaxComputation:{
-      TotalTaxPayable:tax, Rebate87A:0, TaxPayableOnRebate:tax, EducationCess:0, GrossTaxLiability:tax,
-      Section89:0, NetTaxLiability:tax,
-      TotalIntrstPay:0, IntrstPay:{ IntrstPayUs234A:0, IntrstPayUs234B:0, IntrstPayUs234C:0, LateFilingFee234F:0 },
-      TotTaxPlusIntrstPay:tax
+    PartA_GEN2:partA_GEN2,
+    PARTA_BS:partA_BS,
+    PARTA_PL:partA_PL,
+    ITR3ScheduleBP:scheduleBP,
+    ScheduleCYLA:cyla,
+    ScheduleBFLA:bfla,
+    'PartB-TI':{
+      Salaries:salary, IncomeFromHP:hp,
+      ProfBusGain:{ ProfGainNoSpecBus:biz, ProfGainSpecBus:0, ProfGainSpecifiedBus:0, ProfIncome115BBF:0, TotProfBusGain:biz },
+      CapGain:{
+        ShortTerm:{ ShortTerm20Per:0, ShortTerm30Per:0, ShortTermAppRate:stcg, ShortTermSplRateDTAA:0, TotalShortTerm:stcg },
+        LongTerm:{ LongTerm12_5Per:ltcg, LongTermSplRateDTAA:0, TotalLongTerm:ltcg },
+        ShortTermLongTermTotal:cgTotal, CapGains30Per115BBH:0, TotalCapGains:cgTotal
+      },
+      IncFromOS:{ OtherSrcThanOwnRaceHorse:osNormal, IncChargblSplRate:winnings, FromOwnRaceHorse:0, TotIncFromOS:osTotal },
+      TotalTI: salary+Math.max(0,hp)+biz+osTotal+cgTotal,
+      CurrentYearLoss:0, BalanceAfterSetoffLosses: salary+Math.max(0,hp)+biz+osTotal+cgTotal, BroughtFwdLossesSetoff:0,
+      GrossTotalIncome: gti, IncChargeTaxSplRate111A112: splRate,
+      DeductionsUndSchVIADtl:{ PartBchapterVIA:ded, PartCchapterVIA:0, TotDeductUndSchVIA:ded },
+      DeductionsUnder10Aor10AA:0, TotalIncome: ti,
+      AggregateIncome: ti, DeemedIncomeUs115JC:0
     },
-    TaxPaid:{ TaxesPaid:{ TDS:prepaid, TCS:0, AdvanceTax:window.__aisData?Math.round(window.__aisData.advanceTax):0, SelfAssessmentTax:0, TotalTaxesPaid:prepaid }, BalTaxPayable:Math.max(0,bal) },
-    Refund:{ RefundDue:Math.max(0,-bal), BankAccountDtls:{ AddtnlBankDetails:(data.bank||[]).filter(b=>b.acc).map(b=>({IFSCCode:b.ifsc||'',BankName:b.name||'',BankAccountNo:b.acc||'',AccountType:b.type||'SB'})) } },
-    Verification:{ Declaration:{ AssesseeVerName:name, FatherName:V.father||'', AssesseeVerPAN:pan }, Capacity:'S', Place:A.city||'', Date:new Date().toISOString().slice(0,10) }
+    PartB_TTI:{
+      ComputationOfTaxLiability:{
+        TaxPayableOnDeemedTI:{ TaxDeemedTISec115JC:0, SurchargeOnAboveCrore:0, EducationCess:0, TotalTax:0 },
+        TaxPayableOnTI:{ TaxAtNormalRatesOnAggrInc:Math.max(0,tax), TaxAtSpecialRates:0, RebateOnAgriInc:0, TaxPayableOnTotInc:tax, Rebate87A:0, TaxPayableOnRebate:tax, Surcharge25ofSI:0, SurchargeOnAboveCrore:0, Surcharge25ofSIBeforeMarginal:0, SurchargeOnAboveCroreBeforeMarginal:0, TotalSurcharge:0, EducationCess:0, GrossTaxLiability:tax },
+        GrossTaxPayable:tax, CreditUS115JD:0, TaxPayAfterCreditUs115JD:tax, NetTaxLiability:tax,
+        IntrstPay:{ IntrstPayUs234A:0, IntrstPayUs234B:0, IntrstPayUs234C:0, LateFilingFee234F:0 },
+        AggregateTaxInterestLiability:tax
+      },
+      TaxPaid:{ TaxesPaid:{ AdvanceTax:advTax, TDS:tdsTax, TCS:0, SelfAssessmentTax:satTax, TotalTaxesPaid:prepaid } },
+      Refund:{ RefundDue:Math.max(0,-bal), BankAccountDtls:{ BankDtlsFlag:hasBank?'Y':'N', AddtnlBankDetails:bankRows } },
+      AssetOutIndiaFlag:'N'
+    },
+    Verification:{ Declaration:{ AssesseeVerName:name, FatherName:V.father||'', AssesseeVerPAN:pan }, Capacity:'S', Place:A.city||'', Date:today }
   }}};
-  // LTCG 112A schedule if present
-  if(ltcg>0){ j.ITR.ITR1.LTCG112A={ TotLTCG112A:ltcg }; }
-  // TDS schedule from AIS if imported
-  if(window.__aisData && window.__aisData.tdsEntries.length){
+  if(window.__aisData && window.__aisData.tdsEntries && window.__aisData.tdsEntries.length){
     const sal=window.__aisData.tdsEntries.filter(t=>t.section==='192');
     const oth=window.__aisData.tdsEntries.filter(t=>t.section!=='192');
-    if(sal.length) j.ITR.ITR1.TDSonSalaries={ TDSonSalary:sal.map(t=>({EmployerOrDeductorOrCollectDetl:{TAN:t.tan,EmployerOrDeductorOrCollecterName:t.deductor},IncChrgSal:t.amountPaid,TotalTDSSal:t.tds})) };
-    if(oth.length) j.ITR.ITR1.TDSonOthThanSals={ TDSonOthThanSal:oth.map(t=>({EmployerOrDeductorOrCollectDetl:{TAN:t.tan,EmployerOrDeductorOrCollecterName:t.deductor},AmtForTaxDeduct:t.amountPaid,TotTDSOnAmtPaid:t.tds})) };
+    if(sal.length) j.ITR.ITR3.TDSonSalaries={ TDSonSalary:sal.map(t=>({EmployerOrDeductorOrCollectDetl:{TAN:t.tan,EmployerOrDeductorOrCollecterName:t.deductor},IncChrgSal:R(t.amountPaid),TotalTDSSal:R(t.tds)})) };
+    if(oth.length) j.ITR.ITR3.TDSonOthThanSals={ TDSonOthThanSal:oth.map(t=>({EmployerOrDeductorOrCollectDetl:{TAN:t.tan,EmployerOrDeductorOrCollecterName:t.deductor},AmtForTaxDeduct:R(t.amountPaid),TotTDSOnAmtPaid:R(t.tds)})) };
   }
   return j;
 }
@@ -1969,6 +2672,7 @@ function buildItr1Json(){
 // kick off calculator injection — defer until the calc-html block (which follows this script) is parsed
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',injectCalculator); }
 else { injectCalculator(); }
+
 </script>
 <script type="text/plain" id="pdfjs-main">
 /**
@@ -2219,8 +2923,8 @@ t)).default()}catch(e){warn(`JpxImage#getJsModule: ${e}`)}e(n)}static async#E(e,
       <div class="itr" id="it_hp_sop_cap_row" style="display:none"><div class="lbl" style="font-size:11.5px;color:var(--sub);font-style:italic">Note: SOP interest capped at ₹2,00,000 (excess <span id="it_hp_sop_excess">0</span> not allowed)</div><div class="drillcol"></div><div class="va"></div><div class="vb"></div></div>
     </div>
 
-    <div class="it-head ittog" data-grp="g-bp" style="display:none"><span class="tg">▾</span> Profits and gains of Business or Profession</div>
-    <div class="it-grp" id="g-bp" style="display:none">
+    <div class="it-head ittog" data-grp="g-bp"><span class="tg">▸</span> Profits and gains of Business or Profession</div>
+    <div class="it-grp collapsed" id="g-bp">
       <div class="it-colhdr"><div class="lbl"></div><div class="drillcol"></div><div class="va">Turnover/Receipts</div><div class="vb">Profit</div></div>
       <div class="itr"><div class="lbl">Business: Presumptive profits u/s 44AD</div><div class="drillcol sf-open" data-sf="sf-44ad">⋯</div><div class="va"><span class="cv" id="it_bp_44ad_to">0</span></div><div class="vb"><span class="cv" id="it_bp_44ad_pr">0</span></div></div>
       <div class="itr"><div class="lbl">Profession: u/s 44ADA - Presumptive profits</div><div class="drillcol sf-open" data-sf="sf-44ada">⋯</div><div class="va"><span class="cv" id="it_bp_44ada_to">0</span></div><div class="vb"><span class="cv" id="it_bp_44ada_pr">0</span></div></div>
@@ -2281,11 +2985,11 @@ t)).default()}catch(e){warn(`JpxImage#getJsModule: ${e}`)}e(n)}static async#E(e,
 
     <div class="it-head ittog" data-grp="g-cg"><span class="tg">▸</span> Capital Gains</div>
     <div class="it-grp collapsed" id="g-cg">
-      <div class="itr" style="display:none"><div class="lbl">LTCG-1:</div><div class="drillcol sf-open" data-sf="sf-ltcg">⋯</div><div class="va"><span class="cv" id="it_cg_ltcg1">0</span></div><div class="vb"></div></div>
+      <div class="itr"><div class="lbl">LTCG-1:</div><div class="drillcol sf-open" data-sf="sf-ltcg">⋯</div><div class="va"><span class="cv" id="it_cg_ltcg1">0</span></div><div class="vb"></div></div>
       <div class="itr"><div class="lbl i1">Long Term Capital Gain u/s 112A</div><div class="drillcol sf-open" data-sf="sf-ltcg112a">⋯</div><div class="va"><span class="cv" id="it_cg_112a">0</span></div><div class="vb"></div></div>
-      <div class="itr" style="display:none"><div class="lbl i1">Long-term Capital gain from Auto-classification table</div><div class="drillcol"></div><div class="va"><span class="cv" id="it_cg_ltauto">0</span></div><div class="vb"></div></div>
-      <div class="itr" style="display:none"><div class="lbl">STCG-1:</div><div class="drillcol sf-open" data-sf="sf-stcg">⋯</div><div class="va"><span class="cv" id="it_cg_stcg1">0</span></div><div class="vb"></div></div>
-      <div class="itr" style="display:none"><div class="lbl">Auto-classification of STCG / LTCG</div><div class="drillcol sf-open" data-sf="sf-auto-cg">⋯</div><div class="va"></div><div class="vb"><span class="cv" id="it_cg_auto">0</span></div></div>
+      <div class="itr"><div class="lbl i1">Long-term Capital gain from Auto-classification table</div><div class="drillcol"></div><div class="va"><span class="cv" id="it_cg_ltauto">0</span></div><div class="vb"></div></div>
+      <div class="itr"><div class="lbl">STCG-1:</div><div class="drillcol sf-open" data-sf="sf-stcg">⋯</div><div class="va"><span class="cv" id="it_cg_stcg1">0</span></div><div class="vb"></div></div>
+      <div class="itr"><div class="lbl">Auto-classification of STCG / LTCG</div><div class="drillcol sf-open" data-sf="sf-auto-cg">⋯</div><div class="va"></div><div class="vb"><span class="cv" id="it_cg_auto">0</span></div></div>
     </div>
 
     <div class="it-head ittog" data-grp="g-os"><span class="tg">▸</span> Income from other sources</div>

@@ -1,0 +1,25 @@
+Annual Information Statement,,,,,
+PAN:,CMDPR5963D,,Name:,SAMPLE TAXPAYER,
+Financial Year:,2025-26,,,,
+,,,,,
+Part-B TDS/TCS Information,,,,,
+Sr No.,Information Code,Information Description,Information Source,Amount Paid/Credited (Rs.),Tax Deducted (Rs.)
+1,TDS-192,Salary received (Section 192),ACME SOFTWARE PVT LTD (BLRA00000A),1250000,85000
+2,TDS-194A,Interest from deposit (Section 194A),HDFC BANK LTD (MUMH00123B),68000,6800
+3,TDS-194,Dividend (Section 194),INFOSYS LTD (BLRI00456C),12000,1200
+,,,,,
+Part-B SFT Information,,,,,
+Sr No.,Information Code,Information Description,Information Source,Amount (Rs.),
+4,SFT-016,Interest income (savings account),STATE BANK OF INDIA,4200,
+5,SFT-018,Dividend received,VARIOUS COMPANIES,12000,
+6,SFT-015,Time deposit interest,HDFC BANK LTD,68000,
+,,,,,
+Part-B Payment of Taxes,,,,,
+Sr No.,Information Code,Information Description,Information Source,Amount (Rs.),
+7,PMT-ADV,Advance Tax paid,SELF (Challan),40000,
+8,PMT-SAT,Self-Assessment Tax,SELF (Challan),0,
+,,,,,
+Part-B Other Information,,,,,
+Sr No.,Information Code,Information Description,Information Source,Amount (Rs.),
+9,OTH-SALARY,Annexure-II Salary,ACME SOFTWARE PVT LTD,1250000,
+10,OTH-INTREF,Interest on Income Tax Refund,INCOME TAX DEPARTMENT,850,

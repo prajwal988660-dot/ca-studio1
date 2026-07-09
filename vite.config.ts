@@ -83,6 +83,9 @@ export default defineConfig(({ mode }) => {
           '**/*.jpeg',
           '**/*.xml',
           '**/samples/**',
+          // Raw ITR form source folders (large HTML, already deployed to /public) — not app
+          // source. Matches itr25-26, itr26-27, … so the watcher never chokes on them.
+          '**/itr??-??/**',
         ],
       },
     },

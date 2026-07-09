@@ -228,6 +228,65 @@ export default function CompanyOverviewPage() {
         </div>
       )}
 
+      {/* ── Quick actions ── */}
+      <div>
+        <div className="flex items-end justify-between mb-3">
+          <div>
+            <h2 className="text-sm font-bold text-gray-900">Quick actions</h2>
+            <p className="text-xs text-gray-400 mt-0.5">Jump straight into your books and statements</p>
+          </div>
+          <span className="section-eyebrow hidden sm:block">{fy.label}</span>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          {QUICK_ACTIONS.map((a) => (
+            <Link
+              key={a.path}
+              to={`/company/${companyId}/${a.path}`}
+              className="quick-tile"
+              style={{ '--tile': a.tile } as CSSProperties}
+            >
+              <span className="quick-tile-icon"><a.icon className="h-5 w-5" /></span>
+              <span className="min-w-0">
+                <span className="block text-[13px] font-bold text-gray-900 truncate">{a.label}</span>
+                <span className="block text-[11px] text-gray-400 truncate">{a.desc}</span>
+              </span>
+              <ArrowRight className="quick-tile-arrow" />
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Getting started (only when there's no data yet) ── */}
+      {!entriesLoading && entries.length === 0 && (
+        <div className="soft-panel" style={{ '--tile': '#2563EB' } as CSSProperties}>
+          <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(37,99,235,0.08), transparent 70%)' }} />
+          <div className="relative flex items-start gap-3.5">
+            <span className="icon-badge mt-0.5"><Sparkles className="h-5 w-5" /></span>
+            <div className="min-w-0">
+              <h3 className="text-sm font-bold text-gray-900">Let's set up {company.name}</h3>
+              <p className="text-xs text-gray-500 mt-1 max-w-md leading-relaxed">
+                No entries yet for this financial year. Start by recording a journal entry, importing
+                your Tally data, or bringing in a bank statement — the dashboard fills in automatically.
+              </p>
+              <div className="flex flex-wrap gap-2.5 mt-4">
+                <Link to={`/company/${companyId}/journal`} className="btn-pill-primary h-9 px-4">
+                  <BookOpen className="h-4 w-4" /> Record entry
+                </Link>
+                <Link to={`/company/${companyId}/tally`}
+                  className="inline-flex items-center gap-2 h-9 px-4 rounded-full border border-gray-200 bg-white text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+                  <ArrowRightLeft className="h-4 w-4 text-gray-400" /> Import from Tally
+                </Link>
+                <Link to={`/company/${companyId}/bank-import`}
+                  className="inline-flex items-center gap-2 h-9 px-4 rounded-full border border-gray-200 bg-white text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+                  <Wallet className="h-4 w-4 text-gray-400" /> Import bank statement
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

@@ -38,3 +38,7 @@ mcp-server/node_modules/
 /src/app/css.jpeg
 /ui.png
 *.zip
+
+# Raw ITR form source (large HTML) — the used copies live in /public/tax-utilities
+/itr25-26/
+/itr26-27/

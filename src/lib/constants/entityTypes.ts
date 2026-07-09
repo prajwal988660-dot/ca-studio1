@@ -6,7 +6,7 @@ export const ENTITY_TYPES = {
   opc: { label: 'One Person Company', shortLabel: 'OPC', itrForm: 'ITR-6', icon: 'UserCheck', color: 'indigo' },
   pvt_ltd: { label: 'Private Limited Company', shortLabel: 'Pvt Ltd', itrForm: 'ITR-6', icon: 'Building2', color: 'red' },
   public_ltd: { label: 'Public Limited Company', shortLabel: 'Public Ltd', itrForm: 'ITR-6', icon: 'Landmark', color: 'amber' },
-  huf: { label: 'Hindu Undivided Family', shortLabel: 'HUF', itrForm: 'ITR-2', icon: 'Home', color: 'teal' },
+  huf: { label: 'Hindu Undivided Family', shortLabel: 'HUF', itrForm: 'ITR-2/ITR-3', icon: 'Home', color: 'teal' },
   trust: { label: 'Trust', shortLabel: 'Trust', itrForm: 'ITR-7', icon: 'Heart', color: 'pink' },
   society: { label: 'Society', shortLabel: 'Society', itrForm: 'ITR-7', icon: 'Users2', color: 'orange' },
   section8: { label: 'Section 8 Company', shortLabel: 'Sec 8', itrForm: 'ITR-6', icon: 'HeartHandshake', color: 'rose' },
