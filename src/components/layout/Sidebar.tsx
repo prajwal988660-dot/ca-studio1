@@ -194,7 +194,7 @@ export const Sidebar = React.memo(function Sidebar({ onAlezaToggle }: SidebarPro
 
     const taxItems: NavItem[] = [];
     if (nav.gst !== 'never') taxItems.push({ label: 'GST', href: `${base}/gst`, icon: Receipt });
-    if (nav.incomeTax || nav.taxComputation) taxItems.push({ label: nav.taxComputation ? 'Tax Computation' : 'Income Tax', href: `${base}/income-tax`, icon: Calculator });
+    if (nav.incomeTax || nav.taxComputation) taxItems.push({ label: 'Income Tax', href: `${base}/income-tax`, icon: Calculator });
     if (nav.tdsRegister !== 'never') taxItems.push({ label: 'TDS Register', href: `${base}/tds-register`, icon: FileSpreadsheet });
     if (nav.tcsRegister !== 'never') taxItems.push({ label: 'TCS Register', href: `${base}/tcs-register`, icon: FileSpreadsheet });
     if (nav.advanceTax) taxItems.push({ label: 'Advance Tax', href: `${base}/advance-tax`, icon: IndianRupee });
